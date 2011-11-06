@@ -257,9 +257,36 @@ public:
 
 };
 
+/*######
+## go_demon_portal
+######*/
+
+enum DemonPortal
+{
+    NPC_DEMON_GUARDIAN = 11937,
+    QUEST_PORTAL_OF_THE_LEGION = 5581
+};
+
+class go_demon_portal : public GameObjectScript
+{
+public:
+    go_demon_portal() : GameObjectScript("go_demon_portal") { }
+
+    bool OnGossipHello(Player* player, GameObject* GO)
+    {
+        if (player->GetQuestStatus(QUEST_PORTAL_OF_THE_LEGION) == QUEST_STATUS_INCOMPLETE)
+        {
+            if (Creature* guardian = player->SummonCreature(NPC_DEMON_GUARDIAN, GO->GetPositionX(), GO->GetPositionY(), GO->GetPositionZ(), 0.0f, TEMPSUMMON_DEAD_DESPAWN, 0))
+                guardian->AI()->AttackStart(player);
+        }
+        return true;
+    }
+};
+
 void AddSC_desolace()
 {
     new npc_aged_dying_ancient_kodo();
     new go_iruxos();
     new npc_dalinda();
+    new go_demon_portal();
 }
