@@ -48,6 +48,9 @@ Vehicle::Vehicle(Unit* unit, VehicleEntry const* vehInfo, uint32 creatureEntry) 
     {
         case 160:
         case 116:
+        case 452:
+        case 453:
+        case 510:
             _me->SetControlled(true, UNIT_STAT_ROOT);
             _me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
             _me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK_DEST, true);
