@@ -399,14 +399,14 @@ public:
         uint64 uiPlayer;
         Player* player;
 
-        void SetGUID(const uint64 &uiGuid, int32 /*iId*/)
+        void SetGUID(uint64 guid, int32 id)
         {
             movementStarted = true;
             me->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_OOC_NOT_ATTACKABLE);
             me->SetReactState(REACT_PASSIVE);
             me->SetUnitMovementFlags(MOVEMENTFLAG_WALKING);
             me->GetMotionMaster()->MovePoint(0, KamarosWp[0]);
-            uiPlayer = uiGuid;
+            uiPlayer = guid;
         }
 
         void Reset()
@@ -946,12 +946,12 @@ public:
             }
         }
 
-        void SetGUID(const uint64 &uiGuid, int32 /*iId*/)
+        void SetGUID(uint64 guid, int32 id)
         {
             if (active)
                 return;
 
-            uiPlayer = uiGuid;
+            uiPlayer = guid;
             events.ScheduleEvent(1, 2000);
             active = true;
         }
@@ -963,37 +963,37 @@ public:
             {
                 case 1:
                     DoScriptText(SAY_VRYKUL_1, pMale);
-                    events.ScheduleEvent(2, 2000);
+                    events.ScheduleEvent(2, 4000);
                     break;
                 case 2:
                     DoScriptText(EMOTE_VRYKUL_1, pMale);
-                    events.ScheduleEvent(3, 1000);
+                    events.ScheduleEvent(3, 2000);
                     break;
                 case 3:
                     DoScriptText(EMOTE_VRYKUL_2, me);
-                    events.ScheduleEvent(4, 2000);
+                    events.ScheduleEvent(4, 4000);
                     break;
                 case 4:
                     DoScriptText(SAY_VRYKUL_2, pMale);
-                    events.ScheduleEvent(5, 3000);
+                    events.ScheduleEvent(5, 6000);
                     break;
                 case 5:
                     DoScriptText(SAY_VRYKUL_3, me);
-                    events.ScheduleEvent(6,1000);
+                    events.ScheduleEvent(6, 2000);
                     break;
                 case 6:
                     DoScriptText(SAY_VRYKUL_4, pMale);
-                    events.ScheduleEvent(7, 2500);
+                    events.ScheduleEvent(7, 5000);
                     break;
                 case 7:
                     DoScriptText(SAY_VRYKUL_5, me);
-                    events.ScheduleEvent(8, 1000);
+                    events.ScheduleEvent(8, 2000);
                     break;
                 case 8:
                     if(Player* player = me->GetPlayer(*me, uiPlayer))
                         player->GroupEventHappens(QUEST_ECHO_YMIRON, me);
-                    // Set long timer for reset, preventes restarting the event
-                    events.ScheduleEvent(9,20000);
+                    // Set long timer for reset, prevents restarting the event
+                    events.ScheduleEvent(9, 20000);
                     break;
                 case 9:
                     Reset();
@@ -1012,8 +1012,8 @@ class at_ymiron_house : public AreaTriggerScript
         {
             if(player->HasAura(SPELL_ECHO_YMIRON))
             {
-                if(Creature * pVrykul = player->FindNearestCreature(NPC_ANCIENT_VRYKUL_F, 10.0f))
-                    pVrykul->AI()->SetGUID(player->GetGUID());
+                if(Creature * vrykul = player->FindNearestCreature(NPC_ANCIENT_VRYKUL_F, 10.0f))
+                    vrykul->AI()->SetGUID(player->GetGUID());
             }
             return true;
         }
@@ -1074,28 +1074,28 @@ public:
                     break;
                 case 2:
                     DoScriptText(SAY_LK_1, me);
-                    events.ScheduleEvent(3, 2500);
+                    events.ScheduleEvent(3, 5000);
                     break;
                 case 3:
                     if (Creature* pValkyr = me->FindNearestCreature(NPC_VALKYR, 5.0f))
                         DoScriptText(SAY_LK_2, pValkyr);
-                    events.ScheduleEvent(4, 3000);
+                    events.ScheduleEvent(4, 5000);
                     break;
                 case 4:
                     DoScriptText(SAY_LK_3, me);
-                    events.ScheduleEvent(5, 300);
+                    events.ScheduleEvent(5, 2000);
                     break;
                 case 5:
                     DoScriptText(SAY_LK_4, me);
-                    events.ScheduleEvent(6,5500);
+                    events.ScheduleEvent(6, 8000);
                     break;
                 case 6:
                     DoScriptText(SAY_LK_5, me);
-                    events.ScheduleEvent(7, 5500);
+                    events.ScheduleEvent(7, 9000);
                     break;
                 case 7:
                     DoScriptText(SAY_LK_6, me);
-                    events.ScheduleEvent(8, 3000);
+                    events.ScheduleEvent(8, 5000);
                     break;
                 case 8:
                     if(player)
@@ -1635,7 +1635,7 @@ public:
         bool finishedWay;
         Creature* pMalygos;
 
-        void SetGUID(const uint64 &guid, int32 /*iId*/)
+        void SetGUID(uint64 guid, int32 id)
         {
             me->NearTeleportTo(posKeristrasza[4].GetPositionX(), posKeristrasza[4].GetPositionY(), posKeristrasza[4].GetPositionZ(), posKeristrasza[4].GetOrientation());
             me->SetVisible(false);
@@ -3338,7 +3338,7 @@ public:
             }
         }
 
-        void SetGUID(const uint64 guid, int32 id)
+        void SetGUID(uint64 guid, int32 id)
         {
             if(inProgress)
                 return;
