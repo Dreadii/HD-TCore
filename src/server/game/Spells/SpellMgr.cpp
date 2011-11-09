@@ -2975,6 +2975,9 @@ void SpellMgr::LoadDbcDataCorrections()
 
         switch (spellInfo->Id)
         {
+            case 24259: // Felhunter's Spell Lock
+                spellInfo->speed = 80;
+                break;
             case 48278:
                 spellInfo->Targets = 1;
                 spellInfo->StackAmount = 3;
