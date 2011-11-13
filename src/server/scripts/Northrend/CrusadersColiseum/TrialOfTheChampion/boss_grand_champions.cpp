@@ -143,18 +143,17 @@ struct npc_mounted_championAI : ScriptedAI
     uint32 uiChargeTimer;
     uint32 uiShieldBreakerTimer;
     uint32 uiBuffTimer;
-    uint32 uiThrustTimer;
     bool _defeated;
 
     void Reset()
     {
         if(_defeated)
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+
         me->Mount(GetMountId());
         uiChargeTimer = urand(1000, 5000);
         uiShieldBreakerTimer = 8000;
         uiBuffTimer = urand(4000, 5000);
-        uiThrustTimer = 2000;
         _defeated = false;
     }
 
@@ -269,8 +268,14 @@ struct npc_mounted_championAI : ScriptedAI
             uiShieldBreakerTimer = 7000;
         }else uiShieldBreakerTimer -= uiDiff;
 
-        // We should use thrust instead of this, but it's not working on the way I handle this
-        DoMeleeAttackIfReady();
+        // Use Thrust instead of melee attack
+        if (me->isAttackReady() && me->IsWithinMeleeRange(me->getVictim()))
+        {
+            me->AddUnitState(UNIT_STAT_ONVEHICLE);
+            DoCast(me->getVictim(), SPELL_THRUST);
+            me->resetAttackTimer();
+            me->ClearUnitState(UNIT_STAT_ONVEHICLE);
+        }
     }
 };
 
@@ -994,6 +999,9 @@ public:
 
         uint32 GetData(uint32 type)
         {
+            if (isInMountedGauntlet())
+                return npc_mounted_championAI::GetData(type);
+
             // Used by Announcer on periodic check of the bosses state
             if(type == DATA_CHAMPION_DEFEATED)
                 return defeated ? 1 : 0;
