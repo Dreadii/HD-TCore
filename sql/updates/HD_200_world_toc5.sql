@@ -1,7 +1,13 @@
 DELETE FROM `spell_script_names` WHERE spell_id IN (66867);
 INSERT INTO `spell_script_names` VALUES
 (66867, 'spell_eadric_hammer_of_righteous'), -- Hammer can be picked by target if isn't under HoJ effect
-(67534, 'spell_toc5_hex_mending');           -- Hex of mending spell effect
+(67534, 'spell_toc5_hex_mending'),           -- Hex of mending spell effect
+(67830, 'spell_toc5_ride_mount'),            -- Allow ride only if a Lance is equiped
+(66482, 'spell_toc5_defend'),
+(63130, 'spell_toc5_defend_visual'),
+(63131, 'spell_toc5_defend_visual'),
+(63132, 'spell_toc5_defend_visual'),
+(62575, 'spell_toc5_shield_breaker');
 
 DELETE FROM `spell_linked_spell` WHERE `spell_trigger` = 66905;
 INSERT INTO `spell_linked_spell` VALUES

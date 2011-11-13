@@ -1187,12 +1187,12 @@ class spell_toc5_defend_visual : public SpellScriptLoader
         {
             PrepareAuraScript(spell_toc5_defend_visual_AuraScript);
 
-            bool CheckTargetState(Unit* target)
+            void HandleEffectPeriodic(AuraEffect const* /*aurEff*/)
             {
                 Unit* caster = GetCaster();
 
                 if(!caster)
-                    return false;
+                    return;
 
                 if(Unit* mount = caster->GetVehicleBase())
                 {
@@ -1211,12 +1211,12 @@ class spell_toc5_defend_visual : public SpellScriptLoader
                     }
                 }
 
-                return true;
+                return;
             }
 
             void Register()
             {
-                DoCheckAreaTarget += AuraCheckAreaTargetFn(spell_toc5_defend_visual_AuraScript::CheckTargetState);
+                OnEffectPeriodic += AuraEffectPeriodicFn(spell_toc5_defend_visual_AuraScript::HandleEffectPeriodic, EFFECT_0, SPELL_AURA_PERIODIC_TRIGGER_SPELL);
             }
         };
 
