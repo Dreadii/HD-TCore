@@ -90,8 +90,6 @@ public:
 
         bool IsEncounterInProgress() const
         {
-            if(GameObject* portcullis = instance->GetGameObject(GetData64(DATA_PORTCULLIS))
-            {}
             for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
             {
                 if (m_auiEncounter[i] == IN_PROGRESS)

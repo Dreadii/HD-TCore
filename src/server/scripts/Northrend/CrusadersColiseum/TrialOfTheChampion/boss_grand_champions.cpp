@@ -131,142 +131,147 @@ void AggroAllPlayers(Creature* pTemp)
 * Script Complete: 25%.                                                     *
 */
 
+struct npc_mounted_championAI : ScriptedAI
+{
+    npc_mounted_championAI(Creature* creature) : ScriptedAI(creature)
+    {
+        instance = me->GetInstanceScript();
+    }
+
+    InstanceScript* instance;
+
+    uint32 uiChargeTimer;
+    uint32 uiShieldBreakerTimer;
+    uint32 uiBuffTimer;
+    uint32 uiThrustTimer;
+    bool defeated;
+
+    void Reset()
+    {
+        if(defeated)
+            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        me->Mount(GetMountId());
+        uiChargeTimer = urand(1000, 5000);
+        uiShieldBreakerTimer = 8000;
+        uiBuffTimer = urand(4000, 5000);
+        uiThrustTimer = 2000;
+        defeated = false;
+    }
+
+    uint32 GetMountId()
+    {
+        switch(me->GetEntry())
+        {
+            // Alliance
+            case NPC_STORMWIND_CHAMPION:  return 28912;
+            case NPC_IRONFORGE_CHAMPION:  return 29258;
+            case NPC_GNOMEREGAN_CHAMPION: return 28571;
+            case NPC_DARNASSUS_CHAMPION:  return 29256;
+            case NPC_EXODAR_CHAMPION:     return 29255;
+            case NPC_MOUNTED_JACOB:       return 29284;
+            case NPC_MOUNTED_AMBROSE:     return 28571;
+            case NPC_MOUNTED_COLOSOS:     return 29255;
+            case NPC_MOUNTED_JAELYNE:     return 9991;
+            case NPC_MOUNTED_LANA:        return 2787;
+            // Horde
+            case NPC_ORGRIMMAR_CHAMPION:     return 29260;
+            case NPC_THUNDER_BLUFF_CHAMPION: return 29259;
+            case NPC_UNDERCITY_CHAMPION:     return 29257;
+            case NPC_SENJIN_CHAMPION:        return 29261;
+            case NPC_SILVERMOON_CHAMPION:    return 29262;
+            case NPC_MOUNTED_MOKRA:          return 29879;
+            case NPC_MOUNTED_ERESSEA:        return 28607;
+            case NPC_MOUNTED_RUNOK:          return 29880;
+            case NPC_MOUNTED_ZULTORE:        return 29261;
+            case NPC_MOUNTED_VISCERI:        return 10718;
+        }
+        return 0;
+    }
+    void DamageTaken(Unit* /*attacker*/, uint32 & damage)
+    {
+        if(defeated)
+        {
+            damage = 0;
+            return;
+        }
+
+        if(damage >= me->GetHealth())
+        {
+            damage = 0;
+            defeated = true;
+            me->GetMotionMaster()->MoveIdle();
+            me->Unmount();
+            me->CastSpell(me, SPELL_KNEE, true);
+            me->SetTarget(0);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        }
+    }
+
+    uint32 GetData(uint32 type)
+    {
+        if(type == DATA_CHAMPION_DEFEATED)
+            return defeated ? 1 : 0;
+
+        return 0;
+    }
+
+    void EnterCombat(Unit* /*who*/)
+    {
+        // Set Defend to 3 charges at start
+        for (uint8 i = 0; i < 3; ++i)
+            DoCast(me, SPELL_SHIELD, true);
+    }
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        if (!UpdateVictim())
+            return;
+
+        if(defeated)
+            return;
+
+        if (uiBuffTimer <= uiDiff)
+        {
+            Aura* defend = me->GetAura(SPELL_SHIELD);
+            if (!defend || defend->GetStackAmount() < 3)
+            {
+                DoCast(SPELL_SHIELD);
+                uiBuffTimer = urand(4000, 5000);
+            } else uiBuffTimer = urand(1000, 2000);
+        }else uiBuffTimer -= uiDiff;
+
+        if (uiChargeTimer <= uiDiff)
+        {
+            if(Unit* target = SelectTarget(SELECT_TARGET_FARTHEST))
+            {
+                DoResetThreat();
+                me->AddThreat(target, 5.0f);
+                DoCast(target, SPELL_CHARGE, true);
+            }
+            uiChargeTimer = 5000;
+        }else uiChargeTimer -= uiDiff;
+
+        if (uiShieldBreakerTimer <= uiDiff)
+        {
+            if(Unit* target = SelectTarget(SELECT_TARGET_FARTHEST))
+                DoCast(target, SPELL_SHIELD_BREAKER, true);
+
+            uiShieldBreakerTimer = 7000;
+        }else uiShieldBreakerTimer -= uiDiff;
+
+        // We should use thrust instead of this, but it's not working on the way I handle this
+        DoMeleeAttackIfReady();
+    }
+};
+
 class generic_vehicleAI_toc5 : public CreatureScript
 {
 public:
     generic_vehicleAI_toc5() : CreatureScript("generic_vehicleAI_toc5") { }
 
-    struct generic_vehicleAI_toc5AI : public ScriptedAI
+    struct generic_vehicleAI_toc5AI : public npc_mounted_championAI
     {
-        generic_vehicleAI_toc5AI(Creature* creature) : ScriptedAI(creature)
-        {
-            pInstance = creature->GetInstanceScript();
-        }
-
-        InstanceScript* pInstance;
-
-        uint32 uiChargeTimer;
-        uint32 uiShieldBreakerTimer;
-        uint32 uiBuffTimer;
-        uint32 uiThrustTimer;
-        bool defeated;
-
-        void Reset()
-        {
-            if(defeated)
-                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            me->Mount(GetMountId());
-            uiChargeTimer = urand(1000, 5000);
-            uiShieldBreakerTimer = 8000;
-            uiBuffTimer = urand(4000, 5000);
-            uiThrustTimer = 2000;
-            defeated = false;
-        }
-
-        uint32 GetMountId()
-        {
-            switch(me->GetEntry())
-            {
-                // Alliance
-                case NPC_STORMWIND_CHAMPION:  return 28912;
-                case NPC_IRONFORGE_CHAMPION:  return 29258;
-                case NPC_GNOMEREGAN_CHAMPION: return 28571;
-                case NPC_DARNASSUS_CHAMPION:  return 29256;
-                case NPC_EXODAR_CHAMPION:     return 29255;
-                case NPC_MOUNTED_JACOB:       return 29284;
-                case NPC_MOUNTED_AMBROSE:     return 28571;
-                case NPC_MOUNTED_COLOSOS:     return 29255;
-                case NPC_MOUNTED_JAELYNE:     return 9991;
-                case NPC_MOUNTED_LANA:        return 2787;
-                // Horde
-                case NPC_ORGRIMMAR_CHAMPION:     return 29260;
-                case NPC_THUNDER_BLUFF_CHAMPION: return 29259;
-                case NPC_UNDERCITY_CHAMPION:     return 29257;
-                case NPC_SENJIN_CHAMPION:        return 29261;
-                case NPC_SILVERMOON_CHAMPION:    return 29262;
-                case NPC_MOUNTED_MOKRA:          return 29879;
-                case NPC_MOUNTED_ERESSEA:        return 28607;
-                case NPC_MOUNTED_RUNOK:          return 29880;
-                case NPC_MOUNTED_ZULTORE:        return 29261;
-                case NPC_MOUNTED_VISCERI:        return 10718;
-            }
-            return 0;
-        }
-        void DamageTaken(Unit* /*attacker*/, uint32 & damage)
-        {
-            if(defeated)
-            {
-                damage = 0;
-                return;
-            }
-
-            if(damage >= me->GetHealth())
-            {
-                damage = 0;
-                defeated = true;
-                me->GetMotionMaster()->MoveIdle();
-                me->Unmount();
-                me->CastSpell(me, SPELL_KNEE, true);
-                me->SetTarget(0);
-                me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            }
-        }
-
-        uint32 GetData(uint32 type)
-        {
-            if(type == DATA_CHAMPION_DEFEATED)
-                return defeated ? 1 : 0;
-
-            return 0;
-        }
-
-        void EnterCombat(Unit* /*who*/)
-        {
-            // Set Defend to 3 charges at start
-            for (uint8 i = 0; i < 3; ++i)
-                DoCast(me, SPELL_SHIELD, true);
-        }
-
-        void UpdateAI(const uint32 uiDiff)
-        {
-            if (!UpdateVictim())
-                return;
-
-            if(defeated)
-                return;
-
-            if (uiBuffTimer <= uiDiff)
-            {
-                Aura* defend = me->GetAura(SPELL_SHIELD);
-                if (!defend || defend->GetStackAmount() < 3)
-                {
-                    DoCast(SPELL_SHIELD);
-                    uiBuffTimer = urand(4000, 5000);
-                } else uiBuffTimer = urand(1000, 2000);
-            }else uiBuffTimer -= uiDiff;
-
-            if (uiChargeTimer <= uiDiff)
-            {
-                if(Unit* target = SelectTarget(SELECT_TARGET_FARTHEST))
-                {
-                    DoResetThreat();
-                    me->AddThreat(target, 5.0f);
-                    DoCast(target, SPELL_CHARGE, true);
-                }
-                uiChargeTimer = 5000;
-            }else uiChargeTimer -= uiDiff;
-
-            if (uiShieldBreakerTimer <= uiDiff)
-            {
-                if(Unit* target = SelectTarget(SELECT_TARGET_FARTHEST))
-                    DoCast(target, SPELL_SHIELD_BREAKER, true);
-
-                uiShieldBreakerTimer = 7000;
-            }else uiShieldBreakerTimer -= uiDiff;
-
-            // We should use thrust instead of this, but it's not working on the way I handle this
-            DoMeleeAttackIfReady();
-        }
+        generic_vehicleAI_toc5AI(Creature* creature) : npc_mounted_championAI(creature) {}
     };
 
     CreatureAI* GetAI(Creature* creature) const
@@ -1105,7 +1110,7 @@ class spell_toc5_charge : public SpellScriptLoader
                 }
 
                 if(Aura* defend = GetTargetUnit()->GetAura(SPELL_DEFEND))
-                    damage -= (damage*(0.3f * defend->GetStackAmount())-1);
+                    damage -= (uint32)(damage*(0.3f * defend->GetStackAmount())-1);
 
                 // Deal the damage and show it on caster's log
                 caster->DealDamage(target, damage, NULL, SPELL_DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL);
@@ -1117,7 +1122,7 @@ class spell_toc5_charge : public SpellScriptLoader
             }
             void Register()
             {
-                OnEffect += SpellEffectFn(spell_toc5_chargeSpellScript::HandleOnHit, EFFECT_FIRST_FOUND, SPELL_EFFECT_DUMMY);
+                OnEffectHitTarget += SpellEffectFn(spell_toc5_chargeSpellScript::HandleOnHit, EFFECT_FIRST_FOUND, SPELL_EFFECT_DUMMY);
             }
         };
 
@@ -1174,7 +1179,7 @@ class spell_toc5_shield_breaker : public SpellScriptLoader
                     caster->CastSpell(target, SPELL_SHIELD_BREAKER_VISUAL, true);
 
                 if(Aura* defend = GetTargetUnit()->GetAura(SPELL_DEFEND))
-                    damage -= (damage*(0.3f * defend->GetStackAmount())-1);
+                    damage -= (uint32)(damage*(0.3f * defend->GetStackAmount())-1);
 
                 // Deal the damage and show it on caster's log
                 caster->DealDamage(target, damage, NULL, SPELL_DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL);
