@@ -3322,10 +3322,12 @@ void SpellMgr::LoadDbcDataCorrections()
             // ENDOF ULDUAR SPELLS
             //
             // TRIAL OF THE CHAMPION SPELLS
+            case 45815: // Reused spell for ToC5 Shield-Breaker
+                spellInfo->Effect[0] = SPELL_EFFECT_DUMMY;
+                break;
             case 68284: // ToC5 Charge
-                spellInfo->Effect[1] = SPELL_EFFECT_SCHOOL_DAMAGE;
+                spellInfo->Effect[1] = SPELL_EFFECT_DUMMY;
                 spellInfo->EffectImplicitTargetA[1] = TARGET_UNIT_TARGET_ENEMY;
-                spellInfo->EffectBasePoints[1] = 20000;
                 break;
             // END OF TRIAL OF THE CHAMPION SPELLS
             // TRIAL OF THE CRUSADER SPELLS
