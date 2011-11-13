@@ -68,13 +68,6 @@ UPDATE `creature_template` SET `equipment_id` = 1496 WHERE `entry` = (35037, (SE
 UPDATE `creature_template` SET `equipment_id` = 2216 WHERE `entry` = (35042, (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = 35042));
 UPDATE `creature_template` SET `equipment_id` = 714 WHERE `entry` = (35045, (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = 35045));
 UPDATE `creature_template` SET `equipment_id` = 271 WHERE `entry` = (35049, (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = 35049));
--- Argent Champions equip templates
-SET @TemplateId := 2475;
-DELETE FROM `creature_equip_template` WHERE `entry` BETWEEN 2475 AND 2477;
-INSERT INTO `creature_equip_template` VALUES
-(@TemplateId, 44244, 0, 0), -- Argent Lightwielder
-(@TemplateId+1, 18608, 0, 0), -- Argent Priestess
-(@TemplateId+2, 40343, 0, 0); -- The Black Knight
 
 SET @NPC_LIGHTWIELDER   := 35309;
 SET @NPC_PRIESTESS      := 35307;
