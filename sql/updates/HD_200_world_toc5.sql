@@ -86,3 +86,11 @@ SET @NPC_BLACK_KNIGHT_H := (SELECT `difficulty_entry_1` FROM `creature_template`
 UPDATE `creature_template` SET `equipment_id` = @TemplateId WHERE `entry` IN (@NPC_LIGHTWIELDER, @NPC_LIGHTWIELDER_H);
 UPDATE `creature_template` SET `equipment_id` = @TemplateId+1 WHERE `entry` IN (@NPC_PRIESTESS, @NPC_PRIESTESS_H);
 UPDATE `creature_template` SET `equipment_id` = @TemplateId+2 WHERE `entry` IN (@NPC_BLACK_KNIGHT, @NPC_BLACK_KNIGHT_H);
+
+UPDATE `creature_template` SET `type_flags` = 2048, `ScriptName` = 'generic_vehicleAI_toc5' WHERE `entry` IN (35328, 35329, 35331, 35332, 35330, 35314, 35325, 35327, 35323, 35326);
+UPDATE `creature_template` SET `type_flags` = 2048 WHERE `entry` IN (35572, 35569, 35571, 35570, 35617, 34705, 34702, 34701, 34657, 34703);
+-- For Hero entries
+CREATE TABLE `entry_temp` (`id` INT);
+INSERT INTO `entry_temp` SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` IN (35572, 35569, 35571, 35570, 35617, 34705, 34702, 34701, 34657, 34703);
+UPDATE `creature_template` SET `type_flags` = 2048 WHERE `entry` IN (SELECT id FROM`entry_temp`);
+DROP TABLE `entry_temp`;
