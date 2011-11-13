@@ -290,8 +290,8 @@ class spell_paletress_shield : public SpellScriptLoader
 
                 absorbAmount = dmgInfo.GetDamage();
                 // Deal the damage and show it on caster's log
-                caster->DealDamage(attacker, absorbAmount*0.25f, NULL, dmgInfo.GetDamageType(), dmgInfo.GetSchoolMask());
-                caster->SendSpellNonMeleeDamageLog(attacker, GetSpellInfo()->Id, absorbAmount*0.25f,  dmgInfo.GetSchoolMask(), 0, 0, true, 0);
+                caster->DealDamage(attacker, (uint32)(absorbAmount*0.25f), NULL, dmgInfo.GetDamageType(), dmgInfo.GetSchoolMask());
+                caster->SendSpellNonMeleeDamageLog(attacker, GetSpellInfo()->Id, (uint32) (absorbAmount*0.25f),  dmgInfo.GetSchoolMask(), 0, 0, true, 0);
             }
 
             // function registering

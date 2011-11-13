@@ -144,18 +144,18 @@ struct npc_mounted_championAI : ScriptedAI
     uint32 uiShieldBreakerTimer;
     uint32 uiBuffTimer;
     uint32 uiThrustTimer;
-    bool defeated;
+    bool _defeated;
 
     void Reset()
     {
-        if(defeated)
+        if(_defeated)
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         me->Mount(GetMountId());
         uiChargeTimer = urand(1000, 5000);
         uiShieldBreakerTimer = 8000;
         uiBuffTimer = urand(4000, 5000);
         uiThrustTimer = 2000;
-        defeated = false;
+        _defeated = false;
     }
 
     uint32 GetMountId()
@@ -168,28 +168,28 @@ struct npc_mounted_championAI : ScriptedAI
             case NPC_GNOMEREGAN_CHAMPION: return 28571;
             case NPC_DARNASSUS_CHAMPION:  return 29256;
             case NPC_EXODAR_CHAMPION:     return 29255;
-            case NPC_MOUNTED_JACOB:       return 29284;
-            case NPC_MOUNTED_AMBROSE:     return 28571;
-            case NPC_MOUNTED_COLOSOS:     return 29255;
-            case NPC_MOUNTED_JAELYNE:     return 9991;
-            case NPC_MOUNTED_LANA:        return 2787;
+            case NPC_JACOB:               return 29284;
+            case NPC_AMBROSE:             return 28571;
+            case NPC_COLOSOS:             return 29255;
+            case NPC_JAELYNE:             return 9991;
+            case NPC_LANA:                return 2787;
             // Horde
             case NPC_ORGRIMMAR_CHAMPION:     return 29260;
             case NPC_THUNDER_BLUFF_CHAMPION: return 29259;
             case NPC_UNDERCITY_CHAMPION:     return 29257;
             case NPC_SENJIN_CHAMPION:        return 29261;
             case NPC_SILVERMOON_CHAMPION:    return 29262;
-            case NPC_MOUNTED_MOKRA:          return 29879;
-            case NPC_MOUNTED_ERESSEA:        return 28607;
-            case NPC_MOUNTED_RUNOK:          return 29880;
-            case NPC_MOUNTED_ZULTORE:        return 29261;
-            case NPC_MOUNTED_VISCERI:        return 10718;
+            case NPC_MOKRA:                  return 29879;
+            case NPC_ERESSEA:                return 28607;
+            case NPC_RUNOK:                  return 29880;
+            case NPC_ZULTORE:                return 29261;
+            case NPC_VISCERI:                return 10718;
         }
         return 0;
     }
     void DamageTaken(Unit* /*attacker*/, uint32 & damage)
     {
-        if(defeated)
+        if(_defeated)
         {
             damage = 0;
             return;
@@ -198,7 +198,7 @@ struct npc_mounted_championAI : ScriptedAI
         if(damage >= me->GetHealth())
         {
             damage = 0;
-            defeated = true;
+            _defeated = true;
             me->GetMotionMaster()->MoveIdle();
             me->Unmount();
             me->CastSpell(me, SPELL_KNEE, true);
@@ -210,7 +210,7 @@ struct npc_mounted_championAI : ScriptedAI
     uint32 GetData(uint32 type)
     {
         if(type == DATA_CHAMPION_DEFEATED)
-            return defeated ? 1 : 0;
+            return _defeated ? 1 : 0;
 
         return 0;
     }
@@ -222,12 +222,22 @@ struct npc_mounted_championAI : ScriptedAI
             DoCast(me, SPELL_SHIELD, true);
     }
 
+    bool isInMountedGauntlet()
+    {
+        if(Creature* announcer = me->GetCreature(*me, instance->GetData64(DATA_ANNOUNCER)))
+        {
+            if (announcer->AI()->GetData(EVENT_INTRO) == IN_PROGRESS || announcer->AI()->GetData(EVENT_WAVES) == IN_PROGRESS)
+                return true;
+        }
+        return false;
+    }
+
     void UpdateAI(const uint32 uiDiff)
     {
         if (!UpdateVictim())
             return;
 
-        if(defeated)
+        if(_defeated)
             return;
 
         if (uiBuffTimer <= uiDiff)
@@ -286,9 +296,9 @@ public:
     boss_warrior_toc5() : CreatureScript("boss_warrior_toc5") { }
 
     // Marshal Jacob Alerius && Mokra the Skullcrusher || Warrior
-    struct boss_warrior_toc5AI : public ScriptedAI
+    struct boss_warrior_toc5AI : public npc_mounted_championAI
     {
-        boss_warrior_toc5AI(Creature* creature) : ScriptedAI(creature) {}
+        boss_warrior_toc5AI(Creature* creature) : npc_mounted_championAI(creature) {}
 
         uint32 bladeStormTimer;
         uint32 interceptTimer;
@@ -297,6 +307,12 @@ public:
 
         void Reset()
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::Reset();
+                return;
+            }
+
             defeated = false;
             bladeStormTimer = urand(15000, 20000);
             interceptTimer  = 7000;
@@ -306,6 +322,12 @@ public:
 
         void DamageTaken(Unit* /*attacker*/, uint32 & damage)
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::DamageTaken(NULL, damage);
+                return;
+            }
+
             if(defeated)
             {
                 damage = 0;
@@ -333,6 +355,9 @@ public:
 
         uint32 GetData(uint32 type)
         {
+            if (isInMountedGauntlet())
+                return npc_mounted_championAI::GetData(type);
+
             // Used by Announcer on periodic check of the bosses state
             if(type == DATA_CHAMPION_DEFEATED)
                 return defeated ? 1 : 0;
@@ -342,6 +367,12 @@ public:
 
         void EnterCombat(Unit* who)
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::EnterCombat(who);
+                return;
+            }
+
             if(InstanceScript* instance = me->GetInstanceScript())
                 if(instance->GetData(BOSS_GRAND_CHAMPIONS) != IN_PROGRESS)
                     instance->SetData(BOSS_GRAND_CHAMPIONS, IN_PROGRESS);
@@ -349,6 +380,12 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::UpdateAI(diff);
+                return;
+            }
+
             if (!UpdateVictim())
                 return;
 

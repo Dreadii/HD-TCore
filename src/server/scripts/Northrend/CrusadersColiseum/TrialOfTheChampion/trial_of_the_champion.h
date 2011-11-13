@@ -46,6 +46,16 @@ enum Data64
     DATA_PORTCULLIS,
 };
 
+enum AnnouncerPhases
+{
+    EVENT_INTRO = 0, // Presentation of champions
+    EVENT_WAVES,
+    EVENT_CHAMPIONS,
+    EVENT_INTRO_ARGENT,
+    EVENT_WAVES_ARGENT,
+    EVENTS_MAX,
+};
+
 enum achievementCriterias
 {
     CRITERIA_CHAMPION_JACOB     = 12310,

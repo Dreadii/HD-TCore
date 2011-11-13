@@ -518,16 +518,6 @@ const Position ArgentSoldierPosition[3] =
 //    }
 //};
 
-enum AnnouncerPhases
-{
-    EVENT_INTRO = 0, // Presentation of champions
-    EVENT_WAVES,
-    EVENT_CHAMPIONS,
-    EVENT_INTRO_ARGENT,
-    EVENT_WAVES_ARGENT,
-    EVENTS_MAX,
-};
-//uint32 Alliance 
 class npc_announcer_toc5 : public CreatureScript
 {
 public:
@@ -562,7 +552,7 @@ public:
 
             for(uint8 i=0; i<3; i++)
             {
-                bossEntry[i] = NPC_MOUNTED_JACOB;//0;
+                bossEntry[i] = NPC_JACOB;//0;
                 bossGUID[i] = 0;
             }
 
@@ -578,6 +568,7 @@ public:
         void JustSummoned(Creature* summon)
         {
             summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            summon->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             summon->SetReactState(REACT_PASSIVE);
         }
 
@@ -601,20 +592,20 @@ public:
         void SetGrandChampionsForEncounter()
         {
             if(pInstance->GetData(DATA_TEAM) == HORDE)
-                bossEntry[0] = RAND(NPC_MOUNTED_JACOB, NPC_MOUNTED_AMBROSE, NPC_MOUNTED_COLOSOS, NPC_MOUNTED_JAELYNE, NPC_MOUNTED_LANA);
+                bossEntry[0] = RAND(NPC_JACOB, NPC_AMBROSE, NPC_COLOSOS, NPC_JAELYNE, NPC_LANA);
             else
-                bossEntry[0] = RAND(NPC_MOUNTED_MOKRA, NPC_MOUNTED_ERESSEA, NPC_MOUNTED_RUNOK, NPC_MOUNTED_ZULTORE, NPC_MOUNTED_VISCERI);
+                bossEntry[0] = RAND(NPC_MOKRA, NPC_ERESSEA, NPC_RUNOK, NPC_ZULTORE, NPC_VISCERI);
 
             while (bossEntry[1] == bossEntry[0] || bossEntry[2] == bossEntry[0] || bossEntry[2] == bossEntry[1])
             {
                 if(pInstance->GetData(DATA_TEAM) == HORDE)
                 {
-                    bossEntry[1] = RAND(NPC_MOUNTED_JACOB, NPC_MOUNTED_AMBROSE, NPC_MOUNTED_COLOSOS, NPC_MOUNTED_JAELYNE, NPC_MOUNTED_LANA);
-                    bossEntry[2] = RAND(NPC_MOUNTED_JACOB, NPC_MOUNTED_AMBROSE, NPC_MOUNTED_COLOSOS, NPC_MOUNTED_JAELYNE, NPC_MOUNTED_LANA);
+                    bossEntry[1] = RAND(NPC_JACOB, NPC_AMBROSE, NPC_COLOSOS, NPC_JAELYNE, NPC_LANA);
+                    bossEntry[2] = RAND(NPC_JACOB, NPC_AMBROSE, NPC_COLOSOS, NPC_JAELYNE, NPC_LANA);
                 }else
                 {
-                    bossEntry[1] = RAND(NPC_MOUNTED_MOKRA, NPC_MOUNTED_ERESSEA, NPC_MOUNTED_RUNOK, NPC_MOUNTED_ZULTORE, NPC_MOUNTED_VISCERI);
-                    bossEntry[2] = RAND(NPC_MOUNTED_MOKRA, NPC_MOUNTED_ERESSEA, NPC_MOUNTED_RUNOK, NPC_MOUNTED_ZULTORE, NPC_MOUNTED_VISCERI);
+                    bossEntry[1] = RAND(NPC_MOKRA, NPC_ERESSEA, NPC_RUNOK, NPC_ZULTORE, NPC_VISCERI);
+                    bossEntry[2] = RAND(NPC_MOKRA, NPC_ERESSEA, NPC_RUNOK, NPC_ZULTORE, NPC_VISCERI);
                 }
             }
         }
@@ -629,37 +620,17 @@ public:
             switch(bossId)
             {
                 // Alliance
-                case NPC_JACOB:
-                case NPC_MOUNTED_JACOB:
-                    return NPC_STORMWIND_CHAMPION;
-                case NPC_AMBROSE:
-                case NPC_MOUNTED_AMBROSE:
-                    return NPC_GNOMEREGAN_CHAMPION;
-                case NPC_COLOSOS:
-                case NPC_MOUNTED_COLOSOS:
-                    return NPC_EXODAR_CHAMPION;
-                case NPC_JAELYNE:
-                case NPC_MOUNTED_JAELYNE:
-                    return NPC_DARNASSUS_CHAMPION;
-                case NPC_LANA:
-                case NPC_MOUNTED_LANA:
-                    return NPC_IRONFORGE_CHAMPION;
+                case NPC_JACOB:   return NPC_STORMWIND_CHAMPION;
+                case NPC_AMBROSE: return NPC_GNOMEREGAN_CHAMPION;
+                case NPC_COLOSOS: return NPC_EXODAR_CHAMPION;
+                case NPC_JAELYNE: return NPC_DARNASSUS_CHAMPION;
+                case NPC_LANA:    return NPC_IRONFORGE_CHAMPION;
                 // Horde
-                case NPC_MOKRA:
-                case NPC_MOUNTED_MOKRA:
-                    return NPC_ORGRIMMAR_CHAMPION;
-                case NPC_ERESSEA:
-                case NPC_MOUNTED_ERESSEA:
-                    return NPC_SILVERMOON_CHAMPION;
-                case NPC_RUNOK:
-                case NPC_MOUNTED_RUNOK:
-                    return NPC_THUNDER_BLUFF_CHAMPION;
-                case NPC_ZULTORE:
-                case NPC_MOUNTED_ZULTORE:
-                    return NPC_SENJIN_CHAMPION;
-                case NPC_VISCERI:
-                case NPC_MOUNTED_VISCERI:
-                    return NPC_UNDERCITY_CHAMPION;
+                case NPC_MOKRA:   return NPC_ORGRIMMAR_CHAMPION;
+                case NPC_ERESSEA: return NPC_SILVERMOON_CHAMPION;
+                case NPC_RUNOK:   return NPC_THUNDER_BLUFF_CHAMPION;
+                case NPC_ZULTORE: return NPC_SENJIN_CHAMPION;
+                case NPC_VISCERI: return NPC_UNDERCITY_CHAMPION;
             }
             return 0;
         }
@@ -669,26 +640,26 @@ public:
             switch(mountedBossID)
             {
                 // Alliance
-                case NPC_MOUNTED_JACOB:
+                case NPC_JACOB:
                     return NPC_JACOB;
-                case NPC_MOUNTED_AMBROSE:
+                case NPC_AMBROSE:
                     return NPC_AMBROSE;
-                case NPC_MOUNTED_COLOSOS:
+                case NPC_COLOSOS:
                     return NPC_COLOSOS;
-                case NPC_MOUNTED_JAELYNE:
+                case NPC_JAELYNE:
                     return NPC_JAELYNE;
-                case NPC_MOUNTED_LANA:
+                case NPC_LANA:
                     return NPC_LANA;
                 // Horde
-                case NPC_MOUNTED_MOKRA:
+                case NPC_MOKRA:
                     return NPC_MOKRA;
-                case NPC_MOUNTED_ERESSEA:
+                case NPC_ERESSEA:
                     return NPC_ERESSEA;
-                case NPC_MOUNTED_RUNOK:
+                case NPC_RUNOK:
                     return NPC_RUNOK;
-                case NPC_MOUNTED_ZULTORE:
+                case NPC_ZULTORE:
                     return NPC_ZULTORE;
-                case NPC_MOUNTED_VISCERI:
+                case NPC_VISCERI:
                     return NPC_VISCERI;
             }
 
