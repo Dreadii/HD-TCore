@@ -635,37 +635,6 @@ public:
             return 0;
         }
 
-        uint32 GetRealBossEntry(uint32 mountedBossID)
-        {
-            switch(mountedBossID)
-            {
-                // Alliance
-                case NPC_JACOB:
-                    return NPC_JACOB;
-                case NPC_AMBROSE:
-                    return NPC_AMBROSE;
-                case NPC_COLOSOS:
-                    return NPC_COLOSOS;
-                case NPC_JAELYNE:
-                    return NPC_JAELYNE;
-                case NPC_LANA:
-                    return NPC_LANA;
-                // Horde
-                case NPC_MOKRA:
-                    return NPC_MOKRA;
-                case NPC_ERESSEA:
-                    return NPC_ERESSEA;
-                case NPC_RUNOK:
-                    return NPC_RUNOK;
-                case NPC_ZULTORE:
-                    return NPC_ZULTORE;
-                case NPC_VISCERI:
-                    return NPC_VISCERI;
-            }
-
-            return 0;
-        }
-
         void UpdateAI(const uint32 diff)
         {
             events.Update(diff);
@@ -1071,9 +1040,8 @@ public:
                     case 2:
                         for(uint8 i=0; i<3; i++)
                         {
-                            if(Creature* boss = me->SummonCreature(GetRealBossEntry(bossEntry[i]), SpawnPosition))
+                            if(Creature* boss = me->SummonCreature(bossEntry[i], SpawnPosition))
                             {
-                                bossEntry[i] = boss->GetEntry();
                                 bossGUID[i] = boss->GetGUID();
                                 boss->SetTarget(stalkerGUID);
                                 // Prevent bosses from falling down the ground

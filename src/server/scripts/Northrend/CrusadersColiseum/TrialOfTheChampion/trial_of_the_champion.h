@@ -108,27 +108,17 @@ enum eNpcs
 {
     // Horde Champions
     NPC_MOKRA                   = 35572,
-    NPC_MOUNTED_MOKRA           = 355720,
     NPC_ERESSEA                 = 35569,
-    NPC_MOUNTED_ERESSEA         = 355690,
     NPC_RUNOK                   = 35571,
-    NPC_MOUNTED_RUNOK           = 355710,
     NPC_ZULTORE                 = 35570,
-    NPC_MOUNTED_ZULTORE         = 355700,
     NPC_VISCERI                 = 35617,
-    NPC_MOUNTED_VISCERI         = 356170,
 
     // Alliance Champions
     NPC_JACOB                   = 34705,
-    NPC_MOUNTED_JACOB           = 347050,
     NPC_AMBROSE                 = 34702,
-    NPC_MOUNTED_AMBROSE         = 347020,
     NPC_COLOSOS                 = 34701,
-    NPC_MOUNTED_COLOSOS         = 347010,
     NPC_JAELYNE                 = 34657,
-    NPC_MOUNTED_JAELYNE         = 346570,
     NPC_LANA                    = 34703,
-    NPC_MOUNTED_LANA            = 347030,
 
     // Alliance Pre-Champs
     NPC_STORMWIND_CHAMPION      = 35328,
