@@ -440,9 +440,9 @@ public:
     boss_mage_toc5() : CreatureScript("boss_mage_toc5") { }
 
     // Ambrose Boltspark && Eressea Dawnsinger || Mage
-    struct boss_mage_toc5AI : public ScriptedAI
+    struct boss_mage_toc5AI : public npc_mounted_championAI
     {
-        boss_mage_toc5AI(Creature* creature) : ScriptedAI(creature) {}
+        boss_mage_toc5AI(Creature* creature) : npc_mounted_championAI(creature) {}
 
         uint32 fireBallTimer;
         uint32 blastWaveTimer;
@@ -452,6 +452,12 @@ public:
 
         void Reset()
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::Reset();
+                return;
+            }
+
             defeated = false;
             fireBallTimer = 2000;
             polymorphTimer  = 8000;
@@ -462,6 +468,12 @@ public:
 
         void DamageTaken(Unit* /*attacker*/, uint32 & damage)
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::DamageTaken(NULL, damage);
+                return;
+            }
+
             if(defeated)
             {
                 damage = 0;
@@ -489,6 +501,9 @@ public:
 
         uint32 GetData(uint32 type)
         {
+            if (isInMountedGauntlet())
+                return npc_mounted_championAI::GetData(type);
+
             // Used by Announcer on periodic check of the bosses state
             if(type == DATA_CHAMPION_DEFEATED)
                 return defeated ? 1 : 0;
@@ -498,13 +513,25 @@ public:
 
         void EnterCombat(Unit* who)
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::EnterCombat(who);
+                return;
+            }
+
             if(InstanceScript* instance = me->GetInstanceScript())
                 if(instance->GetData(BOSS_GRAND_CHAMPIONS) != IN_PROGRESS)
                     instance->SetData(BOSS_GRAND_CHAMPIONS, IN_PROGRESS);
         };
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 diff)
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::UpdateAI(diff);
+                return;
+            }
+
             if (!UpdateVictim())
                 return;
 
@@ -514,32 +541,32 @@ public:
             if(me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            if (polymorphTimer <= uiDiff)
+            if (polymorphTimer <= diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, SPELL_POLYMORPH);
                 polymorphTimer = 8000;
-            } else polymorphTimer -= uiDiff;
+            } else polymorphTimer -= diff;
 
-            if (blastWaveTimer <= uiDiff)
+            if (blastWaveTimer <= diff)
             {
                 DoCastAOE(SPELL_BLAST_WAVE, false);
                 blastWaveTimer = 13000;
-            } else blastWaveTimer -= uiDiff;
+            } else blastWaveTimer -= diff;
 
-            if (hasteTimer <= uiDiff)
+            if (hasteTimer <= diff)
             {
                 me->InterruptNonMeleeSpells(true);
 
                 DoCast(me, SPELL_HASTE);
                 hasteTimer = 22000;
-            } else hasteTimer -= uiDiff;
+            } else hasteTimer -= diff;
 
-            if (fireBallTimer <= uiDiff)
+            if (fireBallTimer <= diff)
             {
                 DoCastVictim(SPELL_FIREBALL);
                 fireBallTimer = 2600;
-            } else fireBallTimer -= uiDiff;
+            } else fireBallTimer -= diff;
 
             DoMeleeAttackIfReady();
         }
@@ -557,9 +584,9 @@ public:
     boss_shaman_toc5() : CreatureScript("boss_shaman_toc5") { }
 
     // Colosos && Runok Wildmane || Shaman
-    struct boss_shaman_toc5AI : public ScriptedAI
+    struct boss_shaman_toc5AI : public npc_mounted_championAI
     {
-        boss_shaman_toc5AI(Creature* creature) : ScriptedAI(creature) {}
+        boss_shaman_toc5AI(Creature* creature) : npc_mounted_championAI(creature) {}
 
         uint32 chainLightningTimer;
         uint32 eartShieldTimer;
@@ -569,6 +596,12 @@ public:
 
         void Reset()
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::Reset();
+                return;
+            }
+
             defeated = false;
             chainLightningTimer = 5000;
             healingWaveTimer = 12000;
@@ -579,6 +612,12 @@ public:
 
         void EnterCombat(Unit* who)
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::EnterCombat(who);
+                return;
+            }
+
             if(InstanceScript* instance = me->GetInstanceScript())
                 if(instance->GetData(BOSS_GRAND_CHAMPIONS) != IN_PROGRESS)
                     instance->SetData(BOSS_GRAND_CHAMPIONS, IN_PROGRESS);
@@ -588,6 +627,12 @@ public:
 
         void DamageTaken(Unit* /*attacker*/, uint32 & damage)
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::DamageTaken(NULL, damage);
+                return;
+            }
+
             if(defeated)
             {
                 damage = 0;
@@ -615,6 +660,9 @@ public:
 
         uint32 GetData(uint32 type)
         {
+            if (isInMountedGauntlet())
+                return npc_mounted_championAI::GetData(type);
+
             // Used by Announcer on periodic check of the bosses state
             if(type == DATA_CHAMPION_DEFEATED)
                 return defeated ? 1 : 0;
@@ -624,6 +672,12 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::UpdateAI(diff);
+                return;
+            }
+
             if (!UpdateVictim())
                 return;
 
@@ -697,9 +751,9 @@ public:
     boss_hunter_toc5() : CreatureScript("boss_hunter_toc5") { }
 
     // Jaelyne Evensong && Zul'tore || Hunter
-    struct boss_hunter_toc5AI : public ScriptedAI
+    struct boss_hunter_toc5AI : public npc_mounted_championAI
     {
-        boss_hunter_toc5AI(Creature* creature) : ScriptedAI(creature) {}
+        boss_hunter_toc5AI(Creature* creature) : npc_mounted_championAI(creature) {}
 
         uint32 multiShotTimer;
         uint32 lightningArrowsTimer;
@@ -711,6 +765,12 @@ public:
 
         void Reset()
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::Reset();
+                return;
+            }
+
             if(defeated)
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
@@ -754,6 +814,9 @@ public:
 
         uint32 GetData(uint32 type)
         {
+            if (isInMountedGauntlet())
+                return npc_mounted_championAI::GetData(type);
+
             // Used by Announcer on periodic check of the bosses state
             if(type == DATA_CHAMPION_DEFEATED)
                 return defeated ? 1 : 0;
@@ -763,6 +826,12 @@ public:
 
         void EnterCombat(Unit* who)
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::EnterCombat(who);
+                return;
+            }
+
             if(InstanceScript* instance = me->GetInstanceScript())
                 if(instance->GetData(BOSS_GRAND_CHAMPIONS) != IN_PROGRESS)
                     instance->SetData(BOSS_GRAND_CHAMPIONS, IN_PROGRESS);
@@ -770,6 +839,12 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::UpdateAI(diff);
+                return;
+            }
+
             if (!UpdateVictim())
                 return;
 
@@ -851,9 +926,9 @@ public:
     boss_rouge_toc5() : CreatureScript("boss_rouge_toc5") { }
 
     // Lana Stouthammer Evensong && Deathstalker Visceri || Rouge
-    struct boss_rouge_toc5AI : public ScriptedAI
+    struct boss_rouge_toc5AI : public npc_mounted_championAI
     {
-        boss_rouge_toc5AI(Creature* creature) : ScriptedAI(creature) {}
+        boss_rouge_toc5AI(Creature* creature) : npc_mounted_championAI(creature) {}
 
         uint32 eviscerateTimer;
         uint32 fanKivesTimer;
@@ -863,6 +938,12 @@ public:
 
         void Reset()
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::Reset();
+                return;
+            }
+
             if(defeated)
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
@@ -880,6 +961,12 @@ public:
 
         void DamageTaken(Unit* /*attacker*/, uint32 & damage)
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::DamageTaken(NULL, damage);
+                return;
+            }
+
             if(defeated)
             {
                 damage = 0;
@@ -916,6 +1003,12 @@ public:
 
         void EnterCombat(Unit* who)
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::EnterCombat(who);
+                return;
+            }
+
             if(InstanceScript* instance = me->GetInstanceScript())
                 if(instance->GetData(BOSS_GRAND_CHAMPIONS) != IN_PROGRESS)
                     instance->SetData(BOSS_GRAND_CHAMPIONS, IN_PROGRESS);
@@ -925,6 +1018,12 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::UpdateAI(diff);
+                return;
+            }
+
             if (!UpdateVictim())
                 return;
 
