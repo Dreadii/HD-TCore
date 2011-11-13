@@ -31,14 +31,14 @@ class instance_trial_of_the_champion : public InstanceMapScript
 public:
     instance_trial_of_the_champion() : InstanceMapScript("instance_trial_of_the_champion", 650) { }
 
-    InstanceScript* GetInstanceScript(InstanceMap* map) const
+    InstanceScript* GetInstanceScript(InstanceMap* pMap) const
     {
-        return new instance_trial_of_the_champion_InstanceMapScript(map);
+        return new instance_trial_of_the_champion_InstanceMapScript(pMap);
     }
 
     struct instance_trial_of_the_champion_InstanceMapScript : public InstanceScript
     {
-        instance_trial_of_the_champion_InstanceMapScript(Map* map) : InstanceScript(map) {}
+        instance_trial_of_the_champion_InstanceMapScript(Map* pMap) : InstanceScript(pMap) {}
 
         uint32 m_auiEncounter[MAX_ENCOUNTER];
 
@@ -51,9 +51,7 @@ public:
         uint64 uiGrandChampionVehicle1GUID;
         uint64 uiGrandChampionVehicle2GUID;
         uint64 uiGrandChampionVehicle3GUID;
-        uint64 uiGrandChampion1GUID;
-        uint64 uiGrandChampion2GUID;
-        uint64 uiGrandChampion3GUID;
+        uint32 grandChampionEntry[3];
         uint64 uiChampionLootGUID;
         uint64 uiArgentChampionGUID;
 
@@ -75,9 +73,6 @@ public:
             uiGrandChampionVehicle1GUID   = 0;
             uiGrandChampionVehicle2GUID   = 0;
             uiGrandChampionVehicle3GUID   = 0;
-            uiGrandChampion1GUID          = 0;
-            uiGrandChampion2GUID          = 0;
-            uiGrandChampion3GUID          = 0;
             uiChampionLootGUID            = 0;
             uiArgentChampionGUID          = 0;
 
@@ -85,6 +80,7 @@ public:
 
             VehicleList.clear();
             TeamInInstance = 0;
+            memset(&grandChampionEntry, 0, sizeof(grandChampionEntry));
             memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
         }
 
@@ -109,7 +105,7 @@ public:
                     TeamInInstance = player->GetTeam();
             }
 
-            switch (creature->GetEntry())
+            switch(creature->GetEntry())
             {
                 // Champions
                 case VEHICLE_MOKRA_SKILLCRUSHER_MOUNT:
@@ -151,7 +147,7 @@ public:
 
         void OnGameObjectCreate(GameObject* go)
         {
-            switch (go->GetEntry())
+            switch(go->GetEntry())
             {
                 case GO_MAIN_GATE:
                     uiMainGateGUID = go->GetGUID();
@@ -165,7 +161,7 @@ public:
 
         void SetData(uint32 uiType, uint32 uiData)
         {
-            switch (uiType)
+            switch(uiType)
             {
                 case DATA_MOVEMENT_DONE:
                     uiMovementDone = uiData;
@@ -184,6 +180,7 @@ public:
                                 summon->RemoveFromWorld();
                     }else if (uiData == DONE)
                     {
+                        DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_CHAMPIONS);
                         if (Creature* pAnnouncer =  instance->GetCreature(uiAnnouncerGUID))
                         {
                             pAnnouncer->GetMotionMaster()->MovePoint(0, 748.309f, 619.487f, 411.171f);
@@ -222,6 +219,15 @@ public:
                         pAnnouncer->SummonGameObject(instance->IsHeroic()? GO_PALETRESS_LOOT_H : GO_PALETRESS_LOOT, 746.59f, 618.49f, 411.09f, 1.42f, 0, 0, 0, 0, 90000000);
                     }
                     break;
+                case DATA_GRAND_CHAMPION_1:
+                    grandChampionEntry[0] = uiData;
+                    break;
+                case DATA_GRAND_CHAMPION_2:
+                    grandChampionEntry[1] = uiData;
+                    break;
+                case DATA_GRAND_CHAMPION_3:
+                    grandChampionEntry[2] = uiData;
+                    break;
             }
 
             if (uiData == DONE)
@@ -230,7 +236,7 @@ public:
 
         uint32 GetData(uint32 uiData)
         {
-            switch (uiData)
+            switch(uiData)
             {
                 case BOSS_GRAND_CHAMPIONS:  return m_auiEncounter[0];
                 case BOSS_ARGENT_CHALLENGE_E: return m_auiEncounter[1];
@@ -240,6 +246,9 @@ public:
                 case DATA_TEAM: return TeamInInstance;
                 case DATA_MOVEMENT_DONE: return uiMovementDone;
                 case DATA_ARGENT_SOLDIER_DEFEATED: return uiArgentSoldierDeaths;
+                case DATA_GRAND_CHAMPION_1: return grandChampionEntry[0];
+                case DATA_GRAND_CHAMPION_2: return grandChampionEntry[1];
+                case DATA_GRAND_CHAMPION_3: return grandChampionEntry[2];
             }
 
             return 0;
@@ -247,35 +256,82 @@ public:
 
         uint64 GetData64(uint32 uiData)
         {
-            switch (uiData)
+            switch(uiData)
             {
                 case DATA_ANNOUNCER: return uiAnnouncerGUID;
                 case DATA_MAIN_GATE: return uiMainGateGUID;
-
-                case DATA_GRAND_CHAMPION_1: return uiGrandChampion1GUID;
-                case DATA_GRAND_CHAMPION_2: return uiGrandChampion2GUID;
-                case DATA_GRAND_CHAMPION_3: return uiGrandChampion3GUID;
             }
 
             return 0;
         }
 
-        void SetData64(uint32 uiType, uint64 uiData)
+        bool CheckAchievementCriteriaMeet(uint32 criteria_id, Player const* /*source*/, Unit const* /*target*/, uint32 /*miscvalue1*/)
         {
-            switch (uiType)
+            switch(criteria_id)
             {
-                case DATA_GRAND_CHAMPION_1:
-                    uiGrandChampion1GUID = uiData;
-                    break;
-                case DATA_GRAND_CHAMPION_2:
-                    uiGrandChampion2GUID = uiData;
-                    break;
-                case DATA_GRAND_CHAMPION_3:
-                    uiGrandChampion3GUID = uiData;
-                    break;
+                case CRITERIA_CHAMPION_JACOB:
+                case CRITERIA_CHAMPION_LANA:
+                case CRITERIA_CHAMPION_COLOSOS:
+                case CRITERIA_CHAMPION_AMBROSE:
+                case CRITERIA_CHAMPION_JAELYNE:
+                case CRITERIA_CHAMPION_MOKRA:
+                case CRITERIA_CHAMPION_VISCERI:
+                case CRITERIA_CHAMPION_RUNOK:
+                case CRITERIA_CHAMPION_ERESSEA:
+                case CRITERIA_CHAMPION_ZULTORE:
+                    for(uint8 i = 0; i<3; i++)
+                        if(grandChampionEntry[i] == GetRelatedCreatureEntry(criteria_id))
+                            return true;
+                    return false;
             }
-        }
 
+            return false;
+        }
+        uint32 GetRelatedCreatureEntry(uint32 criteria_id)
+        {
+            switch(criteria_id)
+            {
+                case CRITERIA_CHAMPION_JACOB:   return NPC_JACOB;
+                case CRITERIA_CHAMPION_LANA:    return NPC_LANA;
+                case CRITERIA_CHAMPION_COLOSOS: return NPC_COLOSOS;
+                case CRITERIA_CHAMPION_AMBROSE: return NPC_AMBROSE;
+                case CRITERIA_CHAMPION_JAELYNE: return NPC_JAELYNE;
+
+                case CRITERIA_CHAMPION_MOKRA:   return NPC_MOKRA;
+                case CRITERIA_CHAMPION_VISCERI: return NPC_VISCERI;
+                case CRITERIA_CHAMPION_RUNOK:   return NPC_RUNOK;
+                case CRITERIA_CHAMPION_ERESSEA: return NPC_ERESSEA;
+                case CRITERIA_CHAMPION_ZULTORE: return NPC_ZULTORE;
+
+                case CRITERIA_MEMORIE_HOGGER:
+                case CRITERIA_MEMORIE_VANCLEEF:
+                case CRITERIA_MEMORIE_MUTANUS:
+                case CRITERIA_MEMORIE_HEROD:
+                case CRITERIA_MEMORIE_LUCIFROM:
+                case CRITERIA_MEMORIE_THUNDERAAN:
+                case CRITERIA_MEMORIE_CHROMAGGUS:
+                case CRITERIA_MEMORIE_HAKKAR:
+                case CRITERIA_MEMORIE_VEKNILASH:
+                case CRITERIA_MEMORIE_KALITHRESH:
+                case CRITERIA_MEMORIE_MALCHEZAAR:
+                case CRITERIA_MEMORIE_GRUUL:
+                case CRITERIA_MEMORIE_VASHJ:
+                case CRITERIA_MEMORIE_ARCHIMONDE:
+                case CRITERIA_MEMORIE_ILLIDAN:
+                case CRITERIA_MEMORIE_DELRISSA:
+                case CRITERIA_MEMORIE_MURU:
+                case CRITERIA_MEMORIE_INGVAR:
+                case CRITERIA_MEMORIE_CYANIGOSA:
+                case CRITERIA_MEMORIE_ECK:
+                case CRITERIA_MEMORIE_ONYXIA:
+                case CRITERIA_MEMORIE_HEIGAN:
+                case CRITERIA_MEMORIE_IGNIS:
+                case CRITERIA_MEMORIE_VEZAX:
+                case CRITERIA_MEMORIE_ALGALON:
+                    return 0;
+            }
+            return 0;
+        }
         std::string GetSaveData()
         {
             OUT_SAVE_INST_DATA;
