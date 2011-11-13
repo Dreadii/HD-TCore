@@ -3321,6 +3321,13 @@ void SpellMgr::LoadDbcDataCorrections()
                 break;
             // ENDOF ULDUAR SPELLS
             //
+            // TRIAL OF THE CHAMPION SPELLS
+            case 68284: // ToC5 Charge
+                spellInfo->Effect[1] = SPELL_EFFECT_SCHOOL_DAMAGE;
+                spellInfo->EffectImplicitTargetA[1] = TARGET_UNIT_TARGET_ENEMY;
+                spellInfo->EffectBasePoints[1] = 20000;
+                break;
+            // END OF TRIAL OF THE CHAMPION SPELLS
             // TRIAL OF THE CRUSADER SPELLS
             //
             case 66258: // Infernal Eruption (10N)
