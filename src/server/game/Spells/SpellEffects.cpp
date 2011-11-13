@@ -4608,6 +4608,8 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                 {
                     if(m_caster->GetOwner())
                         m_caster->GetOwner()->CastSpell(unitTarget,62626,true );
+                    else
+                        m_caster->CastSpell(unitTarget,62626,true );
                         return;
                 }
                 // Charge - Argent Tournament

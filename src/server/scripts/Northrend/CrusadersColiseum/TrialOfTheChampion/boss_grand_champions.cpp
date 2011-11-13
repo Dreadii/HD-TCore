@@ -1285,59 +1285,21 @@ class spell_toc5_shield_breaker : public SpellScriptLoader
         {
             PrepareSpellScript(spell_toc5_shield_breakerSpellScript)
 
-            bool handled;
-
-            bool Load()
+            void HandleAfterHit()
             {
-                handled = false;
-                return true;
-            }
 
-            void HandleBeforeHit()
-            {
-                if(handled)
-                    return;
-
-                Unit* caster = GetCaster();
                 Unit* target = GetTargetUnit();
 
-                if(!caster || !target)
+                if(!target)
                     return;
 
-                uint32 damage = 0;
-
-                switch(GetSpellInfo()->Id)
-                {
-                    case 62575:
-                    default:
-                        damage = 2000;
-                        break;
-                }
-
-                if(caster->isCharmed())
-                {
-                    if(Unit* rider = caster->GetCharmer())
-                        rider->CastSpell(target, SPELL_SHIELD_BREAKER_VISUAL, true);
-                }
-                else
-                    caster->CastSpell(target, SPELL_SHIELD_BREAKER_VISUAL, true);
-
-                if(Aura* defend = GetTargetUnit()->GetAura(SPELL_DEFEND))
-                    damage -= (uint32)(damage*(0.3f * defend->GetStackAmount())-1);
-
-                // Deal the damage and show it on caster's log
-                caster->DealDamage(target, damage, NULL, SPELL_DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL);
-                caster->SendSpellNonMeleeDamageLog(target, GetSpellInfo()->Id, damage, SPELL_SCHOOL_MASK_NORMAL, 0, 0, true, 0);
-
                 // Drop 1 charge of defend from the target
-                if(Aura* defend = GetTargetUnit()->GetAura(SPELL_DEFEND))
+                if(Aura* defend = target->GetAura(SPELL_DEFEND))
                     defend->ModStackAmount(-1);
-
-                handled = true;
             }
             void Register()
             {
-                BeforeHit += SpellHitFn(spell_toc5_shield_breakerSpellScript::HandleBeforeHit);
+                AfterHit += SpellHitFn(spell_toc5_shield_breakerSpellScript::HandleAfterHit);
             }
         };
 

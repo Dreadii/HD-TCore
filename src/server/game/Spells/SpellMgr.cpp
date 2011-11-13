@@ -2895,6 +2895,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 53454: // Impale
             case 59446: // Impale
             case 62383: // Shatter
+            case 62626: // Shield Breaker
             case 64777: // Machine Gun
             case 65239: // Machine Gun
             case 65919: // Impale
@@ -3322,9 +3323,6 @@ void SpellMgr::LoadDbcDataCorrections()
             // ENDOF ULDUAR SPELLS
             //
             // TRIAL OF THE CHAMPION SPELLS
-            case 45815: // Reused spell for ToC5 Shield-Breaker
-                spellInfo->Effect[0] = SPELL_EFFECT_DUMMY;
-                break;
             case 68284: // ToC5 Charge
                 spellInfo->Effect[1] = SPELL_EFFECT_DUMMY;
                 spellInfo->EffectImplicitTargetA[1] = TARGET_UNIT_TARGET_ENEMY;
