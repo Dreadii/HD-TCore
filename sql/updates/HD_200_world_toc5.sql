@@ -1,4 +1,4 @@
-DELETE FROM `spell_script_names` WHERE spell_id IN (66867, 67534, 67830, 66482, 63130, 63131, 63132, 62575, 68282, 68284, 62626);
+DELETE FROM `spell_script_names` WHERE spell_id IN (66515, 66867, 67534, 67830, 66482);
 INSERT INTO `spell_script_names` VALUES
 (66867, 'spell_eadric_hammer_of_righteous'), -- Hammer can be picked by target if isn't under HoJ effect
 (66515, 'spell_paletress_shield'),           -- Reflect 25% of abosorbed damage
@@ -15,9 +15,9 @@ INSERT INTO `conditions` VALUES
 (13, 0, 66905, 0, 18, 1, 35119, 0, 0, '', 'Eadric Hammer of Rigtheous'); -- Target Eadric with Hammer of Righteous
 
 -- Achievements
-DELETE FROM achievement_criteria_data WHERE criteria_id IN (11863, 11420);
+DELETE FROM achievement_criteria_data WHERE criteria_id IN (11863, 11420, 12439, 11858);
 DELETE FROM achievement_criteria_data WHERE criteria_id BETWEEN 12298 AND 12306;
-DELETE FROM achievement_criteria_data WHERE criteria_id BETWEEN 12310 AND 12322;
+DELETE FROM achievement_criteria_data WHERE criteria_id BETWEEN 12310 AND 12324;
 DELETE FROM achievement_criteria_data WHERE criteria_id BETWEEN 11904 AND 11927;
 INSERT INTO `achievement_criteria_data` VALUES
 -- Champion achievements (Normal)
