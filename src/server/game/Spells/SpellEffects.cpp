@@ -4627,12 +4627,10 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     if (!unitTarget)
                         return;
                     m_caster->CastSpell(unitTarget,68284,true);
-                    return;
                 }
                 // Shield-Breaker - Argent Tournament
                 case 62626:
                 // Charge - Argent Tournament
-                case 68284:
                 case 68321:
                 {
                     if(!unitTarget)

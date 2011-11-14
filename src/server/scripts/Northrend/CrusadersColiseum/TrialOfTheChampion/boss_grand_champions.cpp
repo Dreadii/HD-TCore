@@ -31,7 +31,7 @@ EndScriptData */
 enum eSpells
 {
     //Vehicle
-    SPELL_CHARGE                    = 68284,
+    SPELL_CHARGE                    = 68282,
     SPELL_SHIELD_BREAKER            = 62575,
     SPELL_SHIELD_BREAKER_VISUAL     = 45815,
     SPELL_SHIELD                    = 66482,
