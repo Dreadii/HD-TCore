@@ -60,15 +60,15 @@ UPDATE creature_template SET ScriptName = 'npc_argent_priest' WHERE entry = 3530
 UPDATE `creature_template` SET `mechanic_immune_mask` = '650854267' WHERE `entry` IN (35305, 35309, 35307, 12488, 12439, 12448);
 
 -- Memories equip templates
-UPDATE `creature_template` SET `equipment_id` = 22 WHERE `entry` IN  (34942, (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = 34942));
-UPDATE `creature_template` SET `equipment_id` = 1431 WHERE `entry` = (35028, (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = 35028));
-UPDATE `creature_template` SET `equipment_id` = 1178 WHERE `entry` = (35030, (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = 35030));
-UPDATE `creature_template` SET `equipment_id` = 1330 WHERE `entry` = (35031, (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = 35031));
-UPDATE `creature_template` SET `equipment_id` = 1808 WHERE `entry` = (35036, (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = 35036));
-UPDATE `creature_template` SET `equipment_id` = 1496 WHERE `entry` = (35037, (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = 35037));
-UPDATE `creature_template` SET `equipment_id` = 2216 WHERE `entry` = (35042, (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = 35042));
-UPDATE `creature_template` SET `equipment_id` = 714 WHERE `entry` = (35045, (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = 35045));
-UPDATE `creature_template` SET `equipment_id` = 271 WHERE `entry` = (35049, (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = 35049));
+UPDATE `creature_template` SET `equipment_id` = 22 WHERE `entry` IN  (34942, 35531);
+UPDATE `creature_template` SET `equipment_id` = 1431 WHERE `entry` IN (35028, 35541);
+UPDATE `creature_template` SET `equipment_id` = 1178 WHERE `entry` IN (35030, 35530);
+UPDATE `creature_template` SET `equipment_id` = 1330 WHERE `entry` IN (35031, 35536);
+UPDATE `creature_template` SET `equipment_id` = 1808 WHERE `entry` IN (35036, 35543);
+UPDATE `creature_template` SET `equipment_id` = 1496 WHERE `entry` IN (35037, 35535);
+UPDATE `creature_template` SET `equipment_id` = 2216 WHERE `entry` IN (35042, 35533);
+UPDATE `creature_template` SET `equipment_id` = 714 WHERE `entry` IN (35045, 35534);
+UPDATE `creature_template` SET `equipment_id` = 271 WHERE `entry` IN (35049, 35529);
 
 -- Update spells for players mounts
 UPDATE `creature_template` SET `spell1` = 68505, `spell2` = 62575, `spell3` = 68282, `spell4` = 66482 WHERE `entry` IN (35644, 36558);
