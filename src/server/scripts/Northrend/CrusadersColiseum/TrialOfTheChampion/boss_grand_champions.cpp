@@ -1099,21 +1099,39 @@ class spell_toc5_ride_mount : public SpellScriptLoader
                 return SPELL_CAST_OK;
             }
 
-            void HandleBeforeHit()
+            void Register()
             {
-                Unit* target = GetTargetUnit();
+                OnCheckCast += SpellCheckCastFn(spell_toc5_ride_mount_SpellScript::CheckRequirement);
+            }
+        };
 
-                if(!target)
-                    return;
-                target->RemoveAurasDueToSpell(SPELL_DEFEND);
+        class spell_toc5_ride_mount_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_toc5_ride_mount_AuraScript);
+
+            void HandleOnEffect(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
+                if (Unit* target = GetTarget())
+                    target->RemoveAurasDueToSpell(SPELL_DEFEND);
+                if (Unit* caster = GetCaster())
+                {
+                    caster->RemoveAurasDueToSpell(SPELL_DEFEND);
+                    for (uint8 i=0; i<3; i++)
+                        caster->RemoveAurasDueToSpell(SPELL_VISUAL_SHIELD_1+i);
+                }
             }
 
             void Register()
             {
-                BeforeHit += SpellHitFn(spell_toc5_ride_mount_SpellScript::HandleBeforeHit);
-                OnCheckCast += SpellCheckCastFn(spell_toc5_ride_mount_SpellScript::CheckRequirement);
+                OnEffectApply += AuraEffectApplyFn(spell_toc5_ride_mount_AuraScript::HandleOnEffect, EFFECT_0, SPELL_AURA_CONTROL_VEHICLE, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
+                OnEffectRemove += AuraEffectRemoveFn(spell_toc5_ride_mount_AuraScript::HandleOnEffect, EFFECT_0, SPELL_AURA_CONTROL_VEHICLE, AURA_EFFECT_HANDLE_REAL);
             }
         };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_toc5_ride_mount_AuraScript();
+        }
 
         SpellScript* GetSpellScript() const
         {
