@@ -100,14 +100,14 @@ const Point MovementPoint[] =
   {750.23f, 618.35f, 411.09f}
 };
 */
-void AggroAllPlayers(Creature* pTemp)
+void AggroAllPlayers(Creature* temp)
 {
-    Map::PlayerList const &PlList = pTemp->GetMap()->GetPlayers();
+    Map::PlayerList const &playerList = temp->GetMap()->GetPlayers();
 
-    if (PlList.isEmpty())
+    if (playerList.isEmpty())
             return;
 
-    for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
+    for (Map::PlayerList::const_iterator i = playerList.begin(); i != playerList.end(); ++i)
     {
         if (Player* player = i->getSource())
         {
@@ -116,11 +116,11 @@ void AggroAllPlayers(Creature* pTemp)
 
             if (player->isAlive())
             {
-                pTemp->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE);
-                pTemp->SetReactState(REACT_AGGRESSIVE);
-                pTemp->SetInCombatWith(player);
-                player->SetInCombatWith(pTemp);
-                pTemp->AddThreat(player, 0.0f);
+                temp->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE);
+                temp->SetReactState(REACT_AGGRESSIVE);
+                temp->SetInCombatWith(player);
+                player->SetInCombatWith(temp);
+                temp->AddThreat(player, 0.0f);
             }
         }
     }
@@ -140,9 +140,9 @@ struct npc_mounted_championAI : ScriptedAI
 
     InstanceScript* instance;
 
-    uint32 uiChargeTimer;
-    uint32 uiShieldBreakerTimer;
-    uint32 uiBuffTimer;
+    uint32 chargeTimer;
+    uint32 shieldBreakerTimer;
+    uint32 buffTimer;
     bool _defeated;
 
     void Reset()
@@ -151,9 +151,9 @@ struct npc_mounted_championAI : ScriptedAI
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
         me->Mount(GetMountId());
-        uiChargeTimer = urand(1000, 5000);
-        uiShieldBreakerTimer = 8000;
-        uiBuffTimer = urand(4000, 5000);
+        chargeTimer = urand(1000, 5000);
+        shieldBreakerTimer = 8000;
+        buffTimer = urand(4000, 5000);
         _defeated = false;
     }
 
@@ -239,17 +239,17 @@ struct npc_mounted_championAI : ScriptedAI
         if(_defeated)
             return;
 
-        if (uiBuffTimer <= uiDiff)
+        if (buffTimer <= uiDiff)
         {
             Aura* defend = me->GetAura(SPELL_SHIELD);
             if (!defend || defend->GetStackAmount() < 3)
             {
                 DoCast(SPELL_SHIELD);
-                uiBuffTimer = urand(4000, 5000);
-            } else uiBuffTimer = urand(1000, 2000);
-        }else uiBuffTimer -= uiDiff;
+                buffTimer = urand(4000, 5000);
+            } else buffTimer = urand(1000, 2000);
+        }else buffTimer -= uiDiff;
 
-        if (uiChargeTimer <= uiDiff)
+        if (chargeTimer <= uiDiff)
         {
             if(Unit* target = SelectTarget(SELECT_TARGET_FARTHEST))
             {
@@ -257,16 +257,16 @@ struct npc_mounted_championAI : ScriptedAI
                 me->AddThreat(target, 5.0f);
                 DoCast(target, SPELL_CHARGE, true);
             }
-            uiChargeTimer = 5000;
-        }else uiChargeTimer -= uiDiff;
+            chargeTimer = 5000;
+        }else chargeTimer -= uiDiff;
 
-        if (uiShieldBreakerTimer <= uiDiff)
+        if (shieldBreakerTimer <= uiDiff)
         {
             if(Unit* target = SelectTarget(SELECT_TARGET_FARTHEST))
                 DoCast(target, SPELL_SHIELD_BREAKER, true);
 
-            uiShieldBreakerTimer = 7000;
-        }else uiShieldBreakerTimer -= uiDiff;
+            shieldBreakerTimer = 7000;
+        }else shieldBreakerTimer -= uiDiff;
 
         // Use Thrust instead of melee attack
         if (me->isAttackReady() && me->IsWithinMeleeRange(me->getVictim()))
@@ -1203,6 +1203,7 @@ class player_hex_mendingAI : public PlayerAI
 
         void HealReceived(Unit* healer, uint32 & addHealth)
         {
+            PlayerAI::HealReceived(healer, addHealth);
             me->CastCustomSpell(SPELL_HEX_OF_MENDING_HEAL, SPELLVALUE_BASE_POINT0, int32(addHealth*2.0f), me, true);
         }
 
