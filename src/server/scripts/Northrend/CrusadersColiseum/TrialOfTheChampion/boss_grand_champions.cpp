@@ -1196,54 +1196,6 @@ class spell_toc5_defend : public SpellScriptLoader
         }
 };
 
-class spell_toc5_defend_visual : public SpellScriptLoader
-{
-    public:
-        spell_toc5_defend_visual() : SpellScriptLoader("spell_toc5_defend_visual") { }
-
-        class spell_toc5_defend_visual_AuraScript : public AuraScript
-        {
-            PrepareAuraScript(spell_toc5_defend_visual_AuraScript);
-
-            void HandleEffectPeriodic(AuraEffect const* /*aurEff*/)
-            {
-                Unit* caster = GetCaster();
-
-                if(!caster)
-                    return;
-
-                if(Unit* mount = caster->GetVehicleBase())
-                {
-                    if(!mount->HasAura(SPELL_DEFEND))
-                    {
-                        for(uint8 i=0; i < 3; ++i)
-                            caster->RemoveAurasDueToSpell(SPELL_VISUAL_SHIELD_1 + i);
-                    }
-                }
-                else
-                {
-                    if(!caster->HasAura(SPELL_DEFEND))
-                    {
-                        for(uint8 i=0; i < 3; ++i)
-                            caster->RemoveAurasDueToSpell(SPELL_VISUAL_SHIELD_1 + i);
-                    }
-                }
-
-                return;
-            }
-
-            void Register()
-            {
-                OnEffectPeriodic += AuraEffectPeriodicFn(spell_toc5_defend_visual_AuraScript::HandleEffectPeriodic, EFFECT_0, SPELL_AURA_PERIODIC_TRIGGER_SPELL);
-            }
-        };
-
-        AuraScript* GetAuraScript() const
-        {
-            return new spell_toc5_defend_visual_AuraScript();
-        }
-};
-
 class player_hex_mendingAI : public PlayerAI
 {
     public:
@@ -1316,6 +1268,5 @@ void AddSC_boss_grand_champions()
     new boss_rouge_toc5();
     new spell_toc5_ride_mount();
     new spell_toc5_defend();
-    new spell_toc5_defend_visual();
     new spell_toc5_hex_mending();
 }
