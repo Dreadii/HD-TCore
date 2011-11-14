@@ -2896,6 +2896,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 59446: // Impale
             case 62383: // Shatter
             case 68505: // Thrust
+            case 62544: // Thrust
             case 62626: // Shield Breaker
             case 68284: // Charge
             case 64777: // Machine Gun
