@@ -15,7 +15,10 @@ INSERT INTO `conditions` VALUES
 (13, 0, 66905, 0, 18, 1, 35119, 0, 0, '', 'Eadric Hammer of Rigtheous'); -- Target Eadric with Hammer of Righteous
 
 -- Achievements
-DELETE FROM achievement_criteria_data WHERE criteria_id IN (12310, 12311, 12312, 12313, 12314, 12318, 12319, 12320, 12321, 12322);
+DELETE FROM achievement_criteria_data WHERE criteria_id IN (11863, 11420);
+DELETE FROM achievement_criteria_data WHERE criteria_id BETWEEN 12298 AND 12306;
+DELETE FROM achievement_criteria_data WHERE criteria_id BETWEEN 12310 AND 12322;
+DELETE FROM achievement_criteria_data WHERE criteria_id BETWEEN 11904 AND 11927;
 INSERT INTO `achievement_criteria_data` VALUES
 -- Champion achievements (Normal)
 (11420, 18, 0, 0, ''),
@@ -71,11 +74,19 @@ INSERT INTO `achievement_criteria_data` VALUES
 (12312, 12, 1, 0, ''),
 (12313, 12, 1, 0, ''),
 (12314, 12, 1, 0, ''),
+(12315, 12, 1, 0, ''),
+(12316, 12, 1, 0, ''),
+(12317, 12, 1, 0, ''),
 (12318, 12, 1, 0, ''),
 (12319, 12, 1, 0, ''),
 (12320, 12, 1, 0, ''),
 (12321, 12, 1, 0, ''),
 (12322, 12, 1, 0, ''),
+(12323, 12, 1, 0, ''),
+(12324, 12, 1, 0, ''),
+(12439, 12, 1, 0, ''),
+-- Faceroller achievement
+(11858, 12, 1, 0, ''),
 -- Memories achievement
 (11863, 12, 1, 0, ''),
 (11904, 12, 1, 0, ''),
