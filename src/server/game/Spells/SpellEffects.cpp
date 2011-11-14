@@ -4613,6 +4613,14 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                         return;
                 }
                 // Charge - Argent Tournament
+                case 68282:
+                {
+                    if (!unitTarget)
+                        return;
+                    m_caster->CastSpell(unitTarget,68284,true);
+                    return;
+                }
+                // Charge - Argent Tournament
                 case 62960:
                 {
                     if (!unitTarget)

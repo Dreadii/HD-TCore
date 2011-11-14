@@ -2895,7 +2895,9 @@ void SpellMgr::LoadSpellCustomAttr()
             case 53454: // Impale
             case 59446: // Impale
             case 62383: // Shatter
+            case 68505: // Thrust
             case 62626: // Shield Breaker
+            case 68284: // Charge
             case 64777: // Machine Gun
             case 65239: // Machine Gun
             case 65919: // Impale
@@ -3324,7 +3326,9 @@ void SpellMgr::LoadDbcDataCorrections()
             //
             // TRIAL OF THE CHAMPION SPELLS
             case 68284: // ToC5 Charge
-                spellInfo->Effect[1] = SPELL_EFFECT_DUMMY;
+                spellInfo->Effect[1] = SPELL_EFFECT_SCHOOL_DAMAGE;
+                spellInfo->EffectBasePoints[1] = 20000;
+            case 68282: // ToC5 Charge
                 spellInfo->EffectImplicitTargetA[1] = TARGET_UNIT_TARGET_ENEMY;
                 break;
             // END OF TRIAL OF THE CHAMPION SPELLS

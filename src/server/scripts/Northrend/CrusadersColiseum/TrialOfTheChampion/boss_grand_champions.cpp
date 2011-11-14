@@ -1226,56 +1226,6 @@ class spell_toc5_defend_visual : public SpellScriptLoader
         }
 };
 
-class spell_toc5_charge : public SpellScriptLoader
-{
-    public:
-        spell_toc5_charge() : SpellScriptLoader("spell_toc5_charge") {}
-
-        class spell_toc5_chargeSpellScript : public SpellScript
-        {
-            PrepareSpellScript(spell_toc5_chargeSpellScript)
-
-            void HandleOnHit(SpellEffIndex /*effIndex*/)
-            {
-                Unit* caster = GetCaster();
-                Unit* target = GetTargetUnit();
-
-                if(!caster || !target)
-                    return;
-
-                uint32 damage = 0;
-
-                switch(GetSpellInfo()->Id)
-                {
-                    case 68282:
-                    default:
-                        damage = 20000;
-                        break;
-                }
-
-                if(Aura* defend = GetTargetUnit()->GetAura(SPELL_DEFEND))
-                    damage -= (uint32)(damage*(0.3f * defend->GetStackAmount())-1);
-
-                // Deal the damage and show it on caster's log
-                caster->DealDamage(target, damage, NULL, SPELL_DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL);
-                caster->SendSpellNonMeleeDamageLog(target, GetSpellInfo()->Id, damage, SPELL_SCHOOL_MASK_NORMAL, 0, 0, true, 0);
-
-                // Drop 1 charge of defend from the target
-                if(Aura* defend = GetTargetUnit()->GetAura(SPELL_DEFEND))
-                    defend->ModStackAmount(-1);
-            }
-            void Register()
-            {
-                OnEffectHitTarget += SpellEffectFn(spell_toc5_chargeSpellScript::HandleOnHit, EFFECT_FIRST_FOUND, SPELL_EFFECT_DUMMY);
-            }
-        };
-
-        SpellScript *GetSpellScript() const
-        {
-            return new spell_toc5_chargeSpellScript();
-        }
-};
-
 class spell_toc5_shield_breaker : public SpellScriptLoader
 {
     public:
@@ -1382,7 +1332,6 @@ void AddSC_boss_grand_champions()
     new spell_toc5_ride_mount();
     new spell_toc5_defend();
     new spell_toc5_defend_visual();
-    new spell_toc5_charge();
     new spell_toc5_shield_breaker();
     new spell_toc5_hex_mending();
 }

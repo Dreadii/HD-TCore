@@ -3,8 +3,6 @@ INSERT INTO `spell_script_names` VALUES
 (66867, 'spell_eadric_hammer_of_righteous'), -- Hammer can be picked by target if isn't under HoJ effect
 (67534, 'spell_toc5_hex_mending'),           -- Hex of mending spell effect
 (67830, 'spell_toc5_ride_mount'),            -- Allow ride only if a Lance is equiped
-(68282, 'spell_toc5_charge'),
-(68284, 'spell_toc5_charge'),
 -- (66482, 'spell_toc5_defend'),
 -- (63130, 'spell_toc5_defend_visual'),
 -- (63131, 'spell_toc5_defend_visual'),
@@ -96,3 +94,5 @@ CREATE TABLE `entry_temp` (`id` INT);
 INSERT INTO `entry_temp` SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` IN (35572, 35569, 35571, 35570, 35617, 34705, 34702, 34701, 34657, 34703);
 UPDATE `creature_template` SET `type_flags` = 2048 WHERE `entry` IN (SELECT id FROM`entry_temp`);
 DROP TABLE `entry_temp`;
+
+UPDATE `creature_template` SET `spell1` = 68505, `spell2` = 62575, `spell3` = 68282, `spell4` = 66482 WHERE `entry` IN (35644, 36558);
