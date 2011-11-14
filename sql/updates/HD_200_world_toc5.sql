@@ -13,8 +13,6 @@ DELETE FROM `conditions` WHERE SourceTypeOrReferenceId = 13 AND SourceEntry = 66
 INSERT INTO `conditions` VALUES
 (13, 0, 66905, 0, 18, 1, 35119, 0, 0, '', 'Eadric Hammer of Rigtheous'); -- Target Eadric with Hammer of Righteous
 
-UPDATE `creature_template` SET `spell3` = 68284 WHERE `entry` = 36558;
-
 -- Achievements
 DELETE FROM achievement_criteria_data WHERE criteria_id IN (12310, 12311, 12312, 12313, 12314, 12318, 12319, 12320, 12321, 12322);
 INSERT INTO `achievement_criteria_data` VALUES
@@ -71,17 +69,10 @@ UPDATE `creature_template` SET `equipment_id` = 2216 WHERE `entry` = (35042, (SE
 UPDATE `creature_template` SET `equipment_id` = 714 WHERE `entry` = (35045, (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = 35045));
 UPDATE `creature_template` SET `equipment_id` = 271 WHERE `entry` = (35049, (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = 35049));
 
-SET @NPC_LIGHTWIELDER   := 35309;
-SET @NPC_PRIESTESS      := 35307;
-SET @NPC_BLACK_KNIGHT   := 35451;
-SET @NPC_LIGHTWIELDER_H := (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = @NPC_LIGHTWIELDER);
-SET @NPC_PRIESTESS_H := (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = @NPC_PRIESTESS);
-SET @NPC_BLACK_KNIGHT_H := (SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` = @NPC_BLACK_KNIGHT);
+-- Update spells for players mounts
+UPDATE `creature_template` SET `spell1` = 68505, `spell2` = 62575, `spell3` = 68282, `spell4` = 66482 WHERE `entry` IN (35644, 36558);
 
-UPDATE `creature_template` SET `equipment_id` = @TemplateId WHERE `entry` IN (@NPC_LIGHTWIELDER, @NPC_LIGHTWIELDER_H);
-UPDATE `creature_template` SET `equipment_id` = @TemplateId+1 WHERE `entry` IN (@NPC_PRIESTESS, @NPC_PRIESTESS_H);
-UPDATE `creature_template` SET `equipment_id` = @TemplateId+2 WHERE `entry` IN (@NPC_BLACK_KNIGHT, @NPC_BLACK_KNIGHT_H);
-
+-- Allow mounted combat on Faction champions and Grand Faction Champions
 UPDATE `creature_template` SET `type_flags` = 2048, `ScriptName` = 'generic_vehicleAI_toc5' WHERE `entry` IN (35328, 35329, 35331, 35332, 35330, 35314, 35325, 35327, 35323, 35326);
 UPDATE `creature_template` SET `type_flags` = 2048 WHERE `entry` IN (35572, 35569, 35571, 35570, 35617, 34705, 34702, 34701, 34657, 34703);
 -- For Hero entries
@@ -90,4 +81,5 @@ INSERT INTO `entry_temp` SELECT `difficulty_entry_1` FROM `creature_template` WH
 UPDATE `creature_template` SET `type_flags` = 2048 WHERE `entry` IN (SELECT id FROM`entry_temp`);
 DROP TABLE `entry_temp`;
 
-UPDATE `creature_template` SET `spell1` = 68505, `spell2` = 62575, `spell3` = 68282, `spell4` = 66482 WHERE `entry` IN (35644, 36558);
+-- Set main gate closed by default
+UPDATE `gameobject` SET `state` = 1 WHERE `guid` = 150081;
