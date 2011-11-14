@@ -1226,39 +1226,6 @@ class spell_toc5_defend_visual : public SpellScriptLoader
         }
 };
 
-class spell_toc5_shield_breaker : public SpellScriptLoader
-{
-    public:
-        spell_toc5_shield_breaker() : SpellScriptLoader("spell_toc5_shield_breaker") {}
-
-        class spell_toc5_shield_breakerSpellScript : public SpellScript
-        {
-            PrepareSpellScript(spell_toc5_shield_breakerSpellScript)
-
-            void HandleAfterHit()
-            {
-
-                Unit* target = GetTargetUnit();
-
-                if(!target)
-                    return;
-
-                // Drop 1 charge of defend from the target
-                if(Aura* defend = target->GetAura(SPELL_DEFEND))
-                    defend->ModStackAmount(-1);
-            }
-            void Register()
-            {
-                AfterHit += SpellHitFn(spell_toc5_shield_breakerSpellScript::HandleAfterHit);
-            }
-        };
-
-        SpellScript *GetSpellScript() const
-        {
-            return new spell_toc5_shield_breakerSpellScript();
-        }
-};
-
 class player_hex_mendingAI : public PlayerAI
 {
     public:
@@ -1332,6 +1299,5 @@ void AddSC_boss_grand_champions()
     new spell_toc5_ride_mount();
     new spell_toc5_defend();
     new spell_toc5_defend_visual();
-    new spell_toc5_shield_breaker();
     new spell_toc5_hex_mending();
 }

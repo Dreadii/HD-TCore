@@ -4633,6 +4633,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                 case 62626:
                 // Charge - Argent Tournament
                 case 68321:
+                case 68282:
                 {
                     if(!unitTarget)
                         return;
@@ -4641,6 +4642,9 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
 
                     if(unitTarget->GetAura(64100))
                         unitTarget->RemoveAuraFromStack(64100);
+
+                    if(Aura* defend = unitTarget->GetAura(66482))
+                        defend->ModStackAmount(-1);
                     return;
                 }
                 // Shadow Flame (All script effects, not just end ones to prevent player from dodging the last triggered spell)
