@@ -3329,6 +3329,7 @@ void SpellMgr::LoadDbcDataCorrections()
                 spellInfo->Effect[1] = SPELL_EFFECT_SCHOOL_DAMAGE;
                 spellInfo->EffectBasePoints[1] = 20000;
             case 68282: // ToC5 Charge
+                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_TARGET_ENEMY;
                 spellInfo->EffectImplicitTargetA[1] = TARGET_UNIT_TARGET_ENEMY;
                 break;
             // END OF TRIAL OF THE CHAMPION SPELLS

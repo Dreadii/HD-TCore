@@ -4613,14 +4613,6 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                         return;
                 }
                 // Charge - Argent Tournament
-                case 68282:
-                {
-                    if (!unitTarget)
-                        return;
-                    m_caster->CastSpell(unitTarget,68284,true);
-                    return;
-                }
-                // Charge - Argent Tournament
                 case 62960:
                 {
                     if (!unitTarget)
@@ -4629,11 +4621,16 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     m_caster->CastSpell(unitTarget,68321,true );
                     return;
                 }
+                // Charge - Argent Tournament
+                case 68282:
+                {
+                    if (!unitTarget)
+                        return;
+                    m_caster->CastSpell(unitTarget,68284,true);
+                }
                 // Shield-Breaker - Argent Tournament
                 case 62626:
-                // Charge - Argent Tournament
                 case 68321:
-                case 68282:
                 {
                     if(!unitTarget)
                         return;
