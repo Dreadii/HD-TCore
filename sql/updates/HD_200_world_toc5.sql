@@ -17,6 +17,18 @@ INSERT INTO `conditions` VALUES
 -- Achievements
 DELETE FROM achievement_criteria_data WHERE criteria_id IN (12310, 12311, 12312, 12313, 12314, 12318, 12319, 12320, 12321, 12322);
 INSERT INTO `achievement_criteria_data` VALUES
+-- Champion achievements (Normal)
+(11420, 18, 0, 0, ''),
+(12298, 18, 0, 0, ''),
+(12299, 18, 0, 0, ''),
+(12300, 18, 0, 0, ''),
+(12301, 18, 0, 0, ''),
+(12302, 18, 0, 0, ''),
+(12303, 18, 0, 0, ''),
+(12304, 18, 0, 0, ''),
+(12305, 18, 0, 0, ''),
+(12306, 18, 0, 0, ''),
+-- Champion achievements (Hero)
 (12310, 18, 0, 0, ''),
 (12311, 18, 0, 0, ''),
 (12312, 18, 0, 0, ''),
@@ -27,6 +39,7 @@ INSERT INTO `achievement_criteria_data` VALUES
 (12320, 18, 0, 0, ''),
 (12321, 18, 0, 0, ''),
 (12322, 18, 0, 0, ''),
+-- Memories achievment
 (11863, 18, 0, 0, ''),
 (11904, 18, 0, 0, ''),
 (11905, 18, 0, 0, ''),
@@ -52,6 +65,7 @@ INSERT INTO `achievement_criteria_data` VALUES
 (11925, 18, 0, 0, ''),
 (11926, 18, 0, 0, ''),
 (11927, 18, 0, 0, ''),
+-- Champion achievements (Hero)
 (12310, 12, 1, 0, ''),
 (12311, 12, 1, 0, ''),
 (12312, 12, 1, 0, ''),
@@ -62,6 +76,7 @@ INSERT INTO `achievement_criteria_data` VALUES
 (12320, 12, 1, 0, ''),
 (12321, 12, 1, 0, ''),
 (12322, 12, 1, 0, ''),
+-- Memories achievement
 (11863, 12, 1, 0, ''),
 (11904, 12, 1, 0, ''),
 (11905, 12, 1, 0, ''),

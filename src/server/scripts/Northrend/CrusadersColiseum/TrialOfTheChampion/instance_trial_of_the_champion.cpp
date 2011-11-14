@@ -332,17 +332,37 @@ public:
         {
             switch(criteria_id)
             {
-                case CRITERIA_CHAMPION_JACOB:   return NPC_JACOB;
-                case CRITERIA_CHAMPION_LANA:    return NPC_LANA;
-                case CRITERIA_CHAMPION_COLOSOS: return NPC_COLOSOS;
-                case CRITERIA_CHAMPION_AMBROSE: return NPC_AMBROSE;
-                case CRITERIA_CHAMPION_JAELYNE: return NPC_JAELYNE;
+                case CRITERIA_CHAMPION_JACOB:
+                case CRITERIA_CHAMPION_JACOB_H:
+                    return NPC_JACOB;
+                case CRITERIA_CHAMPION_LANA:
+                case CRITERIA_CHAMPION_LANA_H:
+                    return NPC_LANA;
+                case CRITERIA_CHAMPION_COLOSOS:
+                case CRITERIA_CHAMPION_COLOSOS_H:
+                    return NPC_COLOSOS;
+                case CRITERIA_CHAMPION_AMBROSE:
+                case CRITERIA_CHAMPION_AMBROSE_H:
+                    return NPC_AMBROSE;
+                case CRITERIA_CHAMPION_JAELYNE:
+                case CRITERIA_CHAMPION_JAELYNE_H:
+                    return NPC_JAELYNE;
 
-                case CRITERIA_CHAMPION_MOKRA:   return NPC_MOKRA;
-                case CRITERIA_CHAMPION_VISCERI: return NPC_VISCERI;
-                case CRITERIA_CHAMPION_RUNOK:   return NPC_RUNOK;
-                case CRITERIA_CHAMPION_ERESSEA: return NPC_ERESSEA;
-                case CRITERIA_CHAMPION_ZULTORE: return NPC_ZULTORE;
+                case CRITERIA_CHAMPION_MOKRA:
+                case CRITERIA_CHAMPION_MOKRA_H:
+                    return NPC_MOKRA;
+                case CRITERIA_CHAMPION_VISCERI:
+                case CRITERIA_CHAMPION_VISCERI_H:
+                    return NPC_VISCERI;
+                case CRITERIA_CHAMPION_RUNOK:
+                case CRITERIA_CHAMPION_RUNOK_H:
+                    return NPC_RUNOK;
+                case CRITERIA_CHAMPION_ERESSEA:
+                case CRITERIA_CHAMPION_ERESSEA_H:
+                    return NPC_ERESSEA;
+                case CRITERIA_CHAMPION_ZULTORE:
+                case CRITERIA_CHAMPION_ZULTORE_H:
+                    return NPC_ZULTORE;
 
                 case CRITERIA_MEMORY_HOGGER:     return NPC_MEMORY_HOGGER;
                 case CRITERIA_MEMORY_VANCLEEF:   return NPC_MEMORY_VANCLEEF;
