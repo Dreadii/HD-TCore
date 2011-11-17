@@ -128,6 +128,10 @@ public:
             uiGhoulExplodeTimer = 8000;
             uiDeathBiteTimer = urand (2000, 4000);
             uiMarkedDeathTimer = urand (5000, 7000);
+        }
+
+        void EnterCombat(Unit* /*attacker*/)
+        {
             DoCast(instance->GetData(DATA_TEAM) == ALLIANCE ? SPELL_RAISE_ARELAS : SPELL_RAISE_JAEREN);
         }
 
@@ -290,6 +294,9 @@ public:
 
         void ExplodeAliveGhouls()
         {
+            if (summons.empty())
+                return;
+
             for (SummonList::iterator itr = summons.begin(); itr != summons.end(); ++itr)
                 if (Creature* ghoul = ObjectAccessor::GetCreature(*me, *itr))
                     ghoul->AI()->DoCast(ghoul, SPELL_EXPLODE, true);
