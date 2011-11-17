@@ -46,6 +46,7 @@ enum eSpells
     SPELL_DESECRATION       = 67778,
     SPELL_DESECRATION_2     = 67778,
     SPELL_GHOUL_EXPLODE     = 67751,
+    SPELL_EXPLODE           = 67729,
 
     //phase 3
     SPELL_DEATH_BITE_H      = 67875,
@@ -291,7 +292,7 @@ public:
         {
             for (SummonList::iterator itr = summons.begin(); itr != summons.end(); ++itr)
                 if (Creature* ghoul = ObjectAccessor::GetCreature(*me, *itr))
-                    ghoul->AI()->DoCast(ghoul, SPELL_GHOUL_EXPLODE, true);
+                    ghoul->AI()->DoCast(ghoul, SPELL_EXPLODE, true);
         }
 
         void JustDied(Unit* /*killer*/)
