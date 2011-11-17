@@ -233,6 +233,7 @@ public:
                             {
                                 if (uiDeathArmyCheckTimer <= diff)
                                 {
+                                    me->GetMotionMaster()->MoveChase(me->getVictim());
                                     me->ClearUnitState(UNIT_STAT_ROOT | UNIT_STAT_STUNNED);
                                     uiDeathArmyCheckTimer = 0;
                                     bDeathArmyDone = true;
@@ -289,6 +290,7 @@ public:
                 damage = 0;
                 me->SetHealth(0);
                 me->AddUnitState(UNIT_STAT_ROOT | UNIT_STAT_STUNNED);
+                me->GetMotionMaster()->MoveIdle();
                 resurrectInProgress = true;
                 ExplodeAliveGhouls();
             }
