@@ -85,7 +85,7 @@ public:
 
         InstanceScript* instance;
 
-        std::list<uint64> SummonList;
+        SummonList summons;
 
         bool resurrectInProgress;
         bool bEvent;
@@ -107,7 +107,7 @@ public:
 
         void Reset()
         {
-            RemoveSummons();
+            summons.DespawnAll();
             me->SetDisplayId(me->GetNativeDisplayId());
             me->ClearUnitState(UNIT_STAT_ROOT | UNIT_STAT_STUNNED);
 
@@ -130,26 +130,17 @@ public:
             uiMarkedDeathTimer = urand (5000, 7000);
         }
 
-        void RemoveSummons()
-        {
-            if (SummonList.empty())
-                return;
-
-            for (std::list<uint64>::const_iterator itr = SummonList.begin(); itr != SummonList.end(); ++itr)
-            {
-                if (Creature* temp = Unit::GetCreature(*me, *itr))
-                    if (temp)
-                        temp->DisappearAndDie();
-            }
-            SummonList.clear();
-        }
-
         void JustSummoned(Creature* summon)
         {
-            SummonList.push_back(summon->GetGUID());
+            summons.Summon(summon);
             summon->AI()->AttackStart(me->getVictim());
         }
 
+        void SummonedCreatureDies(Creature* summon, Unit* /*killer*/)
+        {
+            summons.Despawn(summon);
+            summon->SetCorpseDelay(5*IN_MILLISECONDS);
+        }
         void UpdateAI(const uint32 uiDiff)
         {
             //Return since we have no target or we are casting
@@ -240,7 +231,7 @@ public:
                                 }
                                 uiDesecration = urand(15000, 16000);
                             } else uiDesecration -= uiDiff;
-                            if (uiGhoulExplodeTimer <= uiDiff)
+                            if (!summons.empty() && uiGhoulExplodeTimer <= uiDiff)
                             {
                                 DoCast(me, SPELL_GHOUL_EXPLODE);
                                 uiGhoulExplodeTimer = 8000;
