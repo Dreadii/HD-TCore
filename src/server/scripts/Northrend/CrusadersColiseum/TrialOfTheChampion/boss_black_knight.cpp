@@ -79,7 +79,7 @@ public:
 
     struct boss_black_knightAI : public ScriptedAI
     {
-        boss_black_knightAI(Creature* creature) : ScriptedAI(creature)
+        boss_black_knightAI(Creature* creature) : ScriptedAI(creature), summons(creature)
         {
             instance = creature->GetInstanceScript();
         }
@@ -289,9 +289,9 @@ public:
 
         void ExplodeAliveGhouls()
         {
-            for (SummonList::iterator itr = summons.begin(); itr != summons.end; ++itr)
-                if (Unit* unit = ObjectAccessor::GetUnit(*me, *itr))
-                    unit->AI()->DoCast(unit, SPELL_GHOUL_EXPLODE, true);
+            for (SummonList::iterator itr = summons.begin(); itr != summons.end(); ++itr)
+                if (Creature* ghoul = ObjectAccessor::GetCreature(*me, *itr))
+                    ghoul->AI()->DoCast(ghoul, SPELL_GHOUL_EXPLODE, true);
         }
 
         void JustDied(Unit* /*killer*/)
