@@ -3334,6 +3334,10 @@ void SpellMgr::LoadDbcDataCorrections()
             case 68282: // ToC5 Charge
                 spellInfo->Effect[1] = 0;
                 break;
+            case 67705: // Raise Arelas Birhgtstar
+            case 67715: // Raise Jaeren Sunworn
+                spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_DEAD;
+                break;
             case 67782: // Desecration
                 spellInfo->rangeIndex = EFFECT_RADIUS_2_YARDS;
                 spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_SRC_AREA_ENEMY;
