@@ -87,7 +87,7 @@ public:
 
         std::list<uint64> SummonList;
 
-        bool bEventInProgress;
+        bool resurrectInProgress;
         bool bEvent;
         bool bSummonArmy;
         bool bDeathArmyDone;
@@ -111,7 +111,7 @@ public:
             me->SetDisplayId(me->GetNativeDisplayId());
             me->ClearUnitState(UNIT_STAT_ROOT | UNIT_STAT_STUNNED);
 
-            bEventInProgress = false;
+            resurrectInProgress = false;
             bEvent = false;
             bSummonArmy = false;
             bDeathArmyDone = false;
@@ -152,21 +152,31 @@ public:
 
         void UpdateAI(const uint32 uiDiff)
         {
-            //Return since we have no target
-            if (!UpdateVictim())
+            //Return since we have no target or we are casting
+            if (!UpdateVictim() || me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            if (bEventInProgress)
+            if (resurrectInProgress)
             {
                 if (uiResurrectTimer <= uiDiff)
                 {
                     me->SetFullHealth();
+                    switch (uiPhase)
+                    {
+                        case PHASE_UNDEAD:
+                            me->SetDisplayId(MODEL_SKELETON);
+                            break;
+                        case PHASE_SKELETON:
+                            me->SetDisplayId(MODEL_GHOST);
+                            break;
+                    }
                     DoCast(me, SPELL_BLACK_KNIGHT_RES, true);
                     uiPhase++;
                     uiResurrectTimer = 4000;
-                    bEventInProgress = false;
+                    resurrectInProgress = false;
                     me->ClearUnitState(UNIT_STAT_ROOT | UNIT_STAT_STUNNED);
                 } else uiResurrectTimer -= uiDiff;
+                return;
             }
 
             switch (uiPhase)
@@ -181,7 +191,7 @@ public:
                     } else uiIcyTouchTimer -= uiDiff;
                     if (uiPlagueStrikeTimer <= uiDiff)
                     {
-                        DoCastVictim(SPELL_ICY_TOUCH);
+                        DoCastVictim(SPELL_PLAGUE_STRIKE);
                         uiPlagueStrikeTimer = urand(12000, 15000);
                     } else uiPlagueStrikeTimer -= uiDiff;
                     if (uiObliterateTimer <= uiDiff)
@@ -273,16 +283,7 @@ public:
                 me->SetHealth(0);
                 me->AddUnitState(UNIT_STAT_ROOT | UNIT_STAT_STUNNED);
                 RemoveSummons();
-                switch (uiPhase)
-                {
-                    case PHASE_UNDEAD:
-                        me->SetDisplayId(MODEL_SKELETON);
-                        break;
-                    case PHASE_SKELETON:
-                        me->SetDisplayId(MODEL_GHOST);
-                        break;
-                }
-                bEventInProgress = true;
+                resurrectInProgress = true;
             }
         }
 
