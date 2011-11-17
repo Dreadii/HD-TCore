@@ -152,14 +152,6 @@ public:
             summon->SetCorpseDelay(5*IN_MILLISECONDS);
         }
 
-        void SpellHitTarget(Unit* target, const SpellInfo* spell)
-        {
-            /* Hide announcer when raise him by first time. We don't despawn him
-            because if there's a wipe we wouldn't be able to rise him again*/
-            if (spell->Id == SPELL_RAISE_ARELAS || spell->Id == SPELL_RAISE_JAEREN)
-                target->SetVisible(false);
-        }
-
         void UpdateAI(const uint32 diff)
         {
             //Return since we have no target or we are casting
