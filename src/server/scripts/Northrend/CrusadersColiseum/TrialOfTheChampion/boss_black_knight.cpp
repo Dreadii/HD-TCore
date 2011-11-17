@@ -298,8 +298,8 @@ public:
                 return;
 
             for (SummonList::iterator itr = summons.begin(); itr != summons.end(); ++itr)
-                if (Creature* ghoul = ObjectAccessor::GetCreature(*me, *itr))
-                    ghoul->AI()->DoCast(ghoul, SPELL_EXPLODE, true);
+                if (Creature* ghoul = me->GetCreature(*me, *itr))
+                    ghoul->CastSpell(ghoul, SPELL_EXPLODE, true);
         }
 
         void JustDied(Unit* /*killer*/)
