@@ -121,6 +121,10 @@ UPDATE creature_template SET ScriptName = 'npc_argent_monk' WHERE entry = 35305;
 UPDATE creature_template SET ScriptName = 'npc_argent_lightwielder' WHERE entry = 35309;
 UPDATE creature_template SET ScriptName = 'npc_argent_priest' WHERE entry = 35307;
 UPDATE `creature_template` SET `mechanic_immune_mask` = '650854267' WHERE `entry` IN (35305, 35309, 35307, 12488, 12439, 12448);
+-- Desecration Stalker
+DELETE FROM `creature_template_addon` WHERE (`entry`=35614);
+INSERT INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES (35614, '', 0, 0, 0, 0, 67782);
+UPDATE `creature_template` SET `flags_extra` = 130 WHERE `entry` = 35614;
 
 -- Memories equip templates
 UPDATE `creature_template` SET `equipment_id` = 22 WHERE `entry` IN  (34942, 35531);

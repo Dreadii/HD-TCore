@@ -3334,6 +3334,10 @@ void SpellMgr::LoadDbcDataCorrections()
             case 68282: // ToC5 Charge
                 spellInfo->Effect[1] = 0;
                 break;
+            case 67782: // Desecration
+                spellInfo->rangeIndex = EFFECT_RADIUS_2_YARDS;
+                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_SRC_AREA_ENEMY;
+                break;
             // END OF TRIAL OF THE CHAMPION SPELLS
             // TRIAL OF THE CRUSADER SPELLS
             //
