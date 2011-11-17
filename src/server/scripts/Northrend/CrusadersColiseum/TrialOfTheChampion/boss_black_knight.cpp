@@ -123,7 +123,7 @@ public:
             uiDeathRespiteTimer = urand(15000, 16000);
             uiObliterateTimer = urand(17000, 19000);
             uiDesecration = urand(15000, 16000);
-            uiDeathArmyCheckTimer = 7000;
+            uiDeathArmyCheckTimer = 1000;
             uiResurrectTimer = 4000;
             uiGhoulExplodeTimer = 8000;
             uiDeathBiteTimer = urand (2000, 4000);
@@ -177,6 +177,7 @@ public:
                         case PHASE_SKELETON:
                             me->SetDisplayId(MODEL_GHOST);
                             SetEquipmentSlots(false, EQUIP_UNEQUIP);
+                            me->GetMotionMaster()->MoveChase(me->getVictim());
                             break;
                     }
                     DoCast(me, SPELL_BLACK_KNIGHT_RES, true);
