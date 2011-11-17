@@ -38,7 +38,8 @@ enum eSpells
     SPELL_DEATH_RESPITE_3   = 66798,
     SPELL_OBLITERATE_H      = 67883,
     SPELL_OBLITERATE        = 67725,
-    //in this phase should rise herald (the spell is missing)
+    SPELL_RAISE_ARELAS      = 67705,
+    SPELL_RAISE_JAEREN      = 67715,
 
     //phase 2 - During this phase, the Black Knight will use the same abilities as in phase 1, except for Death's Respite
     SPELL_ARMY_DEAD         = 67761,
@@ -128,6 +129,7 @@ public:
             uiGhoulExplodeTimer = 8000;
             uiDeathBiteTimer = urand (2000, 4000);
             uiMarkedDeathTimer = urand (5000, 7000);
+            DoCast(instance->GetData(DATA_TEAM) == ALLIANCE ? SPELL_RAISE_ARELAS : SPELL_RAISE_JAEREN);
         }
 
         void JustSummoned(Creature* summon)
@@ -141,6 +143,15 @@ public:
             summons.Despawn(summon);
             summon->SetCorpseDelay(5*IN_MILLISECONDS);
         }
+
+        void SpellHitTarget(Unit* target, const SpellInfo* spell)
+        {
+            /* Hide announcer when raise him by first time. We don't despawn him
+            because if there's a wipe we wouldn't be able to rise him again*/
+            if (spell->Id == SPELL_RAISE_ARELAS || spell->Id == SPELL_RAISE_JAEREN)
+                target->SetVisible(false);
+        }
+
         void UpdateAI(const uint32 uiDiff)
         {
             //Return since we have no target or we are casting
