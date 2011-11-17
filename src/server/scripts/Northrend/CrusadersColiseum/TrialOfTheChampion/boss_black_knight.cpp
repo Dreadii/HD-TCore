@@ -109,6 +109,7 @@ public:
         {
             summons.DespawnAll();
             me->SetDisplayId(me->GetNativeDisplayId());
+            SetEquipmentSlots(true);
             me->ClearUnitState(UNIT_STAT_ROOT | UNIT_STAT_STUNNED);
 
             resurrectInProgress = false;
@@ -175,6 +176,7 @@ public:
                             break;
                         case PHASE_SKELETON:
                             me->SetDisplayId(MODEL_GHOST);
+                            SetEquipmentSlots(false, EQUIP_UNEQUIP);
                             break;
                     }
                     DoCast(me, SPELL_BLACK_KNIGHT_RES, true);
