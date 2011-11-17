@@ -55,7 +55,9 @@ enum eSpells
 
     SPELL_BLACK_KNIGHT_RES  = 67693,
 
-    SPELL_LEAP                = 67749,
+    SPELL_CLAW              = 67774,
+    SPELL_CLAW_H            = 67879,
+    SPELL_LEAP              = 67749,
     SPELL_LEAP_H            = 67880
 };
 
@@ -332,10 +334,12 @@ public:
         npc_risen_ghoulAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 uiAttackTimer;
+        uint32 uiLeapTimer;
 
         void Reset()
         {
             uiAttackTimer = 3500;
+            uiLeapTimer = 1000;
         }
 
         void UpdateAI(const uint32 diff)
@@ -343,14 +347,21 @@ public:
             if (!UpdateVictim())
                 return;
 
+            if (uiLeapTimer <= diff)
+            {
+                if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 30, true))
+                {
+                    DoResetThreat();
+                    me->AddThreat(target, 5.0f);
+                    DoCast(target, SPELL_LEAP);
+                }
+                uiLeapTimer = urand(7000, 10000);
+            } else uiLeapTimer -= diff;
+
             if (uiAttackTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true))
-                {
-                    if (target && target->isAlive())
-                        DoCast(target, (SPELL_LEAP));
-                }
-                uiAttackTimer = 3500;
+                DoCastVictim(SPELL_CLAW);
+                uiAttackTimer = urand(1000, 3500);
             } else uiAttackTimer -= diff;
 
             DoMeleeAttackIfReady();
