@@ -304,8 +304,9 @@ public:
                 return;
 
             for (SummonList::iterator itr = summons.begin(); itr != summons.end(); ++itr)
-                if (Creature* ghoul = me->GetCreature(*me, *itr))
-                    ghoul->CastSpell(ghoul, SPELL_EXPLODE, true);
+                if (Unit* unit = ObjectAccessor::GetUnit(*me, *itr))
+                    if (Creature* ghoul = unit->ToCreature())
+                        ghoul->CastSpell(ghoul, SPELL_EXPLODE);
         }
 
         void JustDied(Unit* /*killer*/)
