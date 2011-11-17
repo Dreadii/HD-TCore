@@ -185,6 +185,7 @@ enum eNpcs
 
     NPC_RISEN_JAEREN            = 35545,
     NPC_RISEN_ARELAS            = 35564,
+    NPC_RISEN_CHAMPION          = 35590,
 
     // Announcers
     NPC_JAEREN                  = 35004,

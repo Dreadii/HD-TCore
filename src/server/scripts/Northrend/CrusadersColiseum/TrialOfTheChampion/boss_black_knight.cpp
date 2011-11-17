@@ -44,7 +44,6 @@ enum eSpells
     //phase 2 - During this phase, the Black Knight will use the same abilities as in phase 1, except for Death's Respite
     SPELL_ARMY_DEAD         = 67761,
     SPELL_DESECRATION       = 67778,
-    SPELL_DESECRATION_2     = 67778,
     SPELL_GHOUL_EXPLODE     = 67751,
     SPELL_EXPLODE           = 67729,
 
@@ -137,8 +136,11 @@ public:
 
         void JustSummoned(Creature* summon)
         {
-            summons.Summon(summon);
-            summon->AI()->AttackStart(me->getVictim());
+            if (summon->GetEntry() == NPC_RISEN_JAEREN || summon->GetEntry() == NPC_RISEN_ARELAS || summon->GetEntry() == NPC_RISEN_CHAMPION)
+            {
+                summons.Summon(summon);
+                summon->AI()->AttackStart(me->getVictim());
+            }
         }
 
         void SummonedCreatureDies(Creature* summon, Unit* /*killer*/)
