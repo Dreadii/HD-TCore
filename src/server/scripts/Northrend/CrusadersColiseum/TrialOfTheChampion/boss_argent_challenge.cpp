@@ -71,6 +71,7 @@ enum Spells
     SPELL_SUMMON_MEMORY         = 66545,
 
     //Memory
+    SPELL_SHADOW_FORM           = 34429,
     SPELL_OLD_WOUNDS            = 66620,
     SPELL_OLD_WOUNDS_H          = 67679,
     SPELL_SHADOWS_PAST          = 66619,
@@ -336,13 +337,13 @@ public:
             holySmiteTimer    = urand(5000, 7000);
             renewTimer        = urand(2000, 5000);
 
+            if (Creature* memory = Unit::GetCreature(*me, memoryGUID))
+                memory->DespawnOrUnsummon(1000);
+
             memoryGUID = 0;
 
             shielded = false;
             defeated = false;
-
-            if (Creature* memory = Unit::GetCreature(*me, memoryGUID))
-                memory->DespawnOrUnsummon(1000);
         }
 
         void SetData(uint32 id, uint32 /*value*/)
@@ -376,7 +377,6 @@ public:
 
         void MovementInform(uint32 type, uint32 id)
         {
-            // Knee at home position after being defeated
             if(type == POINT_MOTION_TYPE && id == 1)
                 me->DespawnOrUnsummon(0);
         }
@@ -492,6 +492,7 @@ public:
             oldWoundsTimer = 12000;
             shadowPastTimer = 5000;
             wakingNightmareTimer = 7000;
+            DoCast(SPELL_SHADOW_FORM);
         }
 
         void UpdateAI(const uint32 diff)
@@ -501,7 +502,7 @@ public:
 
             if (oldWoundsTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                 {
                     if (target && target->isAlive())
                         DoCast(target, SPELL_OLD_WOUNDS);
@@ -512,12 +513,12 @@ public:
             if (wakingNightmareTimer <= diff)
             {
                 DoCast(me, SPELL_WAKING_NIGHTMARE);
-                wakingNightmareTimer = 7000;
+                wakingNightmareTimer = 15000;
             }else wakingNightmareTimer -= diff;
 
             if (shadowPastTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                 {
                     if (target && target->isAlive())
                         DoCast(target, SPELL_SHADOWS_PAST);
