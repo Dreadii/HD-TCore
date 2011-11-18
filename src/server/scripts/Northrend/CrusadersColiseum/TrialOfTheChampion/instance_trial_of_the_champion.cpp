@@ -190,7 +190,7 @@ public:
                         DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_CHAMPIONS);
                         if (Creature* pAnnouncer =  instance->GetCreature(uiAnnouncerGUID))
                         {
-                            pAnnouncer->GetMotionMaster()->MovePoint(0, 748.309f, 619.487f, 411.171f);
+                            pAnnouncer->GetMotionMaster()->MovePoint(0, 742.742f, 630.207f, 411.172f);
                             pAnnouncer->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                             pAnnouncer->SummonGameObject(instance->IsHeroic()? GO_CHAMPIONS_LOOT_H : GO_CHAMPIONS_LOOT, 746.59f, 618.49f, 411.09f, 1.42f, 0, 0, 0, 0, 90000000);
                         }
@@ -213,7 +213,7 @@ public:
                     if (Creature* pAnnouncer = instance->GetCreature(uiAnnouncerGUID))
                     {
                         DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_EADRIC);
-                        pAnnouncer->GetMotionMaster()->MovePoint(0, 748.309f, 619.487f, 411.171f);
+                        pAnnouncer->GetMotionMaster()->MovePoint(0, 742.742f, 630.207f, 411.172f);
                         pAnnouncer->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                         pAnnouncer->SummonGameObject(instance->IsHeroic()? GO_EADRIC_LOOT_H : GO_EADRIC_LOOT, 746.59f, 618.49f, 411.09f, 1.42f, 0, 0, 0, 0, 90000000);
                     }
@@ -224,7 +224,7 @@ public:
                     {
                         DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_PALETRESS);
                         DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_MEMORIES);
-                        pAnnouncer->GetMotionMaster()->MovePoint(0, 748.309f, 619.487f, 411.171f);
+                        pAnnouncer->GetMotionMaster()->MovePoint(0, 742.742f, 630.207f, 411.172f);
                         pAnnouncer->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                         pAnnouncer->SummonGameObject(instance->IsHeroic()? GO_PALETRESS_LOOT_H : GO_PALETRESS_LOOT, 746.59f, 618.49f, 411.09f, 1.42f, 0, 0, 0, 0, 90000000);
                     }
@@ -347,7 +347,6 @@ public:
                 case CRITERIA_CHAMPION_JAELYNE:
                 case CRITERIA_CHAMPION_JAELYNE_H:
                     return NPC_JAELYNE;
-
                 case CRITERIA_CHAMPION_MOKRA:
                 case CRITERIA_CHAMPION_MOKRA_H:
                     return NPC_MOKRA;

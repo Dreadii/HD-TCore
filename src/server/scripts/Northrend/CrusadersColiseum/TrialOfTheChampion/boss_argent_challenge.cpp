@@ -71,7 +71,7 @@ enum Spells
     SPELL_SUMMON_MEMORY         = 66545,
 
     //Memory
-    SPELL_SHADOW_FORM           = 34429,
+    SPELL_SHADOW_FORM           = 34429, // THIS IS NOT CORRECT!
     SPELL_OLD_WOUNDS            = 66620,
     SPELL_OLD_WOUNDS_H          = 67679,
     SPELL_SHADOWS_PAST          = 66619,

@@ -220,7 +220,7 @@ public:
                         if (Creature* boss1 = me->GetCreature(*me, bossGUID[0]))
                             boss1->GetMotionMaster()->MovePoint(0, FactionChampionPosition[0]);
 
-                        events.ScheduleEvent(4, 4000);
+                        events.ScheduleEvent(4, 5000);
                         break;
                     case 4:
                         // Refresh the adds position
@@ -278,7 +278,7 @@ public:
                         if (Creature* boss2 = me->GetCreature(*me, bossGUID[1]))
                             boss2->GetMotionMaster()->MovePoint(0, FactionChampionPosition[0]);
 
-                        events.ScheduleEvent(7, 4000);
+                        events.ScheduleEvent(7, 5000);
                         break;
                     case 7:
                         // Refresh the adds position
@@ -340,7 +340,7 @@ public:
                         if (Creature* boss2 = me->GetCreature(*me, bossGUID[2]))
                             boss2->GetMotionMaster()->MovePoint(0, FactionChampionPosition[0]);
 
-                        events.ScheduleEvent(10, 4000);
+                        events.ScheduleEvent(10, 5000);
                         break;
                     case 10:
                         // Refresh the adds position
