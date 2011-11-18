@@ -349,7 +349,12 @@ public:
         void SetData(uint32 id, uint32 /*value*/)
         {
             if (id == 1)
+            {
+                if (Creature* memory = Unit::GetCreature(*me, memoryGUID))
+                    memory->DespawnOrUnsummon();
+
                 me->RemoveAura(SPELL_SHIELD);
+            }
         }
 
         void DamageTaken(Unit* /*attacker*/, uint32 & damage)
