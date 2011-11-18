@@ -765,7 +765,6 @@ public:
         uint32 disengageTimer;
 
         bool ligthingArrows;
-        bool chasing;
         bool defeated;
 
         void Reset()
@@ -780,7 +779,6 @@ public:
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
             defeated = false;
-            chasing = false;
             ligthingArrows = false;
             multiShotTimer = 2000;
             disengageTimer = 3000;
@@ -865,16 +863,8 @@ public:
             if(me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            if(me->GetDistance(me->getVictim()) >= 30.0f && !chasing)
-            {
-                chasing = true;
-                me->GetMotionMaster()->MoveChase(me->getVictim());
-            }
-            else
-            {
-                chasing = false;
-                me->GetMotionMaster()->MoveIdle();
-            }
+            if(me->GetDistance(me->getVictim()) >= 30.0f)
+                me->GetMotionMaster()->MoveChase(me->getVictim(), 25.0f);
 
             if (disengageTimer <= diff)
             {
