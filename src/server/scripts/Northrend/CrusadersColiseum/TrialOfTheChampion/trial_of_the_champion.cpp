@@ -39,7 +39,7 @@ EndContentData */
 ## npc_announcer_toc5
 ######*/
 
-const Position SpawnPosition = {746.261f, 657.401f, 411.681f, 4.65f};
+const Position SpawnPosition = {746.565f, 665.056f, 411.756f, 4.77922f};
 const Position OutStadiumPosition = {747.03f, 687.483f, 412.373f, 1.53475f};
 const Position AnnouncerPosition = {733.877f, 662.269f, 412.393f, 4.61586f};
 const Position FactionChampionPosition[3] =
@@ -50,9 +50,9 @@ const Position FactionChampionPosition[3] =
 };
 const Position ArgentSoldierPosition[3] =
 {
-    {746.562f, 634.195f, 411.574f, 4.84441f},
-    {735.675f, 629.715f, 411.575f, 5.64316f},
-    {758.941f, 629.647f, 411.574f, 4.08415f}
+    {746.875f, 650.358f, 411.569f, 4.77922f},
+    {717.771f, 647.165f, 411.923f, 5.54734f},
+    {775.734f, 644.413f, 411.919f, 3.79826f}
 };
 
 class npc_announcer_toc5 : public CreatureScript
@@ -889,14 +889,16 @@ public:
                         // Start attack of first wave of adds
                         if (!addsAttacking)
                         {
-                            for (uint8 i=0; i<3; i++)
+                            for (uint8 j=0; j<3; j++)
                             {
-                                if (Creature* add = me->GetCreature(*me, addsGUID[0][i]))
+                                for (uint8 i=0; i<3; i++)
                                 {
-                                    add->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                                    add->SetReactState(REACT_AGGRESSIVE);
-                                    add->setFaction(16);
-                                    AggroAllPlayers(add);
+                                    if (Creature* add = me->GetCreature(*me, addsGUID[j][i]))
+                                    {
+                                        add->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                                        add->SetReactState(REACT_AGGRESSIVE);
+                                        add->setFaction(16);
+                                    }
                                 }
                             }
                             addsAttacking = true;
@@ -904,12 +906,14 @@ public:
                         } else // Wait for the death of all of them
                         {
                             defeatedCount = 0;
-                            for (uint8 i=0; i<3; i++)
-                                if (Creature* add = me->GetCreature(*me, addsGUID[0][i]))
-                                    if (add->AI()->GetData(DATA_CHAMPION_DEFEATED) == 1)
-                                        defeatedCount++;
 
-                            if (defeatedCount>=3)
+                            for (uint8 j=0; j<3; j++)
+                                for (uint8 i=0; i<3; i++)
+                                    if (Creature* add = me->GetCreature(*me, addsGUID[j][i]))
+                                        if (add->AI()->GetData(DATA_CHAMPION_DEFEATED) == 1)
+                                            defeatedCount++;
+
+                            if (defeatedCount>=9)
                             {
                                 defeatedCount = 0;
                                 addsAttacking = false;
@@ -920,110 +924,35 @@ public:
                         break;
                     case 3:
                         // Despawn previous wave
-                        for (uint8 i=0; i<3; i++)
-                            if (Creature* add = me->GetCreature(*me, addsGUID[0][i]))
-                                add->DespawnOrUnsummon();
-
-                        // Start attack of second wave of adds
-                        if (!addsAttacking)
-                        {
+                        for (uint8 j=0; j<3; j++)
                             for (uint8 i=0; i<3; i++)
-                            {
-                                if (Creature* add = me->GetCreature(*me, addsGUID[1][i]))
-                                {
-                                    add->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                                    add->SetReactState(REACT_AGGRESSIVE);
-                                    add->setFaction(16);
-                                    AggroAllPlayers(add);
-                                }
-                            }
-                            addsAttacking = true;
-                            events.ScheduleEvent(3, 1000);
-                        } else // Wait for the death of all of them
-                        {
-                            defeatedCount = 0;
-                            for (uint8 i=0; i<3; i++)
-                                if (Creature* add = me->GetCreature(*me, addsGUID[1][i]))
-                                    if (add->AI()->GetData(DATA_CHAMPION_DEFEATED) == 1)
-                                        defeatedCount++;
-
-                            if (defeatedCount>=3)
-                            {
-                                defeatedCount = 0;
-                                addsAttacking = false;
-                                events.ScheduleEvent(4, 4000);
-                            } else
-                                events.ScheduleEvent(3, 1000);
-                        }
-                        break;
-                    case 4:
-                        // Despawn previous wave
-                        for (uint8 i=0; i<3; i++)
-                            if (Creature* add = me->GetCreature(*me, addsGUID[1][i]))
-                                add->DespawnOrUnsummon();
-
-                        // Start attack of third wave of adds
-                        if (!addsAttacking)
-                        {
-                            for (uint8 i=0; i<3; i++)
-                            {
-                                if (Creature* add = me->GetCreature(*me, addsGUID[2][i]))
-                                {
-                                    add->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                                    add->SetReactState(REACT_AGGRESSIVE);
-                                    add->setFaction(16);
-                                    AggroAllPlayers(add);
-                                }
-                            }
-                            addsAttacking = true;
-                            events.ScheduleEvent(4, 1000);
-                        } else // Wait for the death of all of them
-                        {
-                            defeatedCount = 0;
-                            for (uint8 i=0; i<3; i++)
-                                if (Creature* add = me->GetCreature(*me, addsGUID[2][i]))
-                                    if (add->AI()->GetData(DATA_CHAMPION_DEFEATED) == 1)
-                                        defeatedCount++;
-
-                            if (defeatedCount>=3)
-                            {
-                                defeatedCount = 0;
-                                addsAttacking = false;
-                                events.ScheduleEvent(5, 4000);
-                            } else
-                                events.ScheduleEvent(4, 1000);
-                        }
-                        break;
-                    case 5:
-                        // Despawn previous wave
-                        for (uint8 i=0; i<3; i++)
-                            if (Creature* add = me->GetCreature(*me, addsGUID[2][i]))
-                                add->DespawnOrUnsummon();
+                                if (Creature* add = me->GetCreature(*me, addsGUID[j][i]))
+                                    add->DespawnOrUnsummon();
 
                         // Prepare the Argent Champion for the fight
                         if (!addsAttacking)
                         {
                             if (Creature* boss = me->GetCreature(*me, bossGUID[0]))
                             {
+                                boss->GetMotionMaster()->MovePoint(0, ArgentSoldierPosition[0]);
                                 boss->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                                 boss->SetReactState(REACT_AGGRESSIVE);
                                 boss->setFaction(16);
-                                AggroAllPlayers(boss);
                             }
                             addsAttacking = true;
-                            events.ScheduleEvent(5, 1000);
-                        } else // Wait for his
+                            events.ScheduleEvent(3, 1000);
+                        } else // Wait for his/her death
                         {
                             if (Creature* boss = me->GetCreature(*me, bossGUID[0]))
                             {
                                 if (boss->AI()->GetData(DATA_CHAMPION_DEFEATED) == 1)
-                                    events.ScheduleEvent(6, 0);
+                                    events.ScheduleEvent(4, 0);
                                 else
-                                    events.ScheduleEvent(5, 1000);
+                                    events.ScheduleEvent(3, 1000);
                             }
                         }
                         break;
-                    case 6:
+                    case 4:
                         // Mark encounter as completed
                         events.Reset();
                         SetData(EVENT_WAVES_ARGENT, DONE);
