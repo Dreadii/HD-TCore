@@ -102,41 +102,17 @@ public:
         void OnCreatureCreate(Creature* creature)
         {
             Map::PlayerList const &players = instance->GetPlayers();
-
             if (!players.isEmpty())
-            {
                 if (Player* player = players.begin()->getSource())
                     TeamInInstance = player->GetTeam();
-            }
 
             switch(creature->GetEntry())
             {
-                // Champions
-                case VEHICLE_MOKRA_SKILLCRUSHER_MOUNT:
-                    if (TeamInInstance == HORDE)
-                        creature->UpdateEntry(VEHICLE_MARSHAL_JACOB_ALERIUS_MOUNT, ALLIANCE);
-                    break;
-                case VEHICLE_ERESSEA_DAWNSINGER_MOUNT:
-                    if (TeamInInstance == HORDE)
-                        creature->UpdateEntry(VEHICLE_AMBROSE_BOLTSPARK_MOUNT, ALLIANCE);
-                    break;
-                case VEHICLE_RUNOK_WILDMANE_MOUNT:
-                    if (TeamInInstance == HORDE)
-                        creature->UpdateEntry(VEHICLE_COLOSOS_MOUNT, ALLIANCE);
-                    break;
-                case VEHICLE_ZUL_TORE_MOUNT:
-                    if (TeamInInstance == HORDE)
-                        creature->UpdateEntry(VEHICLE_EVENSONG_MOUNT, ALLIANCE);
-                    break;
-                case VEHICLE_DEATHSTALKER_VESCERI_MOUNT:
-                    if (TeamInInstance == HORDE)
-                        creature->UpdateEntry(VEHICLE_LANA_STOUTHAMMER_MOUNT, ALLIANCE);
-                    break;
-                // Coliseum Announcer || Just NPC_JAEREN must be spawned.
+                // Coliseum Announcer || Only NPC_JAEREN must be spawned.
                 case NPC_JAEREN:
-                    uiAnnouncerGUID = creature->GetGUID();
                     if (TeamInInstance == ALLIANCE)
-                        creature->UpdateEntry(NPC_ARELAS, ALLIANCE);
+                        creature->UpdateEntry(NPC_ARELAS);
+                    uiAnnouncerGUID = creature->GetGUID();
                     break;
                 case VEHICLE_ARGENT_WARHORSE:
                 case VEHICLE_ARGENT_BATTLEWORG:
