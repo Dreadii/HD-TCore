@@ -934,6 +934,7 @@ public:
                         {
                             if (Creature* boss = me->GetCreature(*me, bossGUID[0]))
                             {
+                                boss->SetUnitMovementFlags(MOVEMENTFLAG_WALKING);
                                 boss->GetMotionMaster()->MovePoint(0, ArgentSoldierPosition[0]);
                                 boss->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                                 boss->SetReactState(REACT_AGGRESSIVE);
@@ -1048,17 +1049,17 @@ public:
     {
         InstanceScript* instance = creature->GetInstanceScript();
 
-        if (instance->GetData(BOSS_GRAND_CHAMPIONS) != DONE)
+        if (player->isGameMaster())
+        {
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+        }
+        else if (instance->GetData(BOSS_GRAND_CHAMPIONS) != DONE)
         {
             if (CAST_AI(npc_announcer_toc5::npc_announcer_toc5AI, creature->AI())->AreAllPlayersMounted())
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
         }else if (instance->GetData(BOSS_ARGENT_CHALLENGE_E) != DONE || instance->GetData(BOSS_ARGENT_CHALLENGE_P) != DONE)
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
-        else if (player->isGameMaster())
-        {
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
-        }
 
         player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
 
