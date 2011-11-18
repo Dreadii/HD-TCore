@@ -792,6 +792,12 @@ public:
 
         void DamageTaken(Unit* /*attacker*/, uint32 & damage)
         {
+            if (isInMountedGauntlet())
+            {
+                npc_mounted_championAI::DamageTaken(NULL, damage);
+                return;
+            }
+
             if(defeated)
             {
                 damage = 0;
