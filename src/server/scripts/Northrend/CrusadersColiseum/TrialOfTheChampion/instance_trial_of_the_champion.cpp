@@ -57,6 +57,7 @@ public:
         uint64 uiChampionLootGUID;
         uint64 uimemoryEntryGUID;
         uint64 uiBlackKnightGUID;
+        uint64 uiBlackKnightGryphonGUID;
 
         std::list<uint64> VehicleList;
         uint32 TeamInInstance;
@@ -128,6 +129,9 @@ public:
                     creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     creature->SetReactState(REACT_PASSIVE);
                     uiBlackKnightGUID = creature->GetGUID();
+                    break;
+                case VEHICLE_BLACK_KNIGHT:
+                    uiBlackKnightGryphonGUID = creature->GetGUID();
                     break;
             }
         }
@@ -259,6 +263,7 @@ public:
                 case DATA_MAIN_GATE: return uiMainGateGUID;
                 case DATA_PORTCULLIS: return uiPortcullisGUID;
                 case DATA_BLACK_KNIGHT: return uiBlackKnightGUID;
+                case DATA_BLACK_KNIGHT_GRYPHON: return uiBlackKnightGryphonGUID;
             }
 
             return 0;

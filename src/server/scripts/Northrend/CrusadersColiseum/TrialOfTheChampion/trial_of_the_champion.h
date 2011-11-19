@@ -45,6 +45,7 @@ enum Data64
     DATA_MAIN_GATE,
     DATA_PORTCULLIS,
     DATA_BLACK_KNIGHT,
+    DATA_BLACK_KNIGHT_GRYPHON,
 };
 
 enum AnnouncerPhases

@@ -376,22 +376,31 @@ public:
     {
         npc_black_knight_skeletal_gryphonAI(Creature* creature) : npc_escortAI(creature), _vehicleKit(creature->GetVehicleKit())
         {
-            Start(false, true, 0, NULL);
             instance = creature->GetInstanceScript();
         }
 
         Vehicle* _vehicleKit;
         InstanceScript* instance;
 
+        void SetData(uint32 type, uint32 data)
+        {
+            if (type == 1)
+                Start(false, true, 0, NULL);
+        }
+
         void WaypointReached(uint32 id)
         {
-            if (id == 13)
+            switch (id)
             {
-                if (Creature* announcer = me->GetCreature(*me, instance->GetData64(DATA_ANNOUNCER)))
-                    me->SetFacingToObject(announcer);
+                case 13:
+                    if (Creature* announcer = me->GetCreature(*me, instance->GetData64(DATA_ANNOUNCER)))
+                        me->SetFacingToObject(announcer);
 
-                if (Unit* blackKnight = _vehicleKit->GetPassenger(0))
-                    blackKnight->ExitVehicle();
+                    if (Unit* blackKnight = _vehicleKit->GetPassenger(0))
+                        blackKnight->ExitVehicle();
+
+                    me->DespawnOrUnsummon(6000);
+                    break;
             }
         }
 

@@ -979,8 +979,11 @@ public:
                         events.ScheduleEvent(2, 3000);
                         break;
                     case 2:
-                        if (Creature* mount = me->SummonCreature(VEHICLE_BLACK_KNIGHT, BlackKnightSpawnPosition, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN))
+                        if (Creature* mount = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT_GRYPHON)))
+                        {
+                            mount->AI()->SetData(1, 0);
                             me->SetTarget(mount->GetGUID());
+                        }
                         events.ScheduleEvent(3, 15000);
                         break;
                     case 3:
@@ -990,6 +993,7 @@ public:
                                 events.ScheduleEvent(3, 2000);
                             else
                             {
+                                blackKinght->SetHomePosition(blackKinght->GetPositionX(), blackKinght->GetPositionY(), blackKinght->GetPositionZ(), blackKinght->GetOrientation());
                                 blackKinght->SetTarget(me->GetGUID());
                                 me->SetTarget(blackKinght->GetGUID());
                                 events.ScheduleEvent(4, 2000);
