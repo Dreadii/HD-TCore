@@ -739,6 +739,7 @@ public:
         uint32 timerMindControl;
         uint32 timerShadowWord;
         uint32 timerFountain;
+        uint32 timerSmite;
         bool defeated;
 
         void Reset()
@@ -746,6 +747,7 @@ public:
             timerMindControl = 7000;
             timerShadowWord = 2000;
             timerFountain = 9000;
+            timerSmite = 1000;
             defeated = false;
         }
 
@@ -789,7 +791,7 @@ public:
 
             if (timerFountain <= diff)
             {
-                DoCast(me, SPELL_FOUNTAIN_OF_LIGHT);
+                DoCast(SPELL_FOUNTAIN_OF_LIGHT);
                 timerFountain = urand(40000, 45000);
             }else timerFountain -= diff;
 
@@ -809,8 +811,12 @@ public:
                 timerShadowWord = urand(3000, 5000);
             }else timerShadowWord -= diff;
 
-            if(Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                DoCast(target, IsHeroic() ? SPELL_HOLY_SMITE_H : SPELL_HOLY_SMITE);
+            if (timerSmite <= diff)
+            {
+                if(Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                    DoCast(target, IsHeroic() ? SPELL_HOLY_SMITE_H : SPELL_HOLY_SMITE);
+                timerSmite = urand(1000, 2000);
+            } else timerSmite -= diff;
 
             DoMeleeAttackIfReady();
         }
