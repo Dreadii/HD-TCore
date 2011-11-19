@@ -189,7 +189,7 @@ public:
                         break;
                     case 2:
                         // Summon invisible trigger for orientation prupouses only
-                        if (Creature* stalker = me->SummonCreature(22515, me->GetPositionX() , me->GetPositionY(), me->GetPositionZ()))
+                        if (Creature* stalker = me->SummonCreature(12999, me->GetPositionX() , me->GetPositionY(), me->GetPositionZ()))
                             stalkerGUID = stalker->GetGUID();
 
                         // Summon 1st Boss and adds and make them follow him
