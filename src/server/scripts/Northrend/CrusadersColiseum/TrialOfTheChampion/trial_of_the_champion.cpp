@@ -41,7 +41,7 @@ EndContentData */
 
 const Position SpawnPosition = {746.565f, 665.056f, 411.756f, 4.77922f};
 const Position OutStadiumPosition = {747.03f, 687.483f, 412.373f, 1.53475f};
-const Position AnnouncerPosition = {733.877f, 662.269f, 412.393f, 4.61586f};
+const Position AnnouncerPosition = {731.585f, 658.719f, 412.393f, 4.61586f};
 const Position FactionChampionPosition[3] =
 {
     {724.854f, 640.344f, 411.829f, 5.60704f},
