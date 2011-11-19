@@ -53,6 +53,7 @@ enum Spells
     SPELL_HAMMER_RIGHTEOUS      = 66867,
     SPELL_RADIANCE              = 66935,
     SPELL_VENGEANCE             = 66865,
+    SPELL_VENGANCE_AURA         = 66889,
     // Necessary for the achievement
     SPELL_HAMMER_RIGHTEOUS_P    = 66904, // Aura on player, changes to a stance with the spell
     SPELL_HAMMER_RIGHTEOUS_RET  = 66905, // Casted by player to Eadric
@@ -262,7 +263,15 @@ public:
                 radianceTimer = 16000;
             } else radianceTimer -= diff;
 
-            DoMeleeAttackIfReady();
+            //DoMeleeAttackIfReady();
+            if (me->isAttackReady() && me->IsWithinMeleeRange(victim))
+            {
+                me->AttackerStateUpdate(victim);
+                me->resetAttackTimer();
+
+                if (me->HasAura(SPELL_VENGANCE_AURA))
+                    me->RemoveAurasDueToSpell(SPELL_VENGANCE_AURA);
+            }
         }
     };
 
