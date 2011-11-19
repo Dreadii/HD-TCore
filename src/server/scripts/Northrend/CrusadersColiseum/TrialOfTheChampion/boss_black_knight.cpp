@@ -387,14 +387,11 @@ public:
         {
             if (id == 13)
             {
-
                 if (Creature* announcer = me->GetCreature(*me, instance->GetData64(DATA_ANNOUNCER)))
                     me->SetFacingToObject(announcer);
 
-                Position pos; me->GetPosition(&pos);
-                pos.m_positionX = me->GetPositionX() - 5.0f;
                 if (Unit* blackKnight = _vehicleKit->GetPassenger(0))
-                    blackKnight->ExitVehicle(&pos);
+                    blackKnight->ExitVehicle();
             }
         }
 

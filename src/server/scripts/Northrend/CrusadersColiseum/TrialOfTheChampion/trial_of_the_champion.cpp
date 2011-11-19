@@ -32,6 +32,7 @@ EndContentData */
 
 #define GOSSIP_START_EVENT1     "Estamos listos para comenzar el desafio."  // "I'm ready to start challenge."
 #define GOSSIP_START_EVENT2     "Estamos preparados para el siguiete reto." // "I'm ready for the next challenge."
+#define GOSSIP_START_EVENT3     "Afrontaremos el ultimo reto." // "Let's face our last challenge."
 
 #define ORIENTATION             4.714f
 
@@ -42,6 +43,7 @@ EndContentData */
 const Position SpawnPosition = {746.565f, 665.056f, 411.756f, 4.77922f};
 const Position OutStadiumPosition = {747.03f, 687.483f, 412.373f, 1.53475f};
 const Position AnnouncerPosition = {731.585f, 658.719f, 412.393f, 4.61586f};
+const Position BlackKnightSpawnPosition = {796.404f, 643.282f, 466.518f, 2.33348f};
 const Position FactionChampionPosition[3] =
 {
     {724.854f, 640.344f, 411.829f, 5.60704f},
@@ -967,6 +969,55 @@ public:
                         break;
                 }
             }
+
+            if (GetData(EVENT_BLACK_KNIGHT_INTRO) == IN_PROGRESS)
+            {
+                switch(events.ExecuteEvent())
+                {
+                    case 1:
+                        // Future texts?
+                        events.ScheduleEvent(2, 3000);
+                        break;
+                    case 2:
+                        if (Creature* mount = me->SummonCreature(VEHICLE_BLACK_KNIGHT, BlackKnightSpawnPosition, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN))
+                            me->SetTarget(mount->GetGUID());
+                        events.ScheduleEvent(3, 15000);
+                        break;
+                    case 3:
+                        if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                        {
+                            if (blackKinght->GetVehicle())
+                                events.ScheduleEvent(3, 2000);
+                            else
+                            {
+                                blackKinght->SetTarget(me->GetGUID());
+                                me->SetTarget(blackKinght->GetGUID());
+                                events.ScheduleEvent(4, 2000);
+                            }
+                        }
+                        break;
+                    case 4:
+                        if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                            blackKinght->AI()->DoCast(SPELL_DEATH_RESPITE_INTRO);
+                        events.ScheduleEvent(5, 2000);
+                        break;
+                    case 5:
+                        if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                            blackKinght->AI()->DoCast(me, SPELL_DEATH_PUSH_INTRO);
+                        events.ScheduleEvent(6, 2000);
+                        break;
+                    case 6:
+                        SetData(EVENT_BLACK_KNIGHT_INTRO, DONE);
+                        events.Reset();
+                        if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                        {
+                            blackKinght->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                            blackKinght->SetReactState(REACT_AGGRESSIVE);
+                            blackKinght->Kill(me);
+                        }
+                        break;
+                }
+            }
         }
 
         void AggroAllPlayers(Creature* creature)
@@ -1053,6 +1104,7 @@ public:
         {
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
         }
         else if (instance->GetData(BOSS_GRAND_CHAMPIONS) != DONE)
         {
@@ -1060,6 +1112,8 @@ public:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
         }else if (instance->GetData(BOSS_ARGENT_CHALLENGE_E) != DONE || instance->GetData(BOSS_ARGENT_CHALLENGE_P) != DONE)
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+        else
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
 
         player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
 
@@ -1083,6 +1137,14 @@ public:
                 if (creature->AI()->GetData(EVENT_INTRO_ARGENT) != IN_PROGRESS)
                 {
                     creature->AI()->SetData(EVENT_INTRO_ARGENT, IN_PROGRESS);
+                    creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                    player->CLOSE_GOSSIP_MENU();
+                }
+                break;
+            case GOSSIP_ACTION_INFO_DEF+2:
+                if (creature->AI()->GetData(EVENT_BLACK_KNIGHT_INTRO) != IN_PROGRESS)
+                {
+                    creature->AI()->SetData(EVENT_BLACK_KNIGHT_INTRO, IN_PROGRESS);
                     creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                     player->CLOSE_GOSSIP_MENU();
                 }

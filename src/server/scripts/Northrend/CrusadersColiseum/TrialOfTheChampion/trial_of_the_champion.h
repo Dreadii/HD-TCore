@@ -44,6 +44,7 @@ enum Data64
     DATA_ANNOUNCER,
     DATA_MAIN_GATE,
     DATA_PORTCULLIS,
+    DATA_BLACK_KNIGHT,
 };
 
 enum AnnouncerPhases
@@ -53,7 +54,7 @@ enum AnnouncerPhases
     EVENT_CHAMPIONS,
     EVENT_INTRO_ARGENT,
     EVENT_WAVES_ARGENT,
-    EVENT_BLACK_KNIGHT_INTO,
+    EVENT_BLACK_KNIGHT_INTRO,
     EVENTS_MAX,
 };
 
@@ -239,6 +240,12 @@ enum eVehicles
     VEHICLE_ARGENT_BATTLEWORG                       = 36558,
 
     VEHICLE_BLACK_KNIGHT                            = 35491
+};
+
+enum BlackKnightIntroSpells
+{
+    SPELL_DEATH_RESPITE_INTRO = 66798,
+    SPELL_DEATH_PUSH_INTRO    = 66797,
 };
 
 #endif

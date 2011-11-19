@@ -56,6 +56,7 @@ public:
         uint32 memoryEntry;
         uint64 uiChampionLootGUID;
         uint64 uimemoryEntryGUID;
+        uint64 uiBlackKnightGUID;
 
         std::list<uint64> VehicleList;
         uint32 TeamInInstance;
@@ -79,6 +80,7 @@ public:
             uiChampionLootGUID            = 0;
             uimemoryEntryGUID          = 0;
             memoryEntry         = 0;
+            uiBlackKnightGUID = 0;
 
             bDone = false;
 
@@ -121,6 +123,11 @@ public:
                 case NPC_EADRIC:
                 case NPC_PALETRESS:
                     uimemoryEntryGUID = creature->GetGUID();
+                    break;
+                case NPC_BLACK_KNIGHT:
+                    creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    creature->SetReactState(REACT_PASSIVE);
+                    uiBlackKnightGUID = creature->GetGUID();
                     break;
             }
         }
@@ -251,6 +258,7 @@ public:
                 case DATA_ANNOUNCER: return uiAnnouncerGUID;
                 case DATA_MAIN_GATE: return uiMainGateGUID;
                 case DATA_PORTCULLIS: return uiPortcullisGUID;
+                case DATA_BLACK_KNIGHT: return uiBlackKnightGUID;
             }
 
             return 0;
