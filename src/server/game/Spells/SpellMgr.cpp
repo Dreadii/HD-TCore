@@ -3342,6 +3342,9 @@ void SpellMgr::LoadDbcDataCorrections()
                 spellInfo->rangeIndex = EFFECT_RADIUS_2_YARDS;
                 spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_SRC_AREA_ENEMY;
                 break;
+            case 66545:
+                spellInfo->EffectImplicitTargetB[0] = TARGET_UNIT_CASTER;
+                break;
             // END OF TRIAL OF THE CHAMPION SPELLS
             // TRIAL OF THE CRUSADER SPELLS
             //
