@@ -264,9 +264,9 @@ public:
             } else radianceTimer -= diff;
 
             //DoMeleeAttackIfReady();
-            if (me->isAttackReady() && me->IsWithinMeleeRange(victim))
+            if (me->isAttackReady() && me->IsWithinMeleeRange(me->getVictim()))
             {
-                me->AttackerStateUpdate(victim);
+                me->AttackerStateUpdate(me->getVictim());
                 me->resetAttackTimer();
 
                 if (me->HasAura(SPELL_VENGANCE_AURA))

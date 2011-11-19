@@ -200,7 +200,7 @@ struct npc_mounted_championAI : ScriptedAI
             _defeated = true;
             me->GetMotionMaster()->MoveIdle();
             me->Unmount();
-            me->RemoveAurasDueToSpell(SPELL_DEFEND);
+            me->RemoveAurasDueToSpell(SPELL_SHIELD);
             me->CastSpell(me, SPELL_KNEE, true);
             me->SetTarget(0);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
