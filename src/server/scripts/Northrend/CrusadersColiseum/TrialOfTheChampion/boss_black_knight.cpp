@@ -23,6 +23,7 @@ SDCategory: Trial of the Champion
 EndScriptData */
 
 #include "ScriptPCH.h"
+#include "Vehicle.h"
 #include "ScriptedEscortAI.h"
 #include "trial_of_the_champion.h"
 
@@ -373,14 +374,28 @@ public:
 
     struct npc_black_knight_skeletal_gryphonAI : public npc_escortAI
     {
-        npc_black_knight_skeletal_gryphonAI(Creature* creature) : npc_escortAI(creature)
+        npc_black_knight_skeletal_gryphonAI(Creature* creature) : npc_escortAI(creature), _vehicleKit(creature->GetVehicleKit())
         {
             Start(false, true, 0, NULL);
+            instance = creature->GetInstanceScript();
         }
 
-        void WaypointReached(uint32 /*i*/)
-        {
+        Vehicle* _vehicleKit;
+        InstanceScript* instance;
 
+        void WaypointReached(uint32 id)
+        {
+            if (id == 13)
+            {
+
+                if (Creature* announcer = me->GetCreature(*me, instance->GetData64(DATA_ANNOUNCER)))
+                    me->SetFacingToObject(announcer);
+
+                Position pos; me->GetPosition(&pos);
+                pos.m_positionX = me->GetPositionX() - 5.0f;
+                if (Unit* blackKnight = _vehicleKit->GetPassenger(0))
+                    blackKnight->ExitVehicle(&pos);
+            }
         }
 
         void UpdateAI(const uint32 diff)
