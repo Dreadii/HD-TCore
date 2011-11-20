@@ -47,6 +47,7 @@ enum eSpells
     SPELL_DESECRATION       = 67778,
     SPELL_GHOUL_EXPLODE     = 67751,
     SPELL_EXPLODE           = 67729,
+    SPELL_EXPLODE_H         = 67886,
 
     //phase 3
     SPELL_DEATH_BITE_H      = 67875,
@@ -343,7 +344,7 @@ public:
 
         void SpellHitTarget(Unit* /*victim*/, const SpellInfo* spell)
         {
-            if (spell->Id == SPELL_EXPLODE)
+            if (spell->Id == SPELL_EXPLODE_H)
                 instance->SetData(DATA_I_VE_HAD_WORSE, 0);
         }
 
