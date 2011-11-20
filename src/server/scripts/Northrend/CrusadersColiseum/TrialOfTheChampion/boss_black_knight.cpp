@@ -412,7 +412,6 @@ public:
                     if (Unit* blackKnight = _vehicleKit->GetPassenger(0))
                         blackKnight->ExitVehicle();
 
-                    me->DespawnOrUnsummon(6000);
                     break;
             }
         }
