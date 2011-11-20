@@ -76,6 +76,14 @@ enum ePhases
     PHASE_GHOST     = 3
 };
 
+enum Says
+{
+    SAY_AGGRO    = 1,
+    SAY_KILL     = 2,
+    SAY_SKELETON = 3,
+    SAY_GHOST    = 4,
+    SAY_DEATH    = 5,
+};
 
 class boss_black_knight : public CreatureScript
 {
@@ -138,6 +146,12 @@ public:
         void EnterCombat(Unit* /*attacker*/)
         {
             DoCast(instance->GetData(DATA_TEAM) == ALLIANCE ? SPELL_RAISE_ARELAS : SPELL_RAISE_JAEREN);
+            Talk(SAY_AGGRO);
+        }
+
+        void KilledUnit(Unit* /*target*/)
+        {
+            Talk(SAY_KILL);
         }
 
         void JustSummoned(Creature* summon)
@@ -169,9 +183,11 @@ public:
                     switch (uiPhase)
                     {
                         case PHASE_UNDEAD:
+                            Talk(SAY_SKELETON);
                             me->SetDisplayId(MODEL_SKELETON);
                             break;
                         case PHASE_SKELETON:
+                            Talk(SAY_GHOST);
                             me->SetDisplayId(MODEL_GHOST);
                             SetEquipmentSlots(false, EQUIP_UNEQUIP);
                             me->GetMotionMaster()->MoveChase(me->getVictim());
@@ -308,6 +324,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
+            Talk(SAY_DEATH);
             if (instance)
                 instance->SetData(BOSS_BLACK_KNIGHT, DONE);
         }
