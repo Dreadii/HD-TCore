@@ -229,7 +229,17 @@ INSERT INTO creature_text (entry, groupid, id, TEXT, TYPE, LANGUAGE, probability
 (@TIRION,3,0,'¡Podeis comenzar!',14,0,100,1,0,0,'Tirion - Intro'),
 -- // Argent Challenge
 
-
+-- -- Black Knight
+(@TIRION,4,0,'Bien hecho. Habeis probado vuestra valía hoy...',14,0,100,1,0,0,'Tirion - Intro'),
+(35004,13,0,'¿Qué es eso cerca de las vigas del techo?',12,0,100,1,0,0,'Announcer - Black Knight - Intro'),
+(35005,13,0,'¿Qué es eso cerca de las vigas del techo?',12,0,100,1,0,0,'Announcer - Black Knight - Intro'),
+(@BLACK_KNIGHT,10,0,'Has estropeado mi gran entrada, rata.',12,0,100,1,0,16256,'Black Knight - Intro'),
+(@TIRION,5,0,'¿Qué significa esto?',14,0,100,1,0,0,'Tirion - Intro'),
+(@BLACK_KNIGHT,11,0,'¿Realmente pensabas que derrotarías a un agente del Rey Exánime en los campos de tu patético torneo?',12,0,100,1,0,16257,'Black Knight - Intro'),
+(@BLACK_KNIGHT,12,0,'He venido a terminar mi cometido.',12,0,100,1,0,16258,'Black Knight - Intro'),
+(@GARROSH,10,0,'¡Hacedlo picadillo!',14,0,100,1,0,0,'Garrosh - Black Knight - Intro'),
+(@VARIAN,10,0,'¡No os quedeis ahí mirando; matadlo!',14,0,100,1,0,0,'Varian - Black Knight - Intro'),
+-- // Black Knight
 -- //INTROS
 
 -- COMBAT TEXTS

@@ -68,6 +68,7 @@ const Position ArgentSoldierPosition[3] =
 
 enum Says
 {
+    // Argent Challenge
     SAY_TIRION_INTRO_ARGENT_1 = 2,
     SAY_ANNOUNCER_EADRIC      = 11,
     SAY_ANNOUNCER_PALETRESS   = 12,
@@ -75,6 +76,16 @@ enum Says
     SAY_PALETRESS_INTRO_1     = 10,
     SAY_PALETRESS_INTRO_2     = 11,
     SAY_TIRION_INTRO_ARGENT_2 = 3,
+
+    // Black Knight
+    SAY_TIRION_INTRO_BK_1     = 4,
+    SAY_ANNOUNCER_BK          = 13,
+    SAY_BK_INTRO_1            = 10,
+    SAY_TIRION_INTRO_BK_2     = 5,
+    SAY_BK_INTRO_2            = 11,
+    SAY_BK_INTRO_3            = 12,
+    SAY_VARIAN_INTRO_BK       = 10,
+    SAY_GARROSH_INTRO_BK      = 10,
 };
 class npc_announcer_toc5 : public CreatureScript
 {
@@ -1030,12 +1041,15 @@ public:
                 switch(events.ExecuteEvent())
                 {
                     case 1:
-                        // Future texts?
+                        if (Creature* tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
+                            tirion->AI()->Talk(SAY_TIRION_INTRO_BK_1);
+
                         events.ScheduleEvent(2, 3000);
                         break;
                     case 2:
                         if (Creature* mount = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT_GRYPHON)))
                         {
+                            Talk(SAY_ANNOUNCER_BK);
                             mount->AI()->SetData(1, 0);
                             me->SetTarget(mount->GetGUID());
                         }
@@ -1048,7 +1062,6 @@ public:
                                 events.ScheduleEvent(3, 2000);
                             else
                             {
-                                blackKinght->SetHomePosition(blackKinght->GetPositionX(), blackKinght->GetPositionY(), blackKinght->GetPositionZ(), blackKinght->GetOrientation());
                                 blackKinght->SetTarget(me->GetGUID());
                                 me->SetTarget(blackKinght->GetGUID());
                                 events.ScheduleEvent(4, 2000);
@@ -1057,7 +1070,10 @@ public:
                         break;
                     case 4:
                         if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                        {
+                            blackKinght->AI()->Talk(SAY_BK_INTRO_1);
                             blackKinght->AI()->DoCast(SPELL_DEATH_RESPITE_INTRO);
+                        }
                         events.ScheduleEvent(5, 4000);
                         break;
                     case 5:
@@ -1069,10 +1085,43 @@ public:
                         events.ScheduleEvent(6, 2000);
                         break;
                     case 6:
+                        if (Creature* tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
+                        {
+                            tirion->AI()->Talk(SAY_TIRION_INTRO_BK_2);
+                            if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                            {
+                                DoCast(57626); // Feign death
+                                blackKinght->SetTarget(tirion->GetGUID());
+                            }
+                        }
+                        events.ScheduleEvent(7, 3000);
+                        break;
+                    case 7:
+                        if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                            blackKinght->AI()->Talk(SAY_BK_INTRO_2);
+                        events.ScheduleEvent(8, 9000);
+                        break;
+                    case 8:
+                        if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                            blackKinght->AI()->Talk(SAY_BK_INTRO_3);
+                        events.ScheduleEvent(9, 5000);
+                        break;
+                    case 9:
+                        if (instance->GetData(DATA_TEAM) == HORDE)
+                        {
+                            if (Creature* garrosh = me->GetCreature(*me, instance->GetData64(DATA_GARROSH)))
+                                garrosh->AI()->Talk(SAY_GARROSH_INTRO_BK);
+                        } else
+                        {
+                            if (Creature* varian = me->GetCreature(*me, instance->GetData64(DATA_VARIAN)))
+                                varian->AI()->Talk(SAY_VARIAN_INTRO_BK);
+                        }
+
                         SetData(EVENT_BLACK_KNIGHT_INTRO, DONE);
                         events.Reset();
                         if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
                         {
+                            blackKinght->SetHomePosition(blackKinght->GetPositionX(), blackKinght->GetPositionY(), blackKinght->GetPositionZ(), blackKinght->GetOrientation());
                             blackKinght->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                             blackKinght->SetReactState(REACT_AGGRESSIVE);
                             blackKinght->Kill(me);

@@ -204,8 +204,8 @@ enum eNpcs
     NPC_TIRION                  = 34996,
     NPC_THRALL                  = 34994,
     NPC_GARROSH                 = 34995,
-    NPC_VARIAN                  = 34992,
-    NPC_JAINA                   = 34990,
+    NPC_VARIAN                  = 34990,
+    NPC_JAINA                   = 34992,
 };
 
 enum eGameObjects
