@@ -81,6 +81,15 @@ enum Spells
     SPELL_WAKING_NIGHTMARE_H    = 67677
 };
 
+enum Says
+{
+    SAY_EADRIC_AGGRO            = 1,
+    SAY_EADRIC_HAMMER           = 2,
+    SAY_EADRIC_KILL             = 3,
+    SAY_EADRIC_DEATH            = 4,
+    SAY_EADRIC_RADIANCE_WARNING = 5,
+    SAY_EADRIC_HAMMER_WARNING   = 6,
+};
 class OrientationCheck : public std::unary_function<Unit*, bool>
 {
     public:
@@ -191,6 +200,16 @@ public:
                             instance->DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_EADRIC_ACHIEVEMENT);
         }
 
+        void EnterCombat(Unit* /*attacker*/)
+        {
+            Talk(SAY_EADRIC_AGGRO);
+        }
+
+        void KilledUnit(Unit* /*target*/)
+        {
+            Talk(SAY_EADRIC_KILL);
+        }
+
         void DamageTaken(Unit* /*attacker*/, uint32 & damage)
         {
             if(defeated)
@@ -208,6 +227,7 @@ public:
                 me->GetMotionMaster()->MovePoint(1, me->GetHomePosition());
                 me->SetTarget(0);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                Talk(SAY_EADRIC_DEATH);
             }
         }
 
@@ -242,7 +262,9 @@ public:
                 {
                     if (target && target->isAlive())
                     {
+                        Talk(SAY_EADRIC_HAMMER);
                         DoCast(target, SPELL_HAMMER_JUSTICE);
+                        Talk(SAY_EADRIC_HAMMER_WARNING, target->GetGUID());
                         DoCast(target, SPELL_HAMMER_RIGHTEOUS);
                     }
                 }
@@ -258,6 +280,7 @@ public:
 
             if (radianceTimer <= diff)
             {
+                Talk(SAY_EADRIC_RADIANCE_WARNING);
                 DoCastAOE(SPELL_RADIANCE);
 
                 radianceTimer = 16000;

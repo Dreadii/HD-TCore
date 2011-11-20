@@ -180,3 +180,15 @@ INSERT INTO `script_waypoint` (`entry`, `pointid`, `location_x`, `location_y`, `
 (35491,13,744.841,634.505,411.575,2000,''),
 (35491,14,759.005,665.142,462.541,0,''),
 (35491,15,747.127,813.51,460.707,0,'');
+
+-- Texts
+DELETE FROM creature_text WHERE entry=35119;
+INSERT INTO creature_text (entry, groupid, id, TEXT, TYPE, LANGUAGE, probability, emote, duration, sound, COMMENT) VALUES
+(35119,0,0,'¿Aceptais el reto? ¡No hay vuelta atras!',12,0,100,1,0,16134,'Eadric - Intro'),
+(35119,1,0,'¡Preparaos!',14,0,100,1,0,16135,'Eadric - Aggro'),
+(35119,2,0,'¡Martillo del honrado!',14,0,100,1,0,16136,'Eadric - Hammer'),
+(35119,3,0,'¡Tu! ¡Tienes que practicar más!',14,0,100,1,0,16137,'Eadric - Slay 1'),
+(35119,3,1,'¡No! ¡No! ¡Y otra vez no! ¡No es suficiente!',16,0,100,11,0,16138,'Eadric - Slay 2'),
+(35119,4,0,'¡Me rindo! Lo admito. Un trabajo excelente. ¿Puedo escaparme ya?',16,0,100,11,0,16139,'Eadric - Death'),
+(35119,5,0,'%s comienza a irradiar luz. ¡Cubrios los ojos!',41,0,100,11,0,0,'Eadric - Warning - Radiance'),
+(35119,6,0,'%s comienza a lanzar Martillo del Honrado sobre %t.',41,0,100,11,0,0,'Eadric - Warning - Hammer');
