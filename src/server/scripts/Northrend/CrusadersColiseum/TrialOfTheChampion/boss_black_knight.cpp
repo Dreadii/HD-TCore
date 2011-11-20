@@ -333,6 +333,9 @@ public:
         {
             uiAttackTimer = 3500;
             uiLeapTimer = 1000;
+
+            if (Creature* knight = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                knight->AI()->JustSummoned(me);
         }
 
         void UpdateAI(const uint32 diff)
