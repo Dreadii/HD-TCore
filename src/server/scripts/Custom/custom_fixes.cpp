@@ -4621,6 +4621,60 @@ public:
     }
 };
 
+/*##########
+# Quest 9361
+###########*/
+
+enum PurifyMeatSpells
+{
+    SPELL_PURIFY_HELBOAR_MEAT = 29200,
+    SPELL_SUMMON_PURIFIED_HELBOAR_MEAT = 29277,
+    SPELL_SUMMON_TOXIC_HELBOAR_MEAT = 29278
+};
+
+class spell_purify_helboar_meat : public SpellScriptLoader
+{
+public:
+    spell_purify_helboar_meat() : SpellScriptLoader("spell_purify_helboar_meat") {}
+
+    class spell_purify_helboar_meat_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_purify_helboar_meat_SpellScript);
+
+        bool Validate(SpellInfo const* /*spellInfo*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_PURIFY_HELBOAR_MEAT))
+                return false;
+            if (!sSpellMgr->GetSpellInfo(SPELL_SUMMON_PURIFIED_HELBOAR_MEAT))
+                return false;
+            if (!sSpellMgr->GetSpellInfo(SPELL_SUMMON_TOXIC_HELBOAR_MEAT))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /*effIndex*/)
+        {
+            if (Unit* caster = GetCaster())
+                if (Player* player = caster->ToPlayer())
+                    switch (urand(0,1))
+                    {
+                        case 0: player->CastSpell(player, SPELL_SUMMON_PURIFIED_HELBOAR_MEAT, false); break;
+                        case 1: player->CastSpell(player, SPELL_SUMMON_TOXIC_HELBOAR_MEAT, false); break;
+                    }
+        }
+
+        void Register()
+        {
+            OnEffectHit += SpellEffectFn(spell_purify_helboar_meat_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_purify_helboar_meat_SpellScript();
+    }
+};
+
 void AddSC_custom_fixes()
 {
     new go_not_a_bug;
@@ -4686,4 +4740,5 @@ void AddSC_custom_fixes()
     new npc_halloween_orphan_matron();
     new npc_attracted_reef_bull();
     new spell_anuniaqs_net();
+    new spell_purify_helboar_meat();
 }
