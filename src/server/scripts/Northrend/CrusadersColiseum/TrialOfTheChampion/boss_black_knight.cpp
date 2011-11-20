@@ -449,27 +449,9 @@ public:
     }
 };
 
-class achievement_i_ve_had_worse : public AchievementCriteriaScript
-{
-    public:
-        achievement_i_ve_had_worse() : AchievementCriteriaScript("achievement_i_ve_had_worse") {}
-
-        bool OnCheck(Player* player, Unit* target)
-        {
-            if (!target)
-                return false;
-
-            if (Creature* blackKinght = target->ToCreature())
-                return blackKinght->AI()->GetData(DATA_I_VE_HAD_WORSE);
-
-             return false;
-        }
-};
-
 void AddSC_boss_black_knight()
 {
     new boss_black_knight();
     new npc_risen_ghoul();
     new npc_black_knight_skeletal_gryphon();
-    new achievement_i_ve_had_worse();
 }

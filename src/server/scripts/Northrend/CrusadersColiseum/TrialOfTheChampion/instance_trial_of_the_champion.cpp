@@ -216,6 +216,10 @@ public:
                         pAnnouncer->SummonGameObject(instance->IsHeroic()? GO_PALETRESS_LOOT_H : GO_PALETRESS_LOOT, 746.59f, 618.49f, 411.09f, 1.42f, 0, 0, 0, 0, 90000000);
                     }
                     break;
+                case BOSS_BLACK_KNIGHT:
+                    m_auiEncounter[3] = uiData;
+                    DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_BLACK_KNIGHT);
+                    break;
                 case DATA_GRAND_CHAMPION_1:
                     grandChampionEntry[0] = uiData;
                     break;
@@ -313,6 +317,9 @@ public:
                 case CRITERIA_MEMORY_VEZAX:
                 case CRITERIA_MEMORY_ALGALON:
                     return (memoryEntry == GetRelatedCreatureEntry(criteria_id));
+                case CRITERIA_I_VE_HAD_WORSE:
+                    if (Creature* blackKnight = instance->GetCreature(GetData64(uiBlackKnightGUID)))
+                        return blackKnight->AI()->GetData(DATA_I_VE_HAD_WORSE);
             }
 
             return false;
