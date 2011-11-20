@@ -1003,11 +1003,14 @@ public:
                     case 4:
                         if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
                             blackKinght->AI()->DoCast(SPELL_DEATH_RESPITE_INTRO);
-                        events.ScheduleEvent(5, 2000);
+                        events.ScheduleEvent(5, 4000);
                         break;
                     case 5:
                         if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                        {
                             blackKinght->AI()->DoCast(me, SPELL_DEATH_PUSH_INTRO);
+                            blackKinght->SetTarget(0);
+                        }
                         events.ScheduleEvent(6, 2000);
                         break;
                     case 6:
