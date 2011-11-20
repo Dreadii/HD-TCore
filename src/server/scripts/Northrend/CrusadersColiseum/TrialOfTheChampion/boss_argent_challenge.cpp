@@ -279,7 +279,6 @@ public:
             if (venganceTimer <= diff)
             {
                 DoCast(me, SPELL_VENGEANCE);
-
                 venganceTimer = 10000;
             } else venganceTimer -= diff;
 
@@ -297,8 +296,9 @@ public:
                 me->AttackerStateUpdate(me->getVictim());
                 me->resetAttackTimer();
 
-                if (me->HasAura(SPELL_VENGANCE_AURA))
-                    me->RemoveAurasDueToSpell(SPELL_VENGANCE_AURA);
+                if (Aura* vengance = me->GetAura(SPELL_VENGANCE_AURA))
+                    if (vengance->GetDuration() < 4900)
+                        me->RemoveAurasDueToSpell(SPELL_VENGANCE_AURA);
             }
         }
     };
