@@ -44,11 +44,20 @@ const Position SpawnPosition = {746.565f, 665.056f, 411.756f, 4.77922f};
 const Position OutStadiumPosition = {747.03f, 687.483f, 412.373f, 1.53475f};
 const Position AnnouncerPosition = {731.585f, 658.719f, 412.393f, 4.61586f};
 const Position BlackKnightSpawnPosition = {796.404f, 643.282f, 466.518f, 2.33348f};
-const Position FactionChampionPosition[3] =
+const Position FactionChampionPos[2][3] =
 {
-    {724.854f, 640.344f, 411.829f, 5.60704f},
-    {714.172f, 618.206f, 411.604f, 0.0f},
-    {724.300f, 595.990f, 411.568f, 0.819248f}
+    {
+        // Horde
+        {724.854f, 640.344f, 411.829f, 5.60704f},
+        {714.172f, 618.206f, 411.604f, 0.0f},
+        {724.300f, 595.990f, 411.568f, 0.819248f},
+    },
+    {
+        // Alliance
+        {767.643f, 639.450f, 411.757f, 3.3663f},
+        {779.169f, 618.351f, 411.607f, 3.06471f},
+        {769.012f, 596.386f, 411.569f, 2.92883f},
+    },
 };
 const Position ArgentSoldierPosition[3] =
 {
@@ -91,6 +100,14 @@ public:
 
         bool addsAttacking;
         uint8 defeatedCount;
+
+        const Position* FactionChampionPosition()
+        {
+            if (instance->GetData(DATA_TEAM) == HORDE)
+                return FactionChampionPos[1];
+            else
+                return FactionChampionPos[0];
+        }
 
         void Reset()
         {
@@ -230,7 +247,7 @@ public:
                     case 3:
                         // Move first boss to the new position
                         if (Creature* boss1 = me->GetCreature(*me, bossGUID[0]))
-                            boss1->GetMotionMaster()->MovePoint(0, FactionChampionPosition[0]);
+                            boss1->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[0]);
 
                         events.ScheduleEvent(4, 5000);
                         break;
@@ -284,11 +301,11 @@ public:
                     case 6:
                         // Move first boss to the new position
                         if (Creature* boss1 = me->GetCreature(*me, bossGUID[0]))
-                            boss1->GetMotionMaster()->MovePoint(0, FactionChampionPosition[1]);
+                            boss1->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[1]);
 
                         // Move second boss to the new position
                         if (Creature* boss2 = me->GetCreature(*me, bossGUID[1]))
-                            boss2->GetMotionMaster()->MovePoint(0, FactionChampionPosition[0]);
+                            boss2->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[0]);
 
                         events.ScheduleEvent(7, 5000);
                         break;
@@ -342,15 +359,15 @@ public:
                     case 9:
                         // Move first boss to the new position
                         if (Creature* boss1 = me->GetCreature(*me, bossGUID[0]))
-                            boss1->GetMotionMaster()->MovePoint(0, FactionChampionPosition[2]);
+                            boss1->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[2]);
 
                         // Move second boss to the new position
                         if (Creature* boss2 = me->GetCreature(*me, bossGUID[1]))
-                            boss2->GetMotionMaster()->MovePoint(0, FactionChampionPosition[1]);
+                            boss2->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[1]);
 
                         // Move third boss to the new position
                         if (Creature* boss2 = me->GetCreature(*me, bossGUID[2]))
-                            boss2->GetMotionMaster()->MovePoint(0, FactionChampionPosition[0]);
+                            boss2->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[0]);
 
                         events.ScheduleEvent(10, 5000);
                         break;
@@ -827,7 +844,7 @@ public:
                         if (Creature* mainAdd3 = me->GetCreature(*me, addsGUID[2][0]))
                             mainAdd3->GetMotionMaster()->MovePoint(0, ArgentSoldierPosition[0]);
 
-                        events.ScheduleEvent(10, 1500);
+                        events.ScheduleEvent(10, 2000);
                         break;
                     case 10:
                         // Refresh the adds position
