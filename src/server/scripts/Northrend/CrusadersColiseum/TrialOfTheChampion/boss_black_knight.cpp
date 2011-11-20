@@ -95,7 +95,6 @@ public:
         bool resurrectInProgress;
         bool bSummonArmy;
         bool bDeathArmyDone;
-        bool achievementHadWorse;
 
         uint8 uiPhase;
 
@@ -118,7 +117,6 @@ public:
             me->ClearUnitState(UNIT_STAT_ROOT | UNIT_STAT_STUNNED);
 
             resurrectInProgress = false;
-            achievementHadWorse = true;
             bSummonArmy = false;
             bDeathArmyDone = false;
 
@@ -312,20 +310,6 @@ public:
             if (instance)
                 instance->SetData(BOSS_BLACK_KNIGHT, DONE);
         }
-
-        void SetData(uint32 type, uint32 /*data*/)
-        {
-            if (type == DATA_I_VE_HAD_WORSE)
-                achievementHadWorse = false;
-        }
-
-        uint32 GetData(uint32 type)
-        {
-            if (type == DATA_I_VE_HAD_WORSE)
-                return achievementHadWorse ? 1 : 0;
-
-            return 0;
-        }
     };
 
     CreatureAI* GetAI(Creature* creature) const
@@ -360,9 +344,9 @@ public:
         void SpellHitTarget(Unit* /*victim*/, const SpellInfo* spell)
         {
             if (spell->Id == SPELL_EXPLODE)
-                if (Creature* knight = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
-                    knight->AI()->SetData(DATA_I_VE_HAD_WORSE, 0);
+                instance->SetData(DATA_I_VE_HAD_WORSE, 0);
         }
+
         void UpdateAI(const uint32 diff)
         {
             if (!UpdateVictim() || me->HasUnitState(UNIT_STAT_CASTING))

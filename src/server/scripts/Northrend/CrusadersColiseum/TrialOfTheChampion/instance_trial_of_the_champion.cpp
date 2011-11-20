@@ -65,6 +65,7 @@ public:
         std::string str_data;
 
         bool bDone;
+        bool achievementHadWorse;
 
         void Initialize()
         {
@@ -84,6 +85,7 @@ public:
             uiBlackKnightGUID = 0;
 
             bDone = false;
+            achievementHadWorse = true;
 
             VehicleList.clear();
             TeamInInstance = 0;
@@ -232,6 +234,9 @@ public:
                 case DATA_MEMORY:
                     memoryEntry = uiData;
                     break;
+                case DATA_I_VE_HAD_WORSE:
+                    achievementHadWorse = false;
+                    break;
             }
 
             if (uiData == DONE)
@@ -318,8 +323,7 @@ public:
                 case CRITERIA_MEMORY_ALGALON:
                     return (memoryEntry == GetRelatedCreatureEntry(criteria_id));
                 case CRITERIA_I_VE_HAD_WORSE:
-                    if (Creature* blackKnight = instance->GetCreature(GetData64(uiBlackKnightGUID)))
-                        return blackKnight->AI()->GetData(DATA_I_VE_HAD_WORSE);
+                    return achievementHadWorse;
             }
 
             return false;
