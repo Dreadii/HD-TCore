@@ -75,6 +75,8 @@ enum ePhases
     PHASE_GHOST     = 3
 };
 
+#define DATA_I_VE_HAD_WORSE 1
+
 class boss_black_knight : public CreatureScript
 {
 public:
@@ -94,6 +96,7 @@ public:
         bool resurrectInProgress;
         bool bSummonArmy;
         bool bDeathArmyDone;
+        bool achievementHadWorse;
 
         uint8 uiPhase;
 
@@ -116,6 +119,7 @@ public:
             me->ClearUnitState(UNIT_STAT_ROOT | UNIT_STAT_STUNNED);
 
             resurrectInProgress = false;
+            achievementHadWorse = true;
             bSummonArmy = false;
             bDeathArmyDone = false;
 
@@ -309,6 +313,20 @@ public:
             if (instance)
                 instance->SetData(BOSS_BLACK_KNIGHT, DONE);
         }
+
+        void SetData(uint32 type, uint32 /*data*/)
+        {
+            if (type == DATA_I_VE_HAD_WORSE)
+                achievementHadWorse = false;
+        }
+
+        uint32 GetData(uint32 type)
+        {
+            if (type == DATA_I_VE_HAD_WORSE)
+                return achievementHadWorse ? 1 : 0;
+
+            return 0;
+        }
     };
 
     CreatureAI* GetAI(Creature* creature) const
@@ -326,11 +344,13 @@ public:
     {
         npc_risen_ghoulAI(Creature* creature) : ScriptedAI(creature) {}
 
+        InstanceScript* instance;
         uint32 uiAttackTimer;
         uint32 uiLeapTimer;
 
         void Reset()
         {
+            instance = me->GetInstanceScript();
             uiAttackTimer = 3500;
             uiLeapTimer = 1000;
 
@@ -338,6 +358,12 @@ public:
                 knight->AI()->JustSummoned(me);
         }
 
+        void SpellHitTarget(Unit* /*victim*/, const SpellInfo* spell)
+        {
+            if (spell->Id == SPELL_EXPLODE)
+                if (Creature* knight = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                    knight->AI()->SetData(DATA_I_VE_HAD_WORSE, 0);
+        }
         void UpdateAI(const uint32 diff)
         {
             if (!UpdateVictim())
@@ -423,9 +449,27 @@ public:
     }
 };
 
+class achievement_i_ve_had_worse : public AchievementCriteriaScript
+{
+    public:
+        achievement_i_ve_had_worse() : AchievementCriteriaScript("achievement_i_ve_had_worse") {}
+
+        bool OnCheck(Player* player, Unit* target)
+        {
+            if (!target)
+                return false;
+
+            if (Creature* blackKinght = target->ToCreature())
+                return blackKinght->AI()->GetData(DATA_I_VE_HAD_WORSE);
+
+             return false;
+        }
+};
+
 void AddSC_boss_black_knight()
 {
     new boss_black_knight();
     new npc_risen_ghoul();
     new npc_black_knight_skeletal_gryphon();
+    new achievement_i_ve_had_worse();
 }
