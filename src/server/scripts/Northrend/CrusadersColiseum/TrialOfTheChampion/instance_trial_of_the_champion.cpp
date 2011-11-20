@@ -47,6 +47,11 @@ public:
         uint8 uiArgentSoldierDeaths;
 
         uint64 uiAnnouncerGUID;
+        uint64 uiTirionGUID;
+        uint64 uiThrallGUID;
+        uint64 uiGarroshGUID;
+        uint64 uiVarianGUID;
+        uint64 uiJainaGUID;
         uint64 uiMainGateGUID;
         uint64 uiPortcullisGUID;
         uint64 uiGrandChampionVehicle1GUID;
@@ -74,6 +79,10 @@ public:
             uiArgentSoldierDeaths = 0;
 
             uiAnnouncerGUID        = 0;
+            uiTirionGUID           = 0;
+            uiThrallGUID           = 0;
+            uiGarroshGUID          = 0;
+            uiJainaGUID            = 0;
             uiMainGateGUID         = 0;
             uiPortcullisGUID       = 0;
             uiGrandChampionVehicle1GUID   = 0;
@@ -118,6 +127,21 @@ public:
                     if (TeamInInstance == ALLIANCE)
                         creature->UpdateEntry(NPC_ARELAS);
                     uiAnnouncerGUID = creature->GetGUID();
+                    break;
+                case NPC_TIRION:
+                    uiTirionGUID = creature->GetGUID();
+                    break;
+                case NPC_THRALL:
+                    uiThrallGUID = creature->GetGUID();
+                    break;
+                case NPC_GARROSH:
+                    uiGarroshGUID = creature->GetGUID();
+                    break;
+                case NPC_VARIAN:
+                    uiVarianGUID = creature->GetGUID();
+                    break;
+                case NPC_JAINA:
+                    uiJainaGUID = creature->GetGUID();
                     break;
                 case VEHICLE_ARGENT_WARHORSE:
                 case VEHICLE_ARGENT_BATTLEWORG:
@@ -269,6 +293,11 @@ public:
             switch(uiData)
             {
                 case DATA_ANNOUNCER: return uiAnnouncerGUID;
+                case DATA_TIRION: return uiTirionGUID;
+                case DATA_THRALL: return uiThrallGUID;
+                case DATA_GARROSH: return uiGarroshGUID;
+                case DATA_VARIAN: return uiVarianGUID;
+                case DATA_JAINA: return uiJainaGUID;
                 case DATA_MAIN_GATE: return uiMainGateGUID;
                 case DATA_PORTCULLIS: return uiPortcullisGUID;
                 case DATA_BLACK_KNIGHT: return uiBlackKnightGUID;

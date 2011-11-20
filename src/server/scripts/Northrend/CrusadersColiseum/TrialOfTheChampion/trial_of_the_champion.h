@@ -43,6 +43,11 @@ enum eData
 enum Data64
 {
     DATA_ANNOUNCER,
+    DATA_TIRION,
+    DATA_THRALL,
+    DATA_GARROSH,
+    DATA_VARIAN,
+    DATA_JAINA,
     DATA_MAIN_GATE,
     DATA_PORTCULLIS,
     DATA_BLACK_KNIGHT,
@@ -194,7 +199,13 @@ enum eNpcs
 
     // Announcers
     NPC_JAEREN                  = 35004,
-    NPC_ARELAS                  = 35005
+    NPC_ARELAS                  = 35005,
+
+    NPC_TIRION                  = 34996,
+    NPC_THRALL                  = 34994,
+    NPC_GARROSH                 = 34995,
+    NPC_VARIAN                  = 34992,
+    NPC_JAINA                   = 34990,
 };
 
 enum eGameObjects

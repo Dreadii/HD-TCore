@@ -57,6 +57,16 @@ const Position ArgentSoldierPosition[3] =
     {775.734f, 644.413f, 411.919f, 3.79826f}
 };
 
+enum Says
+{
+    SAY_TIRION_INTRO_ARGENT_1 = 2,
+    SAY_ANNOUNCER_EADRIC      = 11,
+    SAY_ANNOUNCER_PALETRESS   = 12,
+    SAY_EADRIC_INTRO          = 10,
+    SAY_PALETRESS_INTRO_1     = 10,
+    SAY_PALETRESS_INTRO_2     = 11,
+    SAY_TIRION_INTRO_ARGENT_2 = 3,
+};
 class npc_announcer_toc5 : public CreatureScript
 {
 public:
@@ -648,7 +658,8 @@ public:
                 switch(events.ExecuteEvent())
                 {
                     case 1:
-                        // TODO: Intro texts
+                        if (Creature* tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
+                            tirion->AI()->Talk(SAY_TIRION_INTRO_ARGENT_1);
                         // Open door
                         if (GameObject* pGO = GameObject::GetGameObject(*me, instance->GetData64(DATA_MAIN_GATE)))
                             instance->HandleGameObject(pGO->GetGUID(), true);
@@ -845,13 +856,27 @@ public:
                         bool chance;
                         chance = urand(0, 1);
                         if (Creature* boss = me->SummonCreature(chance ? NPC_EADRIC : NPC_PALETRESS, SpawnPosition))
+                        {
+                            switch (boss->GetEntry())
+                            {
+                                case NPC_EADRIC: Talk(SAY_ANNOUNCER_EADRIC); break;
+                                case NPC_PALETRESS: Talk(SAY_ANNOUNCER_PALETRESS); break;
+                            }
                             bossGUID[0] = boss->GetGUID();
+                        }
                         events.ScheduleEvent(12, 4000);
                         break;
                     case 12:
                         // Set home positions, in case of wipe, this avoids summons goin back to the SpawnPos
                         if (Creature* boss = me->GetCreature(*me, bossGUID[0]))
+                        {
                             boss->SetHomePosition(boss->GetPositionX(), boss->GetPositionY(), boss->GetPositionZ(), boss->GetOrientation());
+                            switch (boss->GetEntry())
+                            {
+                                case NPC_EADRIC: boss->AI()->Talk(SAY_EADRIC_INTRO); break;
+                                case NPC_PALETRESS: boss->AI()->Talk(SAY_PALETRESS_INTRO_1); break;
+                            }
+                        }
 
                         for (uint8 i=0; i<3; i++)
                             for (uint8 j=0; j<3; j++)
@@ -860,17 +885,30 @@ public:
                                     add->SetFacingToObject(me);
                                     add->SetHomePosition(add->GetPositionX(), add->GetPositionY(), add->GetPositionZ(), add->GetOrientation());
                                 }
-
+                        events.ScheduleEvent(13, 4000);
+                        break;
+                    case 13:
+                        // Set home positions, in case of wipe, this avoids summons goin back to the SpawnPos
+                        if (Creature* boss = me->GetCreature(*me, bossGUID[0]))
+                        {
+                            switch (boss->GetEntry())
+                            {
+                                case NPC_PALETRESS: boss->AI()->Talk(SAY_PALETRESS_INTRO_2); break;
+                            }
+                        }
                         // Move to the door position
                         me->SetUnitMovementFlags(MOVEMENTFLAG_WALKING);
                         me->GetMotionMaster()->MovePoint(0, AnnouncerPosition);
                         me->SetTarget(stalkerGUID);
-                        events.ScheduleEvent(13, 19000);
+                        events.ScheduleEvent(14, 19000);
                         break;
-                    case 13:
+                    case 14:
                         //Close Door
                         if (GameObject* pGO = GameObject::GetGameObject(*me, instance->GetData64(DATA_MAIN_GATE)))
                             instance->HandleGameObject(pGO->GetGUID(), false);
+
+                        if (Creature* tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
+                            tirion->AI()->Talk(SAY_TIRION_INTRO_ARGENT_2);
 
                         events.Reset();
                         SetData(EVENT_INTRO_ARGENT, DONE);

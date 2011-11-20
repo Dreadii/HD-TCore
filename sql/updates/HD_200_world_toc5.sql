@@ -181,33 +181,82 @@ INSERT INTO `script_waypoint` (`entry`, `pointid`, `location_x`, `location_y`, `
 (35491,14,759.005,665.142,462.541,0,''),
 (35491,15,747.127,813.51,460.707,0,'');
 
+/*
+(35004,1,0,'Los expectadores de la Alianza animan a %t.',12,0,100,1,0,13838,'Announcer - Alliance Cheers 1'),
+(35004,1,1,'Los expectadores de la Alianza animan a %t.',12,0,100,1,0,13840,'Announcer - Alliance Cheers 2'),
+(35004,2,0,'Los expectadores de la Horda animan a %t.',12,0,100,1,0,13839,'Announcer - Horde Cheers 1'),
+(35004,2,1,'Los expectadores de la Horda animan a %t.',12,0,100,1,0,13841,'Announcer - Horde Cheers 2'),
+*/
+SET @TIRION       := 34996;
+SET @THRALL       := 34994;
+SET @GARROSH      := 34995;
+SET @VARIAN       := 34992;
+SET @JAINA        := 34990;
+
+SET @EADRIC       := 35119;
+SET @PALETRESS    := 34928;
+SET @BLACK_KNIGHT := 35451;
+
 -- Texts
-DELETE FROM creature_text WHERE entry IN (35451, 34928, 35119);
+DELETE FROM creature_text WHERE entry IN (35004, 35005, @TIRION, @THRALL, @GARROSH , @VARIAN , @JAINA, @EADRIC, @PALETRESS, @BLACK_KNIGHT);
 INSERT INTO creature_text (entry, groupid, id, TEXT, TYPE, LANGUAGE, probability, emote, duration, sound, COMMENT) VALUES
--- Intros
-(35119,10,0,'¿Aceptais el reto? ¡No hay vuelta atras!',12,0,100,1,0,16134,'Eadric - Intro'),
-(34928,10,0,'Gracias buen heraldo. Tus palabras son muy amables.',12,0,100,1,0,16245,'Paletress - Intro'),
-(34928,11,0,'Que la luz me de fuerzas para ser un reto digno.',12,0,100,1,0,16245,'Paletress - Intro'),
--- Eadric
-(35119,1,0,'¡Preparaos!',14,0,100,0,0,16135,'Eadric - Aggro'),
-(35119,2,0,'¡Martillo del honrado!',14,0,100,0,0,16136,'Eadric - Hammer'),
-(35119,3,0,'¡Tu! ¡Tienes que practicar más!',14,0,100,0,0,16137,'Eadric - Slay 1'),
-(35119,3,1,'¡No! ¡No! ¡Y otra vez no! ¡No es suficiente!',14,0,100,0,0,16138,'Eadric - Slay 2'),
-(35119,4,0,'¡Me rindo! Lo admito. Un trabajo excelente. ¿Puedo escaparme ya?',14,0,100,0,0,16139,'Eadric - Death'),
-(35119,5,0,'%s comienza a irradiar luz. ¡Cubrios los ojos!',41,0,100,0,0,0,'Eadric - Warning - Radiance'),
-(35119,6,0,'%s comienza a lanzar Martillo del Honrado sobre $N.',41,0,100,0,0,0,'Eadric - Warning - Hammer'),
--- Paletress
-(34928,1,0,'Bien entonces. Comencemos.',14,0,100,0,0,16247,'Paletress - Aggro'),
-(34928,2,0,'Aprovecha este tiempo para pensar en tus hazañas.',14,0,100,0,0,16248,'Paletress - Summon Memory'),
-(34928,3,0,'Descansa.',14,0,100,0,0,16250,'Paletress - Slay 1'),
-(34928,3,1,'Ve en paz.',14,0,100,0,0,16251,'Paletress - Slay 2'),
-(34928,4,0,'¡Un trabajo excelente!',14,0,100,0,0,16252,'Paletress - Death'),
-(34928,5,0,'Incluso el recuerdo más oscuro se desvanece al afrontarlo.',14,0,100,0,0,16249,'Paletress - Memory dies'),
-(34928,6,0,'¡$N comienza a lanzar Pesadilla Lúcida!',41,0,100,0,0,0,'Paletress - Warning - Waking nightmare'),
--- Black Knight
-(35451,1,0,'¡Esta farsa acaba aquí!',14,0,100,0,0,16259,'Black Knight - Aggro'),
-(35451,2,0,'Patético.',14,0,100,0,0,16260,'Black Knight - Slay 1'),
-(35451,2,1,'¡Qué desperdicio!',14,0,100,0,0,16261,'Black Knight - Slay 2'),
-(35451,3,0,'¡Me estorbaba esa carne putrefacta!',14,0,100,0,0,16262,'Black Knight - Skeleton Res'),
-(35451,4,0,'No necesito huesos para vencerte.',14,0,100,0,0,16263,'Black Knight - Ghost Res'),
-(35451,5,0,'¡No! No debo fallar... otra vez...',14,0,100,0,0,16264,'Black Knight - Death');
+-- INTROS
+
+-- -- Mounted Gauntlet
+(@TIRION,0,0,'Bienvenidos campeones. Hoy, ante los ojos de vuestros lideres y compañeros os probareis como combatientes dignos.',14,0,100,1,0,0,'Tirion - Intro'),
+-- -- -- Horde Version
+(@THRALL,0,0,'¡Luchad con fuerza, Horda! ¡Lok\'tar Ogar!',14,0,100,1,0,0,'Thrall - Intro'),
+(@GARROSH,0,0,'¡Por fin! Un combate digno de ser contemplado.',12,0,100,1,0,0,'Garrosh - Intro'),
+(@VARIAN,0,0,'No he venido hasta aquí para ver animales despezandose entre ellos sin ningún criterio, Tirion.',12,0,100,1,0,0,'Varian - Intro'),
+(@JAINA,0,0,'Son combatientes dignos, ya lo verás.',12,0,100,1,0,0,'Jaina - Intro'),
+-- -- // Horde Version
+(@TIRION,1,0,'Primero os enfrentareis a tres de los Grandes Campeones del Torneo. Estos feroces contendientes han derrotado a todos los demás hasta alcanzar la máxima habilidad en la justa.',14,0,100,1,0,0,'Tirion - Intro'),
+-- // Mounted Gauntlet
+
+-- -- Argent Challenge
+(@TIRION,2,0,'¡Buen combate! Vuestro próximo reto viene de los mismisimos cargos de la Cruzada. Sereis puestos a prueba contra sus considerables habilidades.',14,0,100,1,0,0,'Tirion - Intro'),
+-- -- -- Eadric
+(35004,11,0,'Entrnado en la arena, un paladín que no teme ni al campo de batalla ni a las campos de este torneo, el Gran Campeón de la Cruzada Argenta, ¡Eadric el Puro!',14,0,100,1,0,0,'Announcer - Eadric - Intro'),
+(35005,11,0,'Entrnado en la arena, un paladín que no teme ni al campo de batalla ni a las campos de este torneo, el Gran Campeón de la Cruzada Argenta, ¡Eadric el Puro!',14,0,100,1,0,0,'Announcer - Eadric - Intro'),
+(@EADRIC,10,0,'¿Aceptais el reto? ¡No hay vuelta atras!',12,0,100,1,0,16134,'Eadric - Intro'),
+-- -- // Eadric
+-- -- -- Paletress
+(35004,12,0,'La siguiente combatiente es inigualable en su pasión por la defensa de la Luz. ¡Os presento a la Confesora Argenta Cabelloclaro!',14,0,100,1,0,0,'Announcer - Paletress - Intro'),
+(35005,12,0,'La siguiente combatiente es inigualable en su pasión por la defensa de la Luz. ¡Os presento a la Confesora Argenta Cabelloclaro!',14,0,100,1,0,0,'Announcer - Paletress - Intro'),
+(@PALETRESS,10,0,'Gracias buen heraldo. Tus palabras son muy amables.',12,0,100,1,0,16245,'Paletress - Intro'),
+(@PALETRESS,11,0,'Que la luz me de fuerzas para ser un reto digno.',12,0,100,1,0,16246,'Paletress - Intro'),
+-- -- // Paletress
+(@TIRION,3,0,'¡Podeis comenzar!',14,0,100,1,0,0,'Tirion - Intro'),
+-- // Argent Challenge
+
+
+-- //INTROS
+
+-- COMBAT TEXTS
+-- -- Eadric
+(@EADRIC,1,0,'¡Preparaos!',14,0,100,0,0,16135,'Eadric - Aggro'),
+(@EADRIC,2,0,'¡Martillo del honrado!',14,0,100,0,0,16136,'Eadric - Hammer'),
+(@EADRIC,3,0,'¡Tu! ¡Tienes que practicar más!',14,0,100,0,0,16137,'Eadric - Slay 1'),
+(@EADRIC,3,1,'¡No! ¡No! ¡Y otra vez no! ¡No es suficiente!',14,0,100,0,0,16138,'Eadric - Slay 2'),
+(@EADRIC,4,0,'¡Me rindo! Lo admito. Un trabajo excelente. ¿Puedo escaparme ya?',14,0,100,0,0,16139,'Eadric - Death'),
+(@EADRIC,5,0,'%s comienza a irradiar luz. ¡Cubrios los ojos!',41,0,100,0,0,0,'Eadric - Warning - Radiance'),
+(@EADRIC,6,0,'%s comienza a lanzar Martillo del Honrado sobre $N.',41,0,100,0,0,0,'Eadric - Warning - Hammer'),
+-- // Eadric
+-- -- Paletress
+(@PALETRESS,1,0,'Bien entonces. Comencemos.',14,0,100,0,0,16247,'Paletress - Aggro'),
+(@PALETRESS,2,0,'Aprovecha este tiempo para pensar en tus hazañas.',14,0,100,0,0,16248,'Paletress - Summon Memory'),
+(@PALETRESS,3,0,'Descansa.',14,0,100,0,0,16250,'Paletress - Slay 1'),
+(@PALETRESS,3,1,'Ve en paz.',14,0,100,0,0,16251,'Paletress - Slay 2'),
+(@PALETRESS,4,0,'¡Un trabajo excelente!',14,0,100,0,0,16252,'Paletress - Death'),
+(@PALETRESS,5,0,'Incluso el recuerdo más oscuro se desvanece al afrontarlo.',14,0,100,0,0,16249,'Paletress - Memory dies'),
+(@PALETRESS,6,0,'¡Rememoración comienza a lanzar Pesadilla Lúcida!',41,0,100,0,0,0,'Paletress - Warning - Waking nightmare'),
+-- // Paletress
+-- -- Black Knight
+(@BLACK_KNIGHT,1,0,'¡Esta farsa acaba aquí!',14,0,100,0,0,16259,'Black Knight - Aggro'),
+(@BLACK_KNIGHT,2,0,'Patético.',14,0,100,0,0,16260,'Black Knight - Slay 1'),
+(@BLACK_KNIGHT,2,1,'¡Qué desperdicio!',14,0,100,0,0,16261,'Black Knight - Slay 2'),
+(@BLACK_KNIGHT,3,0,'¡Me estorbaba esa carne putrefacta!',14,0,100,0,0,16262,'Black Knight - Skeleton Res'),
+(@BLACK_KNIGHT,4,0,'No necesito huesos para vencerte.',14,0,100,0,0,16263,'Black Knight - Ghost Res'),
+(@BLACK_KNIGHT,5,0,'¡No! No debo fallar... otra vez...',14,0,100,0,0,16264,'Black Knight - Death');
+-- // Black Knight
+-- //COMBAT TEXTS
