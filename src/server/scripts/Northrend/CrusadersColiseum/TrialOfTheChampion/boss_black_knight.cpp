@@ -75,7 +75,6 @@ enum ePhases
     PHASE_GHOST     = 3
 };
 
-#define DATA_I_VE_HAD_WORSE 1
 
 class boss_black_knight : public CreatureScript
 {
@@ -366,7 +365,7 @@ public:
         }
         void UpdateAI(const uint32 diff)
         {
-            if (!UpdateVictim())
+            if (!UpdateVictim() || me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
             if (uiLeapTimer <= diff)
