@@ -711,14 +711,14 @@ public:
                                 }
                             }
                         }
-                        events.ScheduleEvent(3, 500);
+                        events.ScheduleEvent(3, 2000);
                         break;
                     case 3:
                         // Move first wave to his position
                         if (Creature* mainAdd1 = me->GetCreature(*me, addsGUID[0][0]))
                             mainAdd1->GetMotionMaster()->MovePoint(0, ArgentSoldierPosition[0]);
 
-                        events.ScheduleEvent(4, 1500);
+                        events.ScheduleEvent(4, 3000);
                         break;
                     case 4:
                         // Refresh the adds position
@@ -740,7 +740,7 @@ public:
                                 }
                             }
                         }
-                        events.ScheduleEvent(5, 500);
+                        events.ScheduleEvent(5, 3000);
                         break;
                     case 5:
                         // Summon 2nd wave
@@ -770,7 +770,7 @@ public:
                                 }
                             }
                         }
-                        events.ScheduleEvent(6, 500);
+                        events.ScheduleEvent(6, 5000);
                         break;
                     case 6:
                         // Move first wave to the new position
@@ -781,7 +781,7 @@ public:
                         if (Creature* mainAdd2 = me->GetCreature(*me, addsGUID[1][0]))
                             mainAdd2->GetMotionMaster()->MovePoint(0, ArgentSoldierPosition[0]);
 
-                        events.ScheduleEvent(7, 1500);
+                        events.ScheduleEvent(7, 4000);
                         break;
                     case 7:
                         // Refresh the adds position
@@ -803,7 +803,7 @@ public:
                                 }
                             }
                         }
-                        events.ScheduleEvent(8, 500);
+                        events.ScheduleEvent(8, 4000);
                         break;
                     case 8:
                         // Summon 3rd wave
@@ -833,7 +833,7 @@ public:
                                 }
                             }
                         }
-                        events.ScheduleEvent(9, 500);
+                        events.ScheduleEvent(9, 4000);
                         break;
                     case 9:
                         // Move second wave to the new position
@@ -844,7 +844,7 @@ public:
                         if (Creature* mainAdd3 = me->GetCreature(*me, addsGUID[2][0]))
                             mainAdd3->GetMotionMaster()->MovePoint(0, ArgentSoldierPosition[0]);
 
-                        events.ScheduleEvent(10, 2000);
+                        events.ScheduleEvent(10, 4000);
                         break;
                     case 10:
                         // Refresh the adds position
@@ -866,7 +866,7 @@ public:
                                 }
                             }
                         }
-                        events.ScheduleEvent(11, 500);
+                        events.ScheduleEvent(11, 4000);
                         break;
                     case 11:
                         // Summon the boss
