@@ -149,9 +149,10 @@ public:
             Talk(SAY_AGGRO);
         }
 
-        void KilledUnit(Unit* /*target*/)
+        void KilledUnit(Unit* target)
         {
-            Talk(SAY_KILL);
+            if (target->GetTypeId() == TYPEID_PLAYER)
+                Talk(SAY_KILL);
         }
 
         void JustSummoned(Creature* summon)
