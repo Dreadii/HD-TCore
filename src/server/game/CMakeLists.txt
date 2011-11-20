@@ -105,6 +105,10 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/dep/mersennetwister
   ${CMAKE_SOURCE_DIR}/dep/SFMT
   ${CMAKE_SOURCE_DIR}/dep/zlib
+  ${CMAKE_SOURCE_DIR}/dep/recastnavigation
+  ${CMAKE_SOURCE_DIR}/dep/recastnavigation/Detour/Include
+  ${CMAKE_SOURCE_DIR}/dep/recastnavigation/Detour/Source
+  ${CMAKE_SOURCE_DIR}/src/server/movement
   ${CMAKE_SOURCE_DIR}/src/server/collision
   ${CMAKE_SOURCE_DIR}/src/server/collision/Management
   ${CMAKE_SOURCE_DIR}/src/server/shared
@@ -172,6 +176,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/Movement
   ${CMAKE_CURRENT_SOURCE_DIR}/Movement/MovementGenerators
   ${CMAKE_CURRENT_SOURCE_DIR}/Movement/Waypoints
+  ${CMAKE_CURRENT_SOURCE_DIR}/Movement/PathFinding
   ${CMAKE_CURRENT_SOURCE_DIR}/OutdoorPvP
   ${CMAKE_CURRENT_SOURCE_DIR}/Pools
   ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders

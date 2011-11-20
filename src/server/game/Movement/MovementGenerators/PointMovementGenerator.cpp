@@ -20,18 +20,18 @@
 #include "Errors.h"
 #include "Creature.h"
 #include "CreatureAI.h"
-#include "DestinationHolderImp.h"
 #include "World.h"
+#include "MoveSplineInit.h"
+#include "MoveSpline.h"
 
 //----- Point Movement Generator
 template<class T>
 void PointMovementGenerator<T>::Initialize(T &unit)
 {
     unit.StopMoving();
-    Traveller<T> traveller(unit);
-    // OLD: knockback effect has UNIT_STAT_JUMPING set, so if here we disable sentmonstermove there will be creature position sync problem between client and server
-    // NEW: reactivated this check - UNIT_STAT_JUMPING is only used in MoveJump, which sends its own packet
-    i_destinationHolder.SetDestination(traveller, i_x, i_y, i_z, /*true*/ !unit.HasUnitState(UNIT_STAT_JUMPING));
+    Movement::MoveSplineInit init(unit);
+    init.MoveTo(i_x, i_y, i_z, m_generatePath);
+    init.Launch();
 }
 
 template<class T>
@@ -48,22 +48,7 @@ bool PointMovementGenerator<T>::Update(T &unit, const uint32 diff)
             return true;
     }
 
-    Traveller<T> traveller(unit);
-
-    i_destinationHolder.UpdateTraveller(traveller, diff);
-
-    if (i_destinationHolder.HasArrived())
-    {
-        unit.ClearUnitState(UNIT_STAT_MOVE);
-        arrived = true;
-        return false;
-    }
-    else if (!unit.HasUnitState(UNIT_STAT_MOVE) && !unit.HasUnitState(UNIT_STAT_JUMPING))
-    {
-        i_destinationHolder.StartTravel(traveller);
-    }
-
-    return true;
+    return !unit.movespline->Finalized();
 }
 
 template<class T>

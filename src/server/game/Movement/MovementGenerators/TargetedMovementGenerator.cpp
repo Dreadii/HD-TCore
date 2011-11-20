@@ -21,24 +21,13 @@
 #include "Errors.h"
 #include "Creature.h"
 #include "CreatureAI.h"
-#include "DestinationHolderImp.h"
 #include "World.h"
+#include "MoveSplineInit.h"
+#include "MoveSpline.h"
 
 #define SMALL_ALPHA 0.05f
 
 #include <cmath>
-/*
-struct StackCleaner
-{
-    Creature &i_creature;
-    StackCleaner(Creature &creature) : i_creature(creature) {}
-    void Done(void) { i_creature.StopMoving(); }
-    ~StackCleaner()
-    {
-        i_creature->Clear();
-    }
-};
-*/
 
 template<class T>
 TargetedMovementGenerator<T>::TargetedMovementGenerator(Unit &target, float offset, float angle)
@@ -59,8 +48,7 @@ TargetedMovementGenerator<T>::_setTargetLocation(T &owner)
         return false;
 
     float x, y, z;
-    Traveller<T> traveller(owner);
-    if (i_destinationHolder.HasDestination())
+    if (!owner.movespline->Finalized()
     {
         if (i_destinationHolder.HasArrived())
         {
@@ -141,9 +129,25 @@ TargetedMovementGenerator<T>::_setTargetLocation(T &owner)
         if (i_destinationHolder.HasDestination() && i_destinationHolder.GetDestinationDiff(x, y, z) < bothObjectSize)
             return;
     */
-    i_destinationHolder.SetDestination(traveller, x, y, z);
+
+    if (!i_path)
+        i_path = new PathInfo(&owner);
+
+    // allow pets following their master to cheat while generating paths
+    bool forceDest = (owner.GetTypeId() == TYPEID_UNIT && ((Creature*)&owner)->IsPet()
+        && owner.hasUnitState(UNIT_STAT_FOLLOW));
+    i_path->calculate(x, y, z, forceDest);
+    if (i_path->getPathType() & PATHFIND_NOPATH)
+        return;
+
     owner.AddUnitState(UNIT_STAT_CHASE);
-    i_destinationHolder.StartTravel(traveller);
+    i_targetReached = false;
+    i_recalculateTravel = false;
+
+    Movement::MoveSplineInit init(owner);
+    init.MovebyPath(i_path->getPath());
+    init.SetWalk(((D*)this)->EnableWalking());
+    init.Launch();
     return true;
 }
 
@@ -196,42 +200,33 @@ TargetedMovementGenerator<T>::Update(T &owner, const uint32 time_diff)
     if (!owner.HasUnitState(UNIT_STAT_FOLLOW) && owner.getVictim() != i_target.getTarget())
         return true;
 
-    Traveller<T> traveller(owner);
-
-    if (!i_destinationHolder.HasDestination())
-        _setTargetLocation(owner);
-    else if (owner.IsStopped() && !i_destinationHolder.HasArrived())
+    i_recheckDistance.Update(time_diff);
+    if (i_recheckDistance.Passed())
     {
-        owner.AddUnitState(UNIT_STAT_CHASE);
-        i_destinationHolder.StartTravel(traveller);
-        return true;
+        float allowed_dist = i_target->GetObjectSize() + owner.GetObjectSize()
+            + sWorld->getRate(RATE_TARGET_POS_RECALCULATION_RANGE);
+        float dist = (owner.movespline->FinalDestination() -
+            G3D::Vector3(i_target->GetPositionX(),i_target->GetPositionY(),i_target->GetPositionZ())).squaredLength();
+        if (dist >= allowed_dist * allowed_dist)
+            _setTargetLocation(owner);
     }
 
-    if (i_destinationHolder.UpdateTraveller(traveller, time_diff))
+    if (owner.movespline->Finalized())
     {
-        // put targeted movement generators on a higher priority
-        //if (owner.GetObjectSize())
-        //i_destinationHolder.ResetUpdate(50);
-
-        // target moved
-        if (i_targetX != i_target->GetPositionX() || i_targetY != i_target->GetPositionY()
-            || i_targetZ != i_target->GetPositionZ())
-        {
-            if (_setTargetLocation(owner) || !owner.HasUnitState(UNIT_STAT_FOLLOW))
-                owner.SetInFront(i_target.getTarget());
-            i_target->GetPosition(i_targetX, i_targetY, i_targetZ);
-        }
-
-        if ((owner.IsStopped() && !i_destinationHolder.HasArrived()) || i_recalculateTravel)
-        {
-            i_recalculateTravel = false;
-            //Angle update will take place into owner.StopMoving()
+        if (i_angle == 0.f && !owner.HasInArc(0.01f, i_target.getTarget()))
             owner.SetInFront(i_target.getTarget());
+    }
 
-            owner.StopMoving();
-            if (owner.IsWithinMeleeRange(i_target.getTarget()) && !owner.HasUnitState(UNIT_STAT_FOLLOW))
-                owner.Attack(i_target.getTarget(), true);
-        }
+    if (!i_targetReached)
+    {
+        i_targetReached = true;
+        if (owner.IsWithinMeleeRange(i_target.getTarget()) && !owner.HasUnitState(UNIT_STAT_FOLLOW))
+            owner.Attack(i_target.getTarget(), true);
+    }
+    else
+    {
+        if (i_recalculateTravel)
+            _setTargetLocation(owner);
     }
 
     // Implemented for PetAI to handle resetting flags when pet owner reached

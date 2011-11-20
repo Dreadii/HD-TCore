@@ -40,6 +40,11 @@
 
 #define WORLD_TRIGGER   12999
 
+namespace Movement
+{
+    class MoveSpline;
+}
+
 enum SpellInterruptFlags
 {
     SPELL_INTERRUPT_FLAG_MOVEMENT     = 0x01, // why need this for instant?
@@ -1630,18 +1635,12 @@ class Unit : public WorldObject
 
         void SetFacing(float ori, WorldObject* obj = NULL);
         void SendMonsterStop(bool on_death = false);
-        void SendMonsterMove(float NewPosX, float NewPosY, float NewPosZ, uint32 Time, Player* player = NULL);
         void SendMonsterMove(float NewPosX, float NewPosY, float NewPosZ, uint32 MoveFlags, uint32 time, float speedZ, Player* player = NULL);
         void SendMonsterMove(MonsterMoveData const& moveData, Player* receiver = NULL);
         void SendMonsterMoveExitVehicle(Position const* newPos);
         //void SendMonsterMove(float NewPosX, float NewPosY, float NewPosZ, uint8 type, uint32 MovementFlags, uint32 Time, Player* player = NULL);
         void SendMonsterMoveTransport(Unit* vehicleOwner);
-        void SendMonsterMoveWithSpeed(float x, float y, float z, uint32 transitTime = 0, Player* player = NULL);
-        void SendMonsterMoveWithSpeedToCurrentDestination(Player* player = NULL);
         void SendMovementFlagUpdate();
-
-        template<typename PathElem, typename PathNode>
-        void SendMonsterMoveByPath(Path<PathElem, PathNode> const& path, uint32 start, uint32 end);
 
         void SendChangeCurrentVictimOpcode(HostileReference* pHostileReference);
         void SendClearThreatListOpcode();
@@ -2188,6 +2187,10 @@ class Unit : public WorldObject
         bool IsFlying() const   { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_FLYING); }
         void SetFlying(bool apply);
 
+        // Movement info
+        MovementInfo m_movementInfo;
+        Movement::MoveSpline* movespline;
+
         void RewardRage(uint32 damage, uint32 weaponSpeedHitFactor, bool attacker);
 
         virtual float GetFollowAngle() const { return static_cast<float>(M_PI/2); }
@@ -2316,6 +2319,10 @@ class Unit : public WorldObject
         bool HandleAuraRaidProcFromChargeWithValue(AuraEffect* triggeredByAura);
         bool HandleAuraRaidProcFromCharge(AuraEffect* triggeredByAura);
 
+        // Movement
+        void MonsterMoveWithSpeed(float x, float y, float z, float speed);
+        void UpdateSplineMovement(uint32 t_diff);
+
         // player or player's pet
         float GetCombatRatingReduction(CombatRating cr) const;
         uint32 GetCombatRatingDamageReduction(CombatRating cr, float rate, float cap, uint32 damage) const;
@@ -2330,6 +2337,7 @@ class Unit : public WorldObject
         uint32 m_state;                                     // Even derived shouldn't modify
         uint32 m_CombatTimer;
         uint32 m_lastManaUse;                               // msecs
+        TimeTracker m_movesplineTimer;
 
         Diminishing m_Diminishing;
         // Manage all Units that are threatened by us
@@ -2383,30 +2391,4 @@ namespace Trinity
     };
 }
 
-template<typename Elem, typename Node>
-inline void Unit::SendMonsterMoveByPath(Path<Elem, Node> const& path, uint32 start, uint32 end)
-{
-    uint32 traveltime = uint32(path.GetTotalLength(start, end) * 32);
-    uint32 pathSize = end - start;
-    WorldPacket data(SMSG_MONSTER_MOVE, (GetPackGUID().size()+1+4+4+4+4+1+4+4+4+pathSize*4*3));
-    data.append(GetPackGUID());
-    data << uint8(0);
-    data << GetPositionX();
-    data << GetPositionY();
-    data << GetPositionZ();
-    data << uint32(getMSTime());
-    data << uint8(0);
-    data << uint32(((GetUnitMovementFlags() & MOVEMENTFLAG_LEVITATING) || isInFlight()) ? (SPLINEFLAG_FLYING|SPLINEFLAG_WALKING) : SPLINEFLAG_WALKING);
-    data << uint32(traveltime);
-    data << uint32(pathSize);
-
-    for (uint32 i = start; i < end; ++i)
-    {
-        data << float(path[i].x);
-        data << float(path[i].y);
-        data << float(path[i].z);
-    }
-
-    SendMessageToSet(&data, true);
-}
 #endif

@@ -20,9 +20,9 @@
 #define TRINITY_TARGETEDMOVEMENTGENERATOR_H
 
 #include "MovementGenerator.h"
-#include "DestinationHolder.h"
-#include "Traveller.h"
 #include "FollowerReference.h"
+#include "PathInfo.h"
+#include "Unit.h"
 
 class TargetedMovementGeneratorBase
 {
@@ -49,24 +49,24 @@ class TargetedMovementGenerator
 
         void MovementInform(T &);
 
-        Unit* GetTarget() const;
-
-        bool GetDestination(float &x, float &y, float &z) const
+        bool IsReachable() const
         {
-            if (i_destinationHolder.HasArrived() || !i_destinationHolder.HasDestination()) return false;
-            i_destinationHolder.GetDestination(x, y, z);
-            return true;
+            return (i_path) ? (i_path->getPathType() & PATHFIND_NORMAL) : true;
         }
 
+        Unit* GetTarget() const;
+
         void unitSpeedChanged() { i_recalculateTravel=true; }
+        bool EnableWalking() const;
     private:
 
         bool _setTargetLocation(T &);
 
+        TimeTracker i_recheckDistance;
         float i_offset;
         float i_angle;
-        DestinationHolder< Traveller<T> > i_destinationHolder;
-        bool i_recalculateTravel;
+        bool i_recalculateTravel : 1;
+        bool i_targetReached : 1;
         float i_targetX, i_targetY, i_targetZ;
 };
 #endif
