@@ -83,12 +83,17 @@ enum Spells
 
 enum Says
 {
-    SAY_EADRIC_AGGRO            = 1,
-    SAY_EADRIC_HAMMER           = 2,
-    SAY_EADRIC_KILL             = 3,
-    SAY_EADRIC_DEATH            = 4,
-    SAY_EADRIC_RADIANCE_WARNING = 5,
-    SAY_EADRIC_HAMMER_WARNING   = 6,
+    SAY_COMMON_AGGRO                = 1,
+    SAY_COMMON_KILL                 = 3,
+    SAY_COMMON_DEATH                = 4,
+
+    SAY_EADRIC_HAMMER               = 2,
+    SAY_EADRIC_RADIANCE_WARNING     = 5,
+    SAY_EADRIC_HAMMER_WARNING       = 6,
+
+    SAY_PALETRESS_SUMMON_MEMORY     = 2,
+    SAY_PALETRESS_MEMORY_DIES       = 5,
+    SAY_PALETRESS_NIGHTMARE_WARNING = 6,
 };
 class OrientationCheck : public std::unary_function<Unit*, bool>
 {
@@ -202,12 +207,12 @@ public:
 
         void EnterCombat(Unit* /*attacker*/)
         {
-            Talk(SAY_EADRIC_AGGRO);
+            Talk(SAY_COMMON_AGGRO);
         }
 
         void KilledUnit(Unit* /*target*/)
         {
-            Talk(SAY_EADRIC_KILL);
+            Talk(SAY_COMMON_KILL);
         }
 
         void DamageTaken(Unit* /*attacker*/, uint32 & damage)
@@ -227,7 +232,7 @@ public:
                 me->GetMotionMaster()->MovePoint(1, me->GetHomePosition());
                 me->SetTarget(0);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                Talk(SAY_EADRIC_DEATH);
+                Talk(SAY_COMMON_DEATH);
             }
         }
 
@@ -385,8 +390,18 @@ public:
                 if (Creature* memory = Unit::GetCreature(*me, memoryGUID))
                     memory->DespawnOrUnsummon();
 
+                Talk(SAY_PALETRESS_MEMORY_DIES);
                 me->RemoveAura(SPELL_SHIELD);
             }
+        }
+        void EnterCombat(Unit* /*attacker*/)
+        {
+            Talk(SAY_COMMON_AGGRO);
+        }
+
+        void KilledUnit(Unit* /*target*/)
+        {
+            Talk(SAY_COMMON_KILL);
         }
 
         void DamageTaken(Unit* /*attacker*/, uint32 & damage)
@@ -406,6 +421,7 @@ public:
                 me->GetMotionMaster()->MovePoint(1, me->GetHomePosition());
                 me->SetTarget(0);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                Talk(SAY_COMMON_DEATH);
 
                 if (Creature* memory = Unit::GetCreature(*me, memoryGUID))
                     memory->DespawnOrUnsummon(1000);
@@ -489,6 +505,7 @@ public:
                 DoCast(me, SPELL_SHIELD);
                 DoCastAOE(SPELL_SUMMON_MEMORY, false);
                 DoCastAOE(SPELL_CONFESS, false);
+                Talk(SAY_PALETRESS_SUMMON_MEMORY);
 
                 shielded = true;
             }
@@ -549,6 +566,11 @@ public:
 
             if (wakingNightmareTimer <= diff)
             {
+                if (me->isSummon())
+                    if (Creature* summoner = me->ToTempSummon()->GetSummoner()->ToCreature())
+                        if (summoner->isAlive())
+                            summoner->AI()->Talk(SAY_PALETRESS_NIGHTMARE_WARNING, me->GetGUID());
+
                 DoCast(me, SPELL_WAKING_NIGHTMARE);
                 wakingNightmareTimer = 15000;
             }else wakingNightmareTimer -= diff;

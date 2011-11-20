@@ -182,8 +182,9 @@ INSERT INTO `script_waypoint` (`entry`, `pointid`, `location_x`, `location_y`, `
 (35491,15,747.127,813.51,460.707,0,'');
 
 -- Texts
-DELETE FROM creature_text WHERE entry=35119;
+DELETE FROM creature_text WHERE entry IN (34928, 35119);
 INSERT INTO creature_text (entry, groupid, id, TEXT, TYPE, LANGUAGE, probability, emote, duration, sound, COMMENT) VALUES
+-- Eadric
 (35119,0,0,'¿Aceptais el reto? ¡No hay vuelta atras!',12,0,100,1,0,16134,'Eadric - Intro'),
 (35119,1,0,'¡Preparaos!',14,0,100,1,0,16135,'Eadric - Aggro'),
 (35119,2,0,'¡Martillo del honrado!',14,0,100,1,0,16136,'Eadric - Hammer'),
@@ -191,4 +192,14 @@ INSERT INTO creature_text (entry, groupid, id, TEXT, TYPE, LANGUAGE, probability
 (35119,3,1,'¡No! ¡No! ¡Y otra vez no! ¡No es suficiente!',16,0,100,11,0,16138,'Eadric - Slay 2'),
 (35119,4,0,'¡Me rindo! Lo admito. Un trabajo excelente. ¿Puedo escaparme ya?',16,0,100,11,0,16139,'Eadric - Death'),
 (35119,5,0,'%s comienza a irradiar luz. ¡Cubrios los ojos!',41,0,100,11,0,0,'Eadric - Warning - Radiance'),
-(35119,6,0,'%s comienza a lanzar Martillo del Honrado sobre %t.',41,0,100,11,0,0,'Eadric - Warning - Hammer');
+(35119,6,0,'%s comienza a lanzar Martillo del Honrado sobre %t.',41,0,100,11,0,0,'Eadric - Warning - Hammer'),
+-- Paletress
+(34928,0,0,'Gracias buen heraldo. Tus palabras son muy amables.',12,0,100,1,0,16245,'Paletress - Intro'),
+(34928,10,0,'Que la luz me de fuerzas para ser un reto digno.',12,0,100,1,0,16245,'Paletress - Intro'),
+(34928,1,0,'Bien entonces. Comencemos.',14,0,100,1,0,16247,'Paletress - Aggro'),
+(34928,2,0,'Aprovecha este tiempo para pensar en tus hazañas.',14,0,100,1,0,16248,'Paletress - Summon Memory'),
+(34928,3,0,'Descansa.',14,0,100,1,0,16250,'Paletress - Slay 1'),
+(34928,3,1,'Ve en paz.',16,0,100,11,0,16251,'Paletress - Slay 2'),
+(34928,4,0,'¡Un trabajo excelente!',16,0,100,11,0,16252,'Paletress - Death'),
+(34928,5,0,'Incluso el recuerdo más oscuro se desvanece al afrontarlo.',14,0,100,11,0,16249,'Paletress - Memory dies'),
+(34928,6,0,'¡%t comienza a lanzar Pesadilla Lúcida!',41,0,100,11,0,0,'Paletress - Warning - Waking nightmare');
