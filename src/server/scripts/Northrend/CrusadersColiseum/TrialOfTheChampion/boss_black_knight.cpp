@@ -407,6 +407,7 @@ public:
         npc_black_knight_skeletal_gryphonAI(Creature* creature) : npc_escortAI(creature), _vehicleKit(creature->GetVehicleKit())
         {
             instance = creature->GetInstanceScript();
+            me->SetSpeed(MOVE_FLIGHT, 2.8f);
         }
 
         Vehicle* _vehicleKit;
