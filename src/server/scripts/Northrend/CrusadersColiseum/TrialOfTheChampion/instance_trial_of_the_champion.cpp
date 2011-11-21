@@ -174,6 +174,10 @@ public:
                     break;
                 case GO_CHAMPIONS_LOOT:
                 case GO_CHAMPIONS_LOOT_H:
+                case GO_EADRIC_LOOT:
+                case GO_EADRIC_LOOT_H:
+                case GO_PALETRESS_LOOT:
+                case GO_PALETRESS_LOOT_H:
                     uiChampionLootGUID = go->GetGUID();
                     break;
             }
@@ -300,6 +304,7 @@ public:
                 case DATA_JAINA: return uiJainaGUID;
                 case DATA_MAIN_GATE: return uiMainGateGUID;
                 case DATA_PORTCULLIS: return uiPortcullisGUID;
+                case DATA_CHEST: return uiChampionLootGUID;
                 case DATA_BLACK_KNIGHT: return uiBlackKnightGUID;
                 case DATA_BLACK_KNIGHT_GRYPHON: return uiBlackKnightGryphonGUID;
             }

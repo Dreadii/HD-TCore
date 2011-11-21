@@ -1356,6 +1356,12 @@ public:
     bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
+
+        // Remove chest (if any) before starting anything else
+        if (InstanceScript* instance = creature->GetInstanceScript())
+            if (GameObject* chest = GameObject::GetGameObject(*creature, instance->GetData64(DATA_PORTCULLIS)))
+                chest->RemoveFromWorld();
+
         switch (action)
         {
             case GOSSIP_ACTION_INFO_DEF:
