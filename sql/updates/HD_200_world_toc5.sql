@@ -192,8 +192,8 @@ Convertir a script_text
 SET @TIRION       := 34996;
 SET @THRALL       := 34994;
 SET @GARROSH      := 34995;
-SET @VARIAN       := 34992;
-SET @JAINA        := 34990;
+SET @VARIAN       := 34990;
+SET @JAINA        := 34992;
 
 SET @EADRIC       := 35119;
 SET @PALETRESS    := 34928;
@@ -214,6 +214,12 @@ INSERT INTO creature_text (entry, groupid, id, TEXT, TYPE, LANGUAGE, probability
 (@VARIAN,0,0,'No he venido hasta aquí para ver animales despezandose entre ellos sin ningún criterio, Tirion.',12,0,100,1,0,0,'Varian - Intro'),
 (@JAINA,0,0,'Son combatientes dignos, ya lo verás.',12,0,100,1,0,0,'Jaina - Intro'),
 -- -- // Horde Version
+-- -- -- Alliance Version
+(@VARIAN,1,0,'No le veo la gracia a estos juegos, Tirion. Aun así... Confío en que lo harán de una forma admirable.',12,0,100,1,0,0,'Thrall - Intro'),
+(@JAINA,1,0,'Por supuesto que lo harán.',12,0,100,1,0,0,'Garrosh - Intro'),
+(@GARROSH,1,0,'¿Admirable? ¡Ja! Voy a disfrutar viendo a tus pequeños campeones fracasar, humano.',14,0,100,1,0,0,'Varian - Intro'),
+(@THRALL,1,0,'Garrosh, es suficiente.',12,0,100,1,0,0,'Jaina - Intro'),
+-- -- // Alliance Version
 (@TIRION,1,0,'Primero os enfrentareis a tres de los Grandes Campeones del Torneo. Estos feroces contendientes han derrotado a todos los demás hasta alcanzar la máxima habilidad en la justa.',14,0,100,1,0,0,'Tirion - Intro'),
 -- -- Horde Version
 (35004,1,0,'Aquí llega el pequeño pero mortal Ambrose Chisparrayo, Gran Campeón de Gnomeregan.',14,0,100,1,0,0,'Announcer - Alliance Champions - Intro'),
