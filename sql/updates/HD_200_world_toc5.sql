@@ -182,10 +182,12 @@ INSERT INTO `script_waypoint` (`entry`, `pointid`, `location_x`, `location_y`, `
 (35491,15,747.127,813.51,460.707,0,'');
 
 /*
+Convertir a script_text
 (35004,1,0,'Los expectadores de la Alianza animan a %t.',12,0,100,1,0,13838,'Announcer - Alliance Cheers 1'),
 (35004,1,1,'Los expectadores de la Alianza animan a %t.',12,0,100,1,0,13840,'Announcer - Alliance Cheers 2'),
 (35004,2,0,'Los expectadores de la Horda animan a %t.',12,0,100,1,0,13839,'Announcer - Horde Cheers 1'),
 (35004,2,1,'Los expectadores de la Horda animan a %t.',12,0,100,1,0,13841,'Announcer - Horde Cheers 2'),
+(@PALETRESS,6,0,'¡Rememoración oscura comienza a lanzar Pesadilla Lúcida!',41,0,100,0,0,0,'Paletress - Warning - Waking nightmare'),
 */
 SET @TIRION       := 34996;
 SET @THRALL       := 34994;
@@ -216,8 +218,8 @@ INSERT INTO creature_text (entry, groupid, id, TEXT, TYPE, LANGUAGE, probability
 -- -- Argent Challenge
 (@TIRION,2,0,'¡Buen combate! Vuestro próximo reto viene de los mismisimos cargos de la Cruzada. Sereis puestos a prueba contra sus considerables habilidades.',14,0,100,1,0,0,'Tirion - Intro'),
 -- -- -- Eadric
-(35004,11,0,'Entrnado en la arena, un paladín que no teme ni al campo de batalla ni a las campos de este torneo, el Gran Campeón de la Cruzada Argenta, ¡Eadric el Puro!',14,0,100,1,0,0,'Announcer - Eadric - Intro'),
-(35005,11,0,'Entrnado en la arena, un paladín que no teme ni al campo de batalla ni a las campos de este torneo, el Gran Campeón de la Cruzada Argenta, ¡Eadric el Puro!',14,0,100,1,0,0,'Announcer - Eadric - Intro'),
+(35004,11,0,'Entrando en la arena, un paladín que no teme ni al campo de batalla ni a las campos de este torneo, el Gran Campeón de la Cruzada Argenta, ¡Eadric el Puro!',14,0,100,1,0,0,'Announcer - Eadric - Intro'),
+(35005,11,0,'Entrando en la arena, un paladín que no teme ni al campo de batalla ni a las campos de este torneo, el Gran Campeón de la Cruzada Argenta, ¡Eadric el Puro!',14,0,100,1,0,0,'Announcer - Eadric - Intro'),
 (@EADRIC,10,0,'¿Aceptais el reto? ¡No hay vuelta atras!',12,0,100,1,0,16134,'Eadric - Intro'),
 -- -- // Eadric
 -- -- -- Paletress
@@ -259,7 +261,6 @@ INSERT INTO creature_text (entry, groupid, id, TEXT, TYPE, LANGUAGE, probability
 (@PALETRESS,3,1,'Ve en paz.',14,0,100,0,0,16251,'Paletress - Slay 2'),
 (@PALETRESS,4,0,'¡Un trabajo excelente!',14,0,100,0,0,16252,'Paletress - Death'),
 (@PALETRESS,5,0,'Incluso el recuerdo más oscuro se desvanece al afrontarlo.',14,0,100,0,0,16249,'Paletress - Memory dies'),
-(@PALETRESS,6,0,'¡Rememoración comienza a lanzar Pesadilla Lúcida!',41,0,100,0,0,0,'Paletress - Warning - Waking nightmare'),
 -- // Paletress
 -- -- Black Knight
 (@BLACK_KNIGHT,1,0,'¡Esta farsa acaba aquí!',14,0,100,0,0,16259,'Black Knight - Aggro'),

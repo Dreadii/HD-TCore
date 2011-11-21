@@ -93,7 +93,7 @@ enum Says
 
     SAY_PALETRESS_SUMMON_MEMORY     = 2,
     SAY_PALETRESS_MEMORY_DIES       = 5,
-    SAY_PALETRESS_NIGHTMARE_WARNING = 6,
+    SAY_PALETRESS_NIGHTMARE_WARNING = 6,  // Convert to script_texts
 };
 class OrientationCheck : public std::unary_function<Unit*, bool>
 {
@@ -566,11 +566,7 @@ public:
 
             if (wakingNightmareTimer <= diff)
             {
-                if (me->isSummon())
-                    if (Creature* summoner = me->ToTempSummon()->GetSummoner()->ToCreature())
-                        if (summoner->isAlive())
-                            summoner->AI()->Talk(SAY_PALETRESS_NIGHTMARE_WARNING, me->GetGUID());
-
+                DoScriptText(SAY_PALETRESS_NIGHTMARE_WARNING, me);
                 DoCast(me, SPELL_WAKING_NIGHTMARE);
                 wakingNightmareTimer = 15000;
             }else wakingNightmareTimer -= diff;
