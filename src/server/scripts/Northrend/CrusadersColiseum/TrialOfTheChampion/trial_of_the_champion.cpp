@@ -1343,7 +1343,7 @@ public:
         {
             if (CAST_AI(npc_announcer_toc5::npc_announcer_toc5AI, creature->AI())->AreAllPlayersMounted())
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
-        }else if (instance->GetData(BOSS_ARGENT_CHALLENGE_E) != DONE || instance->GetData(BOSS_ARGENT_CHALLENGE_P) != DONE)
+        }else if (instance->GetData(BOSS_ARGENT_CHALLENGE_E) != DONE && instance->GetData(BOSS_ARGENT_CHALLENGE_P) != DONE)
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
         else
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
