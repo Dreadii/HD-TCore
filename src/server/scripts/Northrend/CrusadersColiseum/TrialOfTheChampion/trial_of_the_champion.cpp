@@ -68,6 +68,14 @@ const Position ArgentSoldierPosition[3] =
 
 enum Says
 {
+
+    // Grand Champions
+    SAY_ANNOUNCER_NPC_MAGE    = 1,
+    SAY_ANNOUNCER_NPC_SHAMAN  = 2,
+    SAY_ANNOUNCER_NPC_HUNTER  = 3,
+    SAY_ANNOUNCER_NPC_WARRIOR = 4,
+    SAY_ANNOUNCER_NPC_ROUGE   = 5,
+
     // Argent Challenge
     SAY_TIRION_INTRO_ARGENT_1 = 2,
     SAY_ANNOUNCER_EADRIC      = 11,
@@ -212,6 +220,39 @@ public:
             return 0;
         }
 
+        void AnnounceChampion(Unit* champion, uint8 id = 0)
+        {
+            if (champion->GetTypeId() ==  TYPEID_PLAYER)
+            {
+            }
+            else
+            {
+                switch (champion->GetEntry())
+                {
+                    case NPC_MOKRA:
+                    case NPC_JACOB:
+                        Talk(SAY_ANNOUNCER_NPC_WARRIOR);
+                        break;
+                    case NPC_ERESSEA:
+                    case NPC_AMBROSE:
+                        Talk(SAY_ANNOUNCER_NPC_MAGE);
+                        break;
+                    case NPC_RUNOK:
+                    case NPC_COLOSOS:
+                        Talk(SAY_ANNOUNCER_NPC_SHAMAN);
+                        break;
+                    case NPC_JAELYNE:
+                    case NPC_ZULTORE:
+                        Talk(SAY_ANNOUNCER_NPC_HUNTER);
+                        break;
+                    case NPC_VISCERI:
+                    case NPC_LANA:
+                        Talk(SAY_ANNOUNCER_NPC_ROUGE);
+                        break;
+                }
+            }
+        }
+
         void UpdateAI(const uint32 diff)
         {
             events.Update(diff);
@@ -237,6 +278,7 @@ public:
                         {
                             bossGUID[0] = boss->GetGUID();
                             boss->SetTarget(stalkerGUID);
+                            AnnounceChampion(boss->ToUnit());
 
                             for (uint8 i = 0; i < 3; ++i)
                             {
@@ -291,6 +333,7 @@ public:
                         {
                             bossGUID[1] = boss->GetGUID();
                             boss->SetTarget(stalkerGUID);
+                            AnnounceChampion(boss->ToUnit());
 
                             for (uint8 i = 0; i < 3; ++i)
                             {
@@ -349,6 +392,7 @@ public:
                         {
                             bossGUID[2] = boss->GetGUID();
                             boss->SetTarget(stalkerGUID);
+                            AnnounceChampion(boss->ToUnit());
 
                             for (uint8 i = 0; i < 3; ++i)
                             {

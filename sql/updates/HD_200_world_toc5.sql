@@ -205,6 +205,8 @@ INSERT INTO creature_text (entry, groupid, id, TEXT, TYPE, LANGUAGE, probability
 -- INTROS
 
 -- -- Mounted Gauntlet
+(35004,0,0,'Los Atracasol están orgullosos de presentar a sus representantes en estas pruebas de combate.',14,0,100,1,0,0,'Announcer - Player Horde Champions - Intro'),
+(35005,0,0,'El Pacto de Plata está encantado de presentar a sus luchadores para este evento, Alto Señor.',14,0,100,1,0,0,'Announcer - Player Alliance Champions - Intro'),
 (@TIRION,0,0,'Bienvenidos campeones. Hoy, ante los ojos de vuestros lideres y compañeros os probareis como combatientes dignos.',14,0,100,1,0,0,'Tirion - Intro'),
 -- -- -- Horde Version
 (@THRALL,0,0,'¡Luchad con fuerza, Horda! ¡Lok\'tar Ogar!',14,0,100,1,0,0,'Thrall - Intro'),
@@ -213,18 +215,32 @@ INSERT INTO creature_text (entry, groupid, id, TEXT, TYPE, LANGUAGE, probability
 (@JAINA,0,0,'Son combatientes dignos, ya lo verás.',12,0,100,1,0,0,'Jaina - Intro'),
 -- -- // Horde Version
 (@TIRION,1,0,'Primero os enfrentareis a tres de los Grandes Campeones del Torneo. Estos feroces contendientes han derrotado a todos los demás hasta alcanzar la máxima habilidad en la justa.',14,0,100,1,0,0,'Tirion - Intro'),
+-- -- Horde Version
+(35004,1,0,'Aquí llega el pequeño pero mortal Ambrose Chisparrayo, Gran Campeón de Gnomeregan.',14,0,100,1,0,0,'Announcer - Alliance Champions - Intro'),
+(35004,2,0,'Colosos, el enorme Gran Campeón de El Exodar, está saliendo por la puerta.',14,0,100,1,0,0,'Announcer - Alliance Champions - Intro'),
+(35004,3,0,'Está entrando en la arena la Gran Campeona de Darnassus, la hábil centinela Jaelyne Unicanto.',14,0,100,1,0,0,'Announcer - Alliance Champions - Intro'),
+(35004,4,0,'Fuerte y orgulloso, ¡aclamad al mariscal Jacob Alerius, el Gran Campeón de Ventormenta!',14,0,100,1,0,0,'Announcer - Alliance Champions - Intro'),
+(35004,5,0,'Hoy el poder de los enanos está representado por la Gran Campeona de Forjaz, Lana Martillotenaz.',14,0,100,1,0,0,'Announcer - Alliance Champions - Intro'),
+-- // Horde Version
+-- -- Alliance Version
+(35005,1,0,'¡Saliendo por la puerta Eressea Cantoalba, hábil maga y Gran Campeona de Lunargenta!',14,0,100,1,0,0,'Announcer - Horde Champions - Intro'),
+(35005,2,0,'¡En lo alto de su kodo, aquí esta el venerable Runok Ferocrín, Gran Campeón de Cima del Trueno!',14,0,100,1,0,0,'Announcer - Horde Champions - Intro'),
+(35005,3,0,'¡Entrando en la arena el enjuto pero peligroso Zul\'tore, Campeón de los Sen\'jin!',14,0,100,1,0,0,'Announcer - Horde Champions - Intro'),
+(35005,4,0,'¡Presentamos al Gran Campeón de Orgrimmar, Mokra el Trituracráneos!',14,0,100,1,0,0,'Announcer - Horde Champions - Intro'),
+(35005,5,0,'¡Representando la tenacidad de los Renegados, aquí esta el Gran Campeón de Entrañas, Mortacechador Visceri!',14,0,100,1,0,0,'Announcer - Horde Champions - Intro'),
+-- // Alliance version
 -- // Mounted Gauntlet
 
 -- -- Argent Challenge
 (@TIRION,2,0,'¡Buen combate! Vuestro próximo reto viene de los mismisimos cargos de la Cruzada. Sereis puestos a prueba contra sus considerables habilidades.',14,0,100,1,0,0,'Tirion - Intro'),
 -- -- -- Eadric
-(35004,11,0,'Entrando en la arena, un paladín que no teme ni al campo de batalla ni a las campos de este torneo, el Gran Campeón de la Cruzada Argenta, ¡Eadric el Puro!',14,0,100,1,0,0,'Announcer - Eadric - Intro'),
-(35005,11,0,'Entrando en la arena, un paladín que no teme ni al campo de batalla ni a las campos de este torneo, el Gran Campeón de la Cruzada Argenta, ¡Eadric el Puro!',14,0,100,1,0,0,'Announcer - Eadric - Intro'),
+(35004,11,0,'Entrando en la arena, tenemos a un paladín que no es un extraño para los campos de batalla, ni los Campos del Torneo. ¡El gran campeón de la Cruzada Argenta, Eadric el Puro!',14,0,100,1,0,0,'Announcer - Eadric - Intro'),
+(35005,11,0,'Entrando en la arena, tenemos a un paladín que no es un extraño para los campos de batalla, ni los Campos del Torneo. ¡El gran campeón de la Cruzada Argenta, Eadric el Puro!',14,0,100,1,0,0,'Announcer - Eadric - Intro'),
 (@EADRIC,10,0,'¿Aceptais el reto? ¡No hay vuelta atras!',12,0,100,1,0,16134,'Eadric - Intro'),
 -- -- // Eadric
 -- -- -- Paletress
-(35004,12,0,'La siguiente combatiente es inigualable en su pasión por la defensa de la Luz. ¡Os presento a la Confesora Argenta Cabelloclaro!',14,0,100,1,0,0,'Announcer - Paletress - Intro'),
-(35005,12,0,'La siguiente combatiente es inigualable en su pasión por la defensa de la Luz. ¡Os presento a la Confesora Argenta Cabelloclaro!',14,0,100,1,0,0,'Announcer - Paletress - Intro'),
+(35004,12,0,'La siguiente combatiente no tiene rival alguno en su pasión al apoyar a la Luz. ¡Les entrego a la confesora Argenta Cabelloclaro!',14,0,100,1,0,0,'Announcer - Paletress - Intro'),
+(35005,12,0,'La siguiente combatiente no tiene rival alguno en su pasión al apoyar a la Luz. ¡Les entrego a la confesora Argenta Cabelloclaro!',14,0,100,1,0,0,'Announcer - Paletress - Intro'),
 (@PALETRESS,10,0,'Gracias buen heraldo. Tus palabras son muy amables.',12,0,100,1,0,16245,'Paletress - Intro'),
 (@PALETRESS,11,0,'Que la luz me de fuerzas para ser un reto digno.',12,0,100,1,0,16246,'Paletress - Intro'),
 -- -- // Paletress
@@ -233,8 +249,8 @@ INSERT INTO creature_text (entry, groupid, id, TEXT, TYPE, LANGUAGE, probability
 
 -- -- Black Knight
 (@TIRION,4,0,'Bien hecho. Habeis probado vuestra valía hoy...',14,0,100,1,0,0,'Tirion - Intro'),
-(35004,13,0,'¿Qué es eso cerca de las vigas del techo?',12,0,100,1,0,0,'Announcer - Black Knight - Intro'),
-(35005,13,0,'¿Qué es eso cerca de las vigas del techo?',12,0,100,1,0,0,'Announcer - Black Knight - Intro'),
+(35004,13,0,'¿Qué es eso que hay cerca de las vigas?',12,0,100,1,0,0,'Announcer - Black Knight - Intro'),
+(35005,13,0,'¿Qué es eso que hay cerca de las vigas?',12,0,100,1,0,0,'Announcer - Black Knight - Intro'),
 (@BLACK_KNIGHT,10,0,'Has estropeado mi gran entrada, rata.',12,0,100,1,0,16256,'Black Knight - Intro'),
 (@TIRION,5,0,'¿Qué significa esto?',14,0,100,1,0,0,'Tirion - Intro'),
 (@BLACK_KNIGHT,11,0,'¿Realmente pensabas que derrotarías a un agente del Rey Exánime en los campos de tu patético torneo?',12,0,100,1,0,16257,'Black Knight - Intro'),
