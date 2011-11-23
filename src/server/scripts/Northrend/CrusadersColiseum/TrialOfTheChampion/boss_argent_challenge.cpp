@@ -541,7 +541,7 @@ public:
         void Reset()
         {
             if(InstanceScript* instance = me->GetInstanceScript())
-                instance->SetData(DATA_MEMORY, me->GetEntry());
+                instance->SetData(DATA_MEMORY_ENTRY, me->GetEntry());
 
             oldWoundsTimer = 12000;
             shadowPastTimer = 5000;

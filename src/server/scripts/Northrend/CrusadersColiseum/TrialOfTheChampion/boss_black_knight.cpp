@@ -124,6 +124,7 @@ public:
             me->SetDisplayId(me->GetNativeDisplayId());
             SetEquipmentSlots(true);
             me->ClearUnitState(UNIT_STAT_ROOT | UNIT_STAT_STUNNED);
+            instance->SetData(DATA_I_VE_HAD_WORSE, (uint32)true);
 
             resurrectInProgress = false;
             bSummonArmy = false;
@@ -363,7 +364,7 @@ public:
         void SpellHitTarget(Unit* /*victim*/, const SpellInfo* spell)
         {
             if (spell->Id == SPELL_EXPLODE_H)
-                instance->SetData(DATA_I_VE_HAD_WORSE, 0);
+                instance->SetData(DATA_I_VE_HAD_WORSE, (uint32)false);
         }
 
         void UpdateAI(const uint32 diff)

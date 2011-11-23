@@ -128,10 +128,10 @@ public:
 
         uint32 eventIds[EVENTS_MAX];
 
-        uint64 stalkerGUID;
+        uint32 bossEntry[3];
         uint64 bossGUID[3];
         uint64 addsGUID[3][3];
-        uint32 bossEntry[3];
+        uint64 stalkerGUID;
 
         bool addsAttacking;
         uint8 defeatedCount;
@@ -147,19 +147,16 @@ public:
         void Reset()
         {
             events.Reset();
-            //summons[0]->DespawnAll();
             for (uint8 i=0; i<EVENTS_MAX; i++)
                 eventIds[i] = 0;
 
             for (uint8 i=0; i<3; i++)
             {
-                bossEntry[i] = NPC_JACOB;//0;
+                bossEntry[i] = 0;
                 bossGUID[i] = 0;
-            }
-
-            for (uint8 i=0; i<3; i++)
                 for (uint8 j=0; j<3; j++)
                     addsGUID[i][j] = 0;
+            }
 
             stalkerGUID = 0;
             defeatedCount = 0;
@@ -723,7 +720,6 @@ public:
                         events.Reset();
                         SetData(EVENT_WAVES, DONE);
                         SetData(EVENT_CHAMPIONS, IN_PROGRESS);
-                        instance->SetData(DATA_LESSER_CHAMPIONS_DEFEATED, DONE);
                         break;
                 }
             }
@@ -743,6 +739,8 @@ public:
                             {
                                 bossGUID[i] = boss->GetGUID();
                                 boss->SetTarget(stalkerGUID);
+                                // Save current boss entry to inst for achievement check
+                                instance->SetData(DATA_GRAND_CHAMPION_ENTRY, boss->GetEntry());
                                 // Prevent bosses from falling down the ground
                                 boss->SetPosition(boss->GetPositionX(), boss->GetPositionY(), boss->GetPositionZ()+0.1f, boss->GetOrientation());
                                 // Set positions
@@ -752,15 +750,6 @@ public:
                                     case 2: boss->GetMotionMaster()->MoveFollow(me->GetCreature(*me, bossGUID[0]), 5.0f, (M_PI / 2 + M_PI) - 0.5f); break;
                                 }
                             }
-
-                            uint32 data = 0;
-                            switch (i)
-                            {
-                                case 0: data = DATA_GRAND_CHAMPION_1; break;
-                                case 1: data = DATA_GRAND_CHAMPION_2; break;
-                                case 2: data = DATA_GRAND_CHAMPION_3; break;
-                            }
-                            instance->SetData(data, bossEntry[i]);
                         }
                         events.ScheduleEvent(3, 2000);
                         break;
