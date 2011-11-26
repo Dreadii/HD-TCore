@@ -70,9 +70,9 @@ public:
             uiJainaGUID            = 0;
             uiMainGateGUID         = 0;
             uiPortcullisGUID       = 0;
-            uiChampionLootGUID            = 0;
-            memoryEntry         = 0;
-            uiBlackKnightGUID = 0;
+            uiChampionLootGUID     = 0;
+            memoryEntry            = 0;
+            uiBlackKnightGUID      = 0;
 
             achievementHadWorse = true;
 

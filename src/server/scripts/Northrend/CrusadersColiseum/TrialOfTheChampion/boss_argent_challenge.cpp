@@ -95,6 +95,7 @@ enum Says
     SAY_PALETRESS_MEMORY_DIES       = 5,
     SAY_PALETRESS_NIGHTMARE_WARNING = -1999912,  // Convert to script_texts
 };
+
 class OrientationCheck : public std::unary_function<Unit*, bool>
 {
     public:
