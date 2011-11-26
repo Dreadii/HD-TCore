@@ -1425,7 +1425,7 @@ public:
 
         // Remove chest (if any) before starting anything else
         if (InstanceScript* instance = creature->GetInstanceScript())
-            if (GameObject* chest = GameObject::GetGameObject(*creature, instance->GetData64(DATA_PORTCULLIS)))
+            if (GameObject* chest = GameObject::GetGameObject(*creature, instance->GetData64(DATA_CHEST)))
                 chest->RemoveFromWorld();
 
         switch (action)
