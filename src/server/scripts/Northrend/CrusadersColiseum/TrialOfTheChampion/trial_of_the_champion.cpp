@@ -90,6 +90,9 @@ enum Says
     SAY_ANNOUNCER_NPC_HUNTER   = 3,
     SAY_ANNOUNCER_NPC_WARRIOR  = 4,
     SAY_ANNOUNCER_NPC_ROUGE    = 5,
+    SAY_ANNOUNCER_INTRO_PLAYER = 0,
+    SAY_ANNOUNCER_PLAYER       = -1999920,
+    EMOTE_FACTION_CHEER        = -1999900,
 
     // Argent Challenge
     SAY_TIRION_INTRO_ARGENT_1  = 2,
@@ -132,6 +135,8 @@ public:
         uint64 bossGUID[3];
         uint64 addsGUID[3][3];
         uint64 stalkerGUID;
+        std::set<int32> announceID;
+        std::set<uint64> playersGUID;
 
         bool addsAttacking;
         uint8 defeatedCount;
@@ -158,6 +163,8 @@ public:
                     addsGUID[i][j] = 0;
             }
 
+            announceID.clear();
+            playersGUID.clear();
             stalkerGUID = 0;
             defeatedCount = 0;
             addsAttacking = false;
@@ -183,7 +190,27 @@ public:
                     instance->HandleGameObject(pGO->GetGUID(), false);
                 events.ScheduleEvent(1, 0);
                 if (type == EVENT_INTRO)
+                {
+                    Map::PlayerList const &PlList = me->GetMap()->GetPlayers();
+
+                    if (!PlList.isEmpty())
+                    {
+                        for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
+                        {
+                            if (Player* player = i->getSource())
+                            {
+                                if (player->isGameMaster())
+                                    continue;
+
+                                playersGUID.insert(player->GetGUID());
+                            }
+                        }
+                        for (uint8 i = 0; i<playersGUID.size(); i++)
+                            announceID.insert(SAY_ANNOUNCER_PLAYER-i);
+                    }
+
                     SetGrandChampionsForEncounter();
+                }
             }
         }
 
@@ -233,34 +260,71 @@ public:
             return 0;
         }
 
-        void AnnounceChampion(Unit* champion, uint8 id = 0)
+        void AnnounceChampion(Unit* champion)
         {
             if (champion->GetTypeId() ==  TYPEID_PLAYER)
             {
+                sLog->outBasic("Announcing player");
+                if (!playersGUID.empty())
+                {
+                    if(Player* player = me->GetPlayer(*me, *playersGUID.begin()))
+                    {
+                        sLog->outBasic("Player found!");
+                        if (!announceID.empty())
+                        {
+                            sLog->outBasic("PlayerGUID: %u. AnnounceID: %i", player->GetGUID(), *announceID.begin());
+                            DoScriptText(*announceID.begin(), me, player);
+                            announceID.erase(*announceID.begin());
+                        }
+                        playersGUID.erase(*playersGUID.begin());
+                        // Public emote
+                        DoScriptText(EMOTE_FACTION_CHEER-player->getRace(), player);
+                    }
+                }
             }
             else
             {
                 switch (champion->GetEntry())
                 {
-                    case NPC_MOKRA:
+                    case NPC_MOKRA: // Warrior
+                        Talk(SAY_ANNOUNCER_NPC_WARRIOR);
+                        DoScriptText(EMOTE_FACTION_CHEER-RACE_ORC, champion);
+                        break;
                     case NPC_JACOB:
                         Talk(SAY_ANNOUNCER_NPC_WARRIOR);
+                        DoScriptText(EMOTE_FACTION_CHEER-RACE_HUMAN, champion);
                         break;
-                    case NPC_ERESSEA:
+                    case NPC_ERESSEA: // Mage
+                        Talk(SAY_ANNOUNCER_NPC_MAGE);
+                        DoScriptText(EMOTE_FACTION_CHEER-RACE_BLOODELF, champion);
+                        break;
                     case NPC_AMBROSE:
                         Talk(SAY_ANNOUNCER_NPC_MAGE);
+                        DoScriptText(EMOTE_FACTION_CHEER-RACE_GNOME, champion);
                         break;
-                    case NPC_RUNOK:
+                    case NPC_RUNOK: // Saman
+                        Talk(SAY_ANNOUNCER_NPC_SHAMAN);
+                        DoScriptText(EMOTE_FACTION_CHEER-RACE_TAUREN, champion);
+                        break;
                     case NPC_COLOSOS:
                         Talk(SAY_ANNOUNCER_NPC_SHAMAN);
+                        DoScriptText(EMOTE_FACTION_CHEER-RACE_DRAENEI, champion);
                         break;
-                    case NPC_JAELYNE:
+                    case NPC_JAELYNE: // Hunter
+                        Talk(SAY_ANNOUNCER_NPC_HUNTER);
+                        DoScriptText(EMOTE_FACTION_CHEER-RACE_NIGHTELF, champion);
+                        break;
                     case NPC_ZULTORE:
                         Talk(SAY_ANNOUNCER_NPC_HUNTER);
+                        DoScriptText(EMOTE_FACTION_CHEER-RACE_TROLL, champion);
                         break;
-                    case NPC_VISCERI:
+                    case NPC_VISCERI: // Rouge
+                        Talk(SAY_ANNOUNCER_NPC_ROUGE);
+                        DoScriptText(EMOTE_FACTION_CHEER-RACE_UNDEAD_PLAYER, champion);
+                        break;
                     case NPC_LANA:
                         Talk(SAY_ANNOUNCER_NPC_ROUGE);
+                        DoScriptText(EMOTE_FACTION_CHEER-RACE_DWARF, champion);
                         break;
                 }
             }
@@ -275,65 +339,78 @@ public:
                 switch(events.ExecuteEvent())
                 {
                     case 1:
-                        // TODO: Present players
+                        Talk(SAY_ANNOUNCER_INTRO_PLAYER);
+                        events.ScheduleEvent(2, 7000);
+                        break;
+                    case 2:
+                        if (!playersGUID.empty())
+                        {
+                            if (Player* player = me->GetMap()->GetPlayers().begin()->getSource())
+                                AnnounceChampion(player);
+                            events.ScheduleEvent(2, 8000);
+                        } else
+                            events.ScheduleEvent(3, 8000);
+
+                        break;
+                    case 3:
                         if (Creature* tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
                             tirion->AI()->Talk(SAY_TIRION_INTRO_CHAMPS_1);
 
-                        events.ScheduleEvent(2, 8000);
-                        break;
-                    case 2:
-                        if (instance->GetData(DATA_TEAM) == HORDE)
-                        {
-                            if (Creature* thrall = me->GetCreature(*me, instance->GetData64(DATA_THRALL)))
-                                thrall->AI()->Talk(SAY_THRALL_INTRO_CHAMPS_H);
-                            events.ScheduleEvent(3, 5000);
-                        } else
-                        {
-                            if (Creature* varian = me->GetCreature(*me, instance->GetData64(DATA_VARIAN)))
-                                varian->AI()->Talk(SAY_VARIAN_INTRO_CHAMPS_A);
-                            events.ScheduleEvent(3, 8000);
-                        }
-                        break;
-                    case 3:
-                        if (instance->GetData(DATA_TEAM) == HORDE)
-                        {
-                            if (Creature* garrosh = me->GetCreature(*me, instance->GetData64(DATA_GARROSH)))
-                                garrosh->AI()->Talk(SAY_GARROSH_INTRO_CHAMPS_H);
-                            events.ScheduleEvent(4, 8000);
-                        } else
-                        {
-                            if (Creature* jaina = me->GetCreature(*me, instance->GetData64(DATA_JAINA)))
-                                jaina->AI()->Talk(SAY_JAINA_INTRO_CHAMPS_A);
-                            events.ScheduleEvent(4, 5000);
-                        }
+                        events.ScheduleEvent(4, 8000);
                         break;
                     case 4:
                         if (instance->GetData(DATA_TEAM) == HORDE)
                         {
-                            if (Creature* varian = me->GetCreature(*me, instance->GetData64(DATA_VARIAN)))
-                                varian->AI()->Talk(SAY_VARIAN_INTRO_CHAMPS_H);
-                            events.ScheduleEvent(5, 8000);
+                            if (Creature* thrall = me->GetCreature(*me, instance->GetData64(DATA_THRALL)))
+                                thrall->AI()->Talk(SAY_THRALL_INTRO_CHAMPS_H);
+                            events.ScheduleEvent(5, 5000);
                         } else
                         {
-                            if (Creature* garrosh = me->GetCreature(*me, instance->GetData64(DATA_GARROSH)))
-                                garrosh->AI()->Talk(SAY_GARROSH_INTRO_CHAMPS_A);
+                            if (Creature* varian = me->GetCreature(*me, instance->GetData64(DATA_VARIAN)))
+                                varian->AI()->Talk(SAY_VARIAN_INTRO_CHAMPS_A);
                             events.ScheduleEvent(5, 8000);
                         }
                         break;
                     case 5:
                         if (instance->GetData(DATA_TEAM) == HORDE)
                         {
-                            if (Creature* jaina = me->GetCreature(*me, instance->GetData64(DATA_JAINA)))
-                                jaina->AI()->Talk(SAY_JAINA_INTRO_CHAMPS_H);
-                            events.ScheduleEvent(6, 5000);
+                            if (Creature* garrosh = me->GetCreature(*me, instance->GetData64(DATA_GARROSH)))
+                                garrosh->AI()->Talk(SAY_GARROSH_INTRO_CHAMPS_H);
+                            events.ScheduleEvent(6, 8000);
                         } else
                         {
-                            if (Creature* thrall = me->GetCreature(*me, instance->GetData64(DATA_THRALL)))
-                                thrall->AI()->Talk(SAY_THRALL_INTRO_CHAMPS_A);
+                            if (Creature* jaina = me->GetCreature(*me, instance->GetData64(DATA_JAINA)))
+                                jaina->AI()->Talk(SAY_JAINA_INTRO_CHAMPS_A);
                             events.ScheduleEvent(6, 5000);
                         }
                         break;
                     case 6:
+                        if (instance->GetData(DATA_TEAM) == HORDE)
+                        {
+                            if (Creature* varian = me->GetCreature(*me, instance->GetData64(DATA_VARIAN)))
+                                varian->AI()->Talk(SAY_VARIAN_INTRO_CHAMPS_H);
+                            events.ScheduleEvent(7, 8000);
+                        } else
+                        {
+                            if (Creature* garrosh = me->GetCreature(*me, instance->GetData64(DATA_GARROSH)))
+                                garrosh->AI()->Talk(SAY_GARROSH_INTRO_CHAMPS_A);
+                            events.ScheduleEvent(7, 8000);
+                        }
+                        break;
+                    case 7:
+                        if (instance->GetData(DATA_TEAM) == HORDE)
+                        {
+                            if (Creature* jaina = me->GetCreature(*me, instance->GetData64(DATA_JAINA)))
+                                jaina->AI()->Talk(SAY_JAINA_INTRO_CHAMPS_H);
+                            events.ScheduleEvent(8, 5000);
+                        } else
+                        {
+                            if (Creature* thrall = me->GetCreature(*me, instance->GetData64(DATA_THRALL)))
+                                thrall->AI()->Talk(SAY_THRALL_INTRO_CHAMPS_A);
+                            events.ScheduleEvent(8, 5000);
+                        }
+                        break;
+                    case 8:
                         if (Creature* tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
                             tirion->AI()->Talk(SAY_TIRION_INTRO_CHAMPS_2);
 
@@ -341,9 +418,9 @@ public:
                         if (GameObject* pGO = GameObject::GetGameObject(*me, instance->GetData64(DATA_MAIN_GATE)))
                             instance->HandleGameObject(pGO->GetGUID(), true);
 
-                        events.ScheduleEvent(7, 7000);
+                        events.ScheduleEvent(9, 7000);
                         break;
-                    case 7:
+                    case 9:
                         // Summon invisible trigger for orientation prupouses only
                         if (Creature* stalker = me->SummonCreature(12999, me->GetPositionX() , me->GetPositionY(), me->GetPositionZ()))
                             stalkerGUID = stalker->GetGUID();
@@ -370,16 +447,16 @@ public:
                                 }
                             }
                         }
-                        events.ScheduleEvent(8, 2000);
+                        events.ScheduleEvent(10, 2000);
                         break;
-                    case 8:
+                    case 10:
                         // Move first boss to the new position
                         if (Creature* boss1 = me->GetCreature(*me, bossGUID[0]))
                             boss1->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[0]);
 
-                        events.ScheduleEvent(9, 5000);
+                        events.ScheduleEvent(11, 5000);
                         break;
-                    case 9:
+                    case 11:
                         // Refresh the adds position
                         for (uint8 i=0; i<1; i++)
                         {
@@ -400,9 +477,9 @@ public:
                                 }
                             }
                         }
-                        events.ScheduleEvent(10, 3000);
+                        events.ScheduleEvent(12, 3000);
                         break;
-                    case 10:
+                    case 12:
                         // Summon 2nd Boss and adds and make them follow him
                         if (Creature* boss = me->SummonCreature(bossEntry[1], SpawnPosition))
                         {
@@ -425,9 +502,9 @@ public:
                                 }
                             }
                         }
-                        events.ScheduleEvent(11, 5000);
+                        events.ScheduleEvent(13, 5000);
                         break;
-                    case 11:
+                    case 13:
                         // Move first boss to the new position
                         if (Creature* boss1 = me->GetCreature(*me, bossGUID[0]))
                             boss1->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[1]);
@@ -436,9 +513,9 @@ public:
                         if (Creature* boss2 = me->GetCreature(*me, bossGUID[1]))
                             boss2->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[0]);
 
-                        events.ScheduleEvent(12, 5000);
+                        events.ScheduleEvent(14, 5000);
                         break;
-                    case 12:
+                    case 14:
                         // Refresh the adds position
                         for (uint8 i=0; i<2; i++)
                         {
@@ -459,9 +536,9 @@ public:
                                 }
                             }
                         }
-                        events.ScheduleEvent(13, 4000);
+                        events.ScheduleEvent(15, 4000);
                         break;
-                    case 13:
+                    case 15:
                         // Summon 3rd Boss and adds and make them follow him
                         if (Creature* boss = me->SummonCreature(bossEntry[2], SpawnPosition))
                         {
@@ -484,9 +561,9 @@ public:
                                 }
                             }
                         }
-                        events.ScheduleEvent(14, 4000);
+                        events.ScheduleEvent(16, 4000);
                         break;
-                    case 14:
+                    case 16:
                         // Move first boss to the new position
                         if (Creature* boss1 = me->GetCreature(*me, bossGUID[0]))
                             boss1->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[2]);
@@ -499,9 +576,9 @@ public:
                         if (Creature* boss2 = me->GetCreature(*me, bossGUID[2]))
                             boss2->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[0]);
 
-                        events.ScheduleEvent(15, 5000);
+                        events.ScheduleEvent(17, 5000);
                         break;
-                    case 15:
+                    case 17:
                         // Refresh the adds position
                         for (uint8 i=0; i<3; i++)
                         {
@@ -522,9 +599,9 @@ public:
                                 }
                             }
                         }
-                        events.ScheduleEvent(16, 4000);
+                        events.ScheduleEvent(18, 4000);
                         break;
-                    case 16:
+                    case 18:
                         // Set home positions, in case of wipe, this avoids summons to go to the SpawnPos
                         for (uint8 i=0; i<3; i++)
                             if (Creature* boss = me->GetCreature(*me, bossGUID[i]))
@@ -542,9 +619,9 @@ public:
                         me->SetUnitMovementFlags(MOVEMENTFLAG_WALKING);
                         me->GetMotionMaster()->MovePoint(0, AnnouncerPosition);
                         me->SetTarget(stalkerGUID);
-                        events.ScheduleEvent(17, 19000);
+                        events.ScheduleEvent(19, 19000);
                         break;
-                    case 17:
+                    case 19:
                         //Close Door
                         if (GameObject* pGO = GameObject::GetGameObject(*me, instance->GetData64(DATA_MAIN_GATE)))
                             instance->HandleGameObject(pGO->GetGUID(), false);
