@@ -277,6 +277,16 @@ public:
                 case CRITERIA_CHAMPION_RUNOK:
                 case CRITERIA_CHAMPION_ERESSEA:
                 case CRITERIA_CHAMPION_ZULTORE:
+                case CRITERIA_CHAMPION_JACOB_H:
+                case CRITERIA_CHAMPION_LANA_H:
+                case CRITERIA_CHAMPION_COLOSOS_H:
+                case CRITERIA_CHAMPION_AMBROSE_H:
+                case CRITERIA_CHAMPION_JAELYNE_H:
+                case CRITERIA_CHAMPION_MOKRA_H:
+                case CRITERIA_CHAMPION_VISCERI_H:
+                case CRITERIA_CHAMPION_RUNOK_H:
+                case CRITERIA_CHAMPION_ERESSEA_H:
+                case CRITERIA_CHAMPION_ZULTORE_H:
                     for(uint8 i = 0; i<3; i++)
                         if(grandChampionEntry[i] == GetRelatedCreatureEntry(criteria_id))
                             return true;
