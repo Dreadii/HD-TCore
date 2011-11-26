@@ -89,7 +89,7 @@ enum Says
 
     SAY_EADRIC_HAMMER               = 2,
     SAY_EADRIC_RADIANCE_WARNING     = 5,
-    SAY_EADRIC_HAMMER_WARNING       = 6,
+    SAY_EADRIC_HAMMER_WARNING       = -1999913,
 
     SAY_PALETRESS_SUMMON_MEMORY     = 2,
     SAY_PALETRESS_MEMORY_DIES       = 5,
@@ -270,7 +270,7 @@ public:
                     {
                         Talk(SAY_EADRIC_HAMMER);
                         DoCast(target, SPELL_HAMMER_JUSTICE);
-                        Talk(SAY_EADRIC_HAMMER_WARNING, target->GetGUID());
+                        DoScriptText(SAY_EADRIC_HAMMER_WARNING, me, target);
                         DoCast(target, SPELL_HAMMER_RIGHTEOUS);
                     }
                 }

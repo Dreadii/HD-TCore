@@ -208,6 +208,7 @@ INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`sound`,`type`
 (0,@SCRIPT_TEXTS_ID-11, 'Los draenei de Exodar animan a %s.',13838,2,0,1, 'ToC5 Cheers'),
 -- Waking nightmare warining
 (0,@SCRIPT_TEXTS_ID-12, '¡%s comienza a lanzar Pesadilla Lúcida!',0,3,0,0, 'Paletress - Memory warning.'),
+(0,@SCRIPT_TEXTS_ID-13, '%s comienza a lanzar Martillo del Honrado sobre $N.',0,3,0,0, 'Eadric - Combat - Warning - Hammer'),
 (0,@SCRIPT_TEXTS_ID-20, '$N se ha alzado hasta el rango de $Gcampeón:campeona; en nuestro torneo. Nos orgullecemos de $Gpresentarlo:presentarla; hoy.',0,1,0,1, 'ToC5 Player presentation'),
 (0,@SCRIPT_TEXTS_ID-21, '$GUn:Una; $Gpoderoso:poderosa; $Gcampeón:campeona;, $Gun:una; $Gcapacitado:capacitada; $c, $gun:una; honorable $r. Presentamos a $N.',13838,1,0,1, 'ToC5 Player presentation'),
 (0,@SCRIPT_TEXTS_ID-22, '$Los campeones del torneo hablan muy bien de $Geste:esta; $c. Hoy presentamos a $N.',13838,1,0,1, 'ToC5 Player presentation'),
@@ -288,7 +289,6 @@ INSERT INTO creature_text (entry, groupid, id, TEXT, TYPE, LANGUAGE, probability
 (@EADRIC,3,1,'¡No! ¡No! ¡Y otra vez no! ¡No es suficiente!',14,0,100,0,0,16138,'Eadric - Combat - Slay 2'),
 (@EADRIC,4,0,'¡Me rindo! Lo admito. Un trabajo excelente. ¿Puedo escaparme ya?',14,0,100,0,0,16139,'Eadric - Combat - Death'),
 (@EADRIC,5,0,'%s comienza a irradiar luz. ¡Cubrios los ojos!',41,0,100,0,0,0,'Eadric - Combat - Warning - Radiance'),
-(@EADRIC,6,0,'%s comienza a lanzar Martillo del Honrado sobre $N.',41,0,100,0,0,0,'Eadric - Combat - Warning - Hammer'),
 -- // Eadric
 -- -- Paletress
 (@PALETRESS,1,0,'Bien entonces. Comencemos.',14,0,100,0,0,16247,'Paletress - Combat - Aggro'),
