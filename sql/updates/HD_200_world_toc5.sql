@@ -444,3 +444,21 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`
 (@SPAWN_GUID+124,34974,650,0,1,0,0,781.8,568.648,435.421,2.20939,300,0,0,42,0,0,0,0,0),
 (@SPAWN_GUID+125,34974,650,0,1,0,0,788.423,568.361,436.881,2.20389,300,0,0,42,0,0,0,0,0),
 (@SPAWN_GUID+126,34974,650,0,1,0,0,787.929,563.884,438.695,2.18504,300,0,0,42,0,0,0,0,0);
+
+-- Templates
+DELETE FROM `creature_template` WHERE `entry` IN (12000, 12001, 12002, 12003, 12004, 12005, 12006, 12007, 12008, 12009, 12010, 12011, 12444);
+UPDATE `creature_template` SET `difficulty_entry_1` = 36089 WHERE `entry` = 35572;
+UPDATE `creature_template` SET `difficulty_entry_1` = 36085 WHERE `entry` = 35569;
+UPDATE `creature_template` SET `difficulty_entry_1` = 36090 WHERE `entry` = 35571;
+UPDATE `creature_template` SET `difficulty_entry_1` = 36091 WHERE `entry` = 35570;
+UPDATE `creature_template` SET `difficulty_entry_1` = 36084 WHERE `entry` = 35617;
+
+UPDATE `creature_template` SET `difficulty_entry_1` = 36088 WHERE `entry` = 34705;
+UPDATE `creature_template` SET `difficulty_entry_1` = 36082 WHERE `entry` = 34702;
+UPDATE `creature_template` SET `difficulty_entry_1` = 36083 WHERE `entry` = 34701;
+UPDATE `creature_template` SET `difficulty_entry_1` = 36086 WHERE `entry` = 34657;
+UPDATE `creature_template` SET `difficulty_entry_1` = 36087 WHERE `entry` = 34703;
+
+UPDATE `creature_template` SET `difficulty_entry_1` = 35518 WHERE `entry` = 35119;
+UPDATE `creature_template` SET `difficulty_entry_1` = 35517 WHERE `entry` = 34928;
+UPDATE `creature_template` SET `difficulty_entry_1` = 35717 WHERE `entry` = 35590;
