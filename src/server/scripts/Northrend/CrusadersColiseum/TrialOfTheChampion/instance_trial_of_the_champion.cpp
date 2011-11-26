@@ -428,6 +428,13 @@ public:
                     if (m_auiEncounter[i] == IN_PROGRESS)
                         m_auiEncounter[i] = NOT_STARTED;
 
+                if (m_auiEncounter[1] == DONE || m_auiEncounter[2] == DONE)
+                {
+                    Creature* announcer = instance->GetCreature(uiAnnouncerGUID);
+                    if (!announcer || announcer->isDead())
+                        announcer->Respawn();
+                }
+
             } else OUT_LOAD_INST_DATA_FAIL;
 
             OUT_LOAD_INST_DATA_COMPLETE;
