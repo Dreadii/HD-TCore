@@ -152,11 +152,11 @@ UPDATE `creature_template` SET `spell1` = 68505, `spell2` = 62575, `spell3` = 68
 
 -- Allow mounted combat on Faction champions and Grand Faction Champions
 UPDATE `creature_template` SET `type_flags` = 2048, `ScriptName` = 'generic_vehicleAI_toc5' WHERE `entry` IN (35328, 35329, 35331, 35332, 35330, 35314, 35325, 35327, 35323, 35326);
-UPDATE `creature_template` SET `type_flags` = 2048 WHERE `entry` IN (35572, 35569, 35571, 35570, 35617, 34705, 34702, 34701, 34657, 34703);
+UPDATE `creature_template` SET `type_flags` = 2048,`mechanic_immune_mask` = 617299835 WHERE `entry` IN (35572, 35569, 35571, 35570, 35617, 34705, 34702, 34701, 34657, 34703);
 -- For Hero entries
 CREATE TABLE `entry_temp` (`id` INT);
 INSERT INTO `entry_temp` SELECT `difficulty_entry_1` FROM `creature_template` WHERE `entry` IN (35572, 35569, 35571, 35570, 35617, 34705, 34702, 34701, 34657, 34703);
-UPDATE `creature_template` SET `type_flags` = 2048 WHERE `entry` IN (SELECT id FROM`entry_temp`);
+UPDATE `creature_template` SET `type_flags` = 2048, `mechanic_immune_mask` = 617299835  WHERE `entry` IN (SELECT id FROM`entry_temp`);
 DROP TABLE `entry_temp`;
 
 -- Set main gate closed by default
@@ -314,7 +314,7 @@ INSERT INTO `vehicle_template_accessory` (`entry`, `accessory_entry`, `seat_id`,
 (35491,35451,0,0,'Trial of the Champion - Black Knight on his gryphon',6,30000);
 
 -- Spawns
-SET @SPAWN_GUID := 365000:
+SET @SPAWN_GUID := 365000;
 DELETE FROM `creature` WHERE `map` = 650;
 INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`) VALUES
 (@SPAWN_GUID+000,36558,650,1,1,0,0,726.826,661.201,412.472,4.66003,86400,0,0,1,0,0,0,0,0),
@@ -381,7 +381,6 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`
 (@SPAWN_GUID+061,34857,650,1,1,0,0,675.281,589.988,442.081,0.383972,86400,0,0,1,0,0,0,0,0),
 (@SPAWN_GUID+062,34857,650,1,1,0,0,675.115,597.719,442.073,0.279253,86400,0,0,1,0,0,0,0,0),
 (@SPAWN_GUID+064,34857,650,1,1,0,0,692.854,590.632,435.504,0.471239,86400,0,0,1,0,0,0,0,0),
-(@SPAWN_GUID+064,34857,650,1,1,0,0,689.623,598.045,435.503,0.331613,86400,0,0,1,0,0,0,0,0),
 (@SPAWN_GUID+065,34857,650,1,1,0,0,684.964,591.017,438.848,0.418879,86400,0,0,1,0,0,0,0,0),
 (@SPAWN_GUID+066,34975,650,1,1,0,0,779.997,550.694,442.077,2.05949,86400,0,0,1,0,0,0,0,0),
 (@SPAWN_GUID+067,34975,650,1,1,0,0,773.502,555.516,438.825,1.95477,86400,0,0,1,0,0,0,0,0),
@@ -443,7 +442,9 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`
 (@SPAWN_GUID+123,34975,650,0,1,0,0,781.712,556.65,440.159,2.12535,300,0,0,42,0,0,0,0,0),
 (@SPAWN_GUID+124,34974,650,0,1,0,0,781.8,568.648,435.421,2.20939,300,0,0,42,0,0,0,0,0),
 (@SPAWN_GUID+125,34974,650,0,1,0,0,788.423,568.361,436.881,2.20389,300,0,0,42,0,0,0,0,0),
-(@SPAWN_GUID+126,34974,650,0,1,0,0,787.929,563.884,438.695,2.18504,300,0,0,42,0,0,0,0,0);
+(@SPAWN_GUID+126,34974,650,0,1,0,0,787.929,563.884,438.695,2.18504,300,0,0,42,0,0,0,0,0),
+(@SPAWN_GUID+127,34857,650,1,1,0,0,689.623,598.045,435.503,0.331613,86400,0,0,1,0,0,0,0,0);
+UPDATE `creature` SET `spawnMask` = 3 WHERE `map` = 650;
 
 -- Templates
 DELETE FROM `creature_template` WHERE `entry` IN (12000, 12001, 12002, 12003, 12004, 12005, 12006, 12007, 12008, 12009, 12010, 12011, 12444);
@@ -462,3 +463,18 @@ UPDATE `creature_template` SET `difficulty_entry_1` = 36087 WHERE `entry` = 3470
 UPDATE `creature_template` SET `difficulty_entry_1` = 35518 WHERE `entry` = 35119;
 UPDATE `creature_template` SET `difficulty_entry_1` = 35517 WHERE `entry` = 34928;
 UPDATE `creature_template` SET `difficulty_entry_1` = 35717 WHERE `entry` = 35590;
+
+-- Argent Prechamp
+-- Argent Lightwielder
+UPDATE `creature_template` SET `modelid3` = 0 WHERE `entry` = 35309;
+UPDATE `creature_template` SET `minlevel` = 80, `maxlevel` = 80, `mindmg` = 420, `maxdmg` = 630, `attackpower` = 158, `dmg_multiplier` = 16.8, `mechanic_immune_mask` = 650854267 WHERE `entry` = 35310;
+-- Argent Monk
+UPDATE `creature_template` SET `modelid3` = 0 WHERE `entry` = 35305;
+UPDATE `creature_template` SET `minlevel` = 80, `maxlevel` = 80, `mindmg` = 420, `maxdmg` = 650, `attackpower` = 158, `dmg_multiplier` = 16, `mechanic_immune_mask` = 650854267 WHERE `entry` = 35306;
+-- Argent Priestess
+UPDATE `creature_template` SET `modelid3` = 0 WHERE `entry` = 35307;
+UPDATE `creature_template` SET `minlevel` = 80, `maxlevel` = 80, `mindmg` = 420, `maxdmg` = 630, `attackpower` = 158, `dmg_multiplier` = 11, `mechanic_immune_mask` = 650854267 WHERE `entry` = 35308;
+-- 	Paletress memory
+UPDATE `creature_template` SET `mindmg` = 330, `maxdmg` = 495, `attackpower` = 124, `dmg_multiplier` = 41.5, `baseattacktime` = 2000, `mechanic_immune_mask` = 617297499 WHERE `name` LIKE 'Memory of%(1)';
+-- Major bosses immunities
+UPDATE `creature_template` SET `mechanic_immune_mask` = 617299835 WHERE `entry` IN (34928,35517,35119,35518,35451,35490);
