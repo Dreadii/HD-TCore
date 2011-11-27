@@ -1087,7 +1087,9 @@ class spell_toc5_ride_mount : public SpellScriptLoader
 
             SpellCastResult CheckRequirement()
             {
-                if(GetCaster()->GetUInt32Value(PLAYER_VISIBLE_ITEM_16_ENTRYID) != 46106)
+                if(GetCaster()->GetUInt32Value(PLAYER_VISIBLE_ITEM_16_ENTRYID) != 46106 ||
+                    GetCaster()->GetUInt32Value(PLAYER_VISIBLE_ITEM_16_ENTRYID) != 46069 ||
+                    GetCaster()->GetUInt32Value(PLAYER_VISIBLE_ITEM_16_ENTRYID) != 46070)
                 {
                     SetCustomCastResultMessage(SPELL_CUSTOM_ERROR_MUST_HAVE_LANCE_EQUIPPED);
                     return SPELL_FAILED_CUSTOM_ERROR;
