@@ -428,11 +428,14 @@ public:
                     if (m_auiEncounter[i] == IN_PROGRESS)
                         m_auiEncounter[i] = NOT_STARTED;
 
-                if (m_auiEncounter[1] == DONE || m_auiEncounter[2] == DONE)
+                if (m_auiEncounter[1] != DONE && (m_auiEncounter[1] == DONE || m_auiEncounter[2] == DONE))
                 {
                     Creature* announcer = instance->GetCreature(uiAnnouncerGUID);
                     if (!announcer || announcer->isDead())
-                        announcer->Respawn();
+                    {
+                        const Position pos = {746.865f, 635.991f, 411.575f, 4.61586f};
+                        instance->SummonCreature(NPC_BLACK_KNIGHT, pos);
+                    }
                 }
 
             } else OUT_LOAD_INST_DATA_FAIL;
