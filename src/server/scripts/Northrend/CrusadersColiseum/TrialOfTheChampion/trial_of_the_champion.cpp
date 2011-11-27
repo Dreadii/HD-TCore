@@ -180,14 +180,9 @@ public:
         void SetData(uint32 type, uint32 data)
         {
             eventIds[type] = data;
-            if (data == DONE)
+
+            if (data == IN_PROGRESS)
             {
-                if (GameObject* pGO = GameObject::GetGameObject(*me, instance->GetData64(DATA_PORTCULLIS)))
-                    instance->HandleGameObject(pGO->GetGUID(), true);
-            } else if (data == IN_PROGRESS)
-            {
-                if (GameObject* pGO = GameObject::GetGameObject(*me, instance->GetData64(DATA_PORTCULLIS)))
-                    instance->HandleGameObject(pGO->GetGUID(), false);
                 events.ScheduleEvent(1, 0);
                 if (type == EVENT_INTRO)
                 {

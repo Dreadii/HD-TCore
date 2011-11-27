@@ -161,6 +161,14 @@ public:
 
         void SetData(uint32 type, uint32 data)
         {
+            if (type != DATA_I_VE_HAD_WORSE)
+            {
+                if (data == DONE || data == FAIL)
+                    HandleGameObject(GetData64(DATA_PORTCULLIS), true);
+                else if (data == IN_PROGRESS)
+                    HandleGameObject(GetData64(DATA_PORTCULLIS), false);
+            }
+
             switch(type)
             {
                 case BOSS_GRAND_CHAMPIONS:
@@ -183,28 +191,35 @@ public:
                     break;
                 case BOSS_ARGENT_CHALLENGE_E:
                     m_auiEncounter[1] = data;
-                    if (Creature* announcer = instance->GetCreature(uiAnnouncerGUID))
+                    if (data == DONE)
                     {
-                        DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_EADRIC);
-                        announcer->GetMotionMaster()->MovePoint(0, 742.742f, 630.207f, 411.172f);
-                        announcer->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                        announcer->SummonGameObject(instance->IsHeroic()? GO_EADRIC_LOOT_H : GO_EADRIC_LOOT, 746.59f, 618.49f, 411.09f, 1.42f, 0, 0, 0, 0, 90000000);
+                        if (Creature* announcer = instance->GetCreature(uiAnnouncerGUID))
+                        {
+                            DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_EADRIC);
+                            announcer->GetMotionMaster()->MovePoint(0, 742.742f, 630.207f, 411.172f);
+                            announcer->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                            announcer->SummonGameObject(instance->IsHeroic()? GO_EADRIC_LOOT_H : GO_EADRIC_LOOT, 746.59f, 618.49f, 411.09f, 1.42f, 0, 0, 0, 0, 90000000);
+                        }
                     }
                     break;
                 case BOSS_ARGENT_CHALLENGE_P:
                     m_auiEncounter[2] = data;
-                    if (Creature* announcer = instance->GetCreature(uiAnnouncerGUID))
+                    if (data == DONE)
                     {
-                        DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_PALETRESS);
-                        DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_MEMORIES);
-                        announcer->GetMotionMaster()->MovePoint(0, 742.742f, 630.207f, 411.172f);
-                        announcer->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                        announcer->SummonGameObject(instance->IsHeroic()? GO_PALETRESS_LOOT_H : GO_PALETRESS_LOOT, 746.59f, 618.49f, 411.09f, 1.42f, 0, 0, 0, 0, 90000000);
+                        if (Creature* announcer = instance->GetCreature(uiAnnouncerGUID))
+                        {
+                            DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_PALETRESS);
+                            DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_MEMORIES);
+                            announcer->GetMotionMaster()->MovePoint(0, 742.742f, 630.207f, 411.172f);
+                            announcer->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                            announcer->SummonGameObject(instance->IsHeroic()? GO_PALETRESS_LOOT_H : GO_PALETRESS_LOOT, 746.59f, 618.49f, 411.09f, 1.42f, 0, 0, 0, 0, 90000000);
+                        }
                     }
                     break;
                 case BOSS_BLACK_KNIGHT:
                     m_auiEncounter[3] = data;
-                    DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_BLACK_KNIGHT);
+                    if (data == DONE)
+                        DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_BLACK_KNIGHT);
                     break;
                 case DATA_GRAND_CHAMPION_ENTRY:
                     for (uint8 i=0; i<3; i++)
