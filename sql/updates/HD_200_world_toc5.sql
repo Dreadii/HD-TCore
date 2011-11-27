@@ -146,6 +146,7 @@ UPDATE `creature_template` SET `equipment_id` = 1496 WHERE `entry` IN (35037, 35
 UPDATE `creature_template` SET `equipment_id` = 2216 WHERE `entry` IN (35042, 35533);
 UPDATE `creature_template` SET `equipment_id` = 714 WHERE `entry` IN (35045, 35534);
 UPDATE `creature_template` SET `equipment_id` = 271 WHERE `entry` IN (35049, 35529);
+UPDATE `creature_template` SET `equipment_id` = 833 WHERE `entry` IN (35119, 35518);
 
 -- Update spells for players mounts
 UPDATE `creature_template` SET `spell1` = 68505, `spell2` = 62575, `spell3` = 68282, `spell4` = 66482 WHERE `entry` IN (35644, 36558);
@@ -444,10 +445,10 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`
 (@SPAWN_GUID+125,34974,650,0,1,0,0,788.423,568.361,436.881,2.20389,300,0,0,42,0,0,0,0,0),
 (@SPAWN_GUID+126,34974,650,0,1,0,0,787.929,563.884,438.695,2.18504,300,0,0,42,0,0,0,0,0),
 (@SPAWN_GUID+127,34857,650,1,1,0,0,689.623,598.045,435.503,0.331613,86400,0,0,1,0,0,0,0,0);
-UPDATE `creature` SET `spawnMask` = 3 WHERE `map` = 650;
+UPDATE `creature` SET `spawnMask` = 3, `spawntimesecs` = 86400 WHERE `map` = 650;
 
 -- Templates
-DELETE FROM `creature_template` WHERE `entry` IN (12000, 12001, 12002, 12003, 12004, 12005, 12006, 12007, 12008, 12009, 12010, 12011, 12444);
+DELETE FROM `creature_template` WHERE `entry` IN (12000, 12001, 12002, 12003, 12004, 12005, 12006, 12007, 12008, 12009, 12010, 12011, 12444, 12436);
 UPDATE `creature_template` SET `difficulty_entry_1` = 36089 WHERE `entry` = 35572;
 UPDATE `creature_template` SET `difficulty_entry_1` = 36085 WHERE `entry` = 35569;
 UPDATE `creature_template` SET `difficulty_entry_1` = 36090 WHERE `entry` = 35571;
@@ -478,3 +479,10 @@ UPDATE `creature_template` SET `minlevel` = 80, `maxlevel` = 80, `mindmg` = 420,
 UPDATE `creature_template` SET `mindmg` = 330, `maxdmg` = 495, `attackpower` = 124, `dmg_multiplier` = 41.5, `baseattacktime` = 2000, `mechanic_immune_mask` = 617297499 WHERE `name` LIKE 'Memory of%(1)';
 -- Major bosses immunities
 UPDATE `creature_template` SET `mechanic_immune_mask` = 617299835 WHERE `entry` IN (34928,35517,35119,35518,35451,35490);
+-- Risen champions
+UPDATE `creature_template` SET `dmg_multiplier` = 1.5 WHERE `entry` = 35590;
+UPDATE `creature_template` SET `mindmg` = 420, `maxdmg` = 630, `attackpower` = 158, `dmg_multiplier` = 3 WHERE `entry` = 35717;
+UPDATE `creature_template` SET `difficulty_entry_1` = 35546 WHERE `entry` = 35545;
+UPDATE `creature_template` SET `difficulty_entry_1` = 35568 WHERE `entry` = 35564;
+UPDATE `creature_template` SET `minlevel` = 80, `maxlevel` = 80, `mindmg` = 420, `maxdmg` = 630, `attackpower` = 158, `dmg_multiplier` = 3 WHERE `entry` IN (35568, 35546);
+UPDATE `creature_template` SET `minlevel` = 80, `maxlevel` = 80, `baseattacktime` = 2000, `faction_A` = 14, `faction_H` = 14 WHERE `entry` IN (35564, 35568, 35545, 35546, 35717, 35590);
